@@ -62,11 +62,6 @@
                 <span>Appt. Locations</span>
             </div>
         </a>
-        <a href="{{route('notification-settings')}}" class=" {{  request()->routeIs('notification-settings') ? 'is-active-setting' : ''}}">
-            <div class="sidebar-item">
-                <span>External Sync</span>
-            </div>
-        </a>
         <a href="{{route('change-password')}}" class=" {{  request()->routeIs('change-password') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
                 <span>Change Password</span>

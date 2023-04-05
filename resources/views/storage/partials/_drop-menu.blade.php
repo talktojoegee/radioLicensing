@@ -1,5 +1,5 @@
 <div class="dropdown mb-2">
-    <a class="font-size-16 text-muted" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a class="font-size-16 text-muted " role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="mdi mdi-dots-horizontal"></i>
     </a>
     <div class="dropdown-menu dropdown-menu-end" style="">

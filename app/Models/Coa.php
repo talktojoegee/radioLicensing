@@ -23,6 +23,9 @@ class Coa extends Model
     public function getAllChartOfAccounts(){
         return Coa::all();
     }
+    public function getAllDetailChartOfAccounts(){
+        return Coa::where('type', 1)->get();
+    }
 
 
     public function getChartOfAccountByAccountType($type, $account_type){

@@ -21,7 +21,6 @@ class DashboardController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
         $this->product = new Product();
         $this->client = new Client();
         $this->sale = new Sale();

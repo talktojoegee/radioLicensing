@@ -119,7 +119,7 @@
                                         <thead>
                                         <tr>
                                             <th class="">#</th>
-                                            <th class="wd-15p">Client</th>
+                                            <th class="wd-15p">Name</th>
                                             <th class="wd-15p">Date & Time</th>
                                             <th class="wd-15p">Type</th>
                                             <th class="wd-15p">Contact</th>

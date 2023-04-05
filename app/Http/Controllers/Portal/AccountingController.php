@@ -61,4 +61,10 @@ class AccountingController extends Controller
         }
 
     }
+
+    public function showJournalVoucherForm(){
+        return view('accounting.journal-voucher',[
+            'accounts'=>$this->coa->getAllDetailChartOfAccounts()
+        ]);
+    }
 }

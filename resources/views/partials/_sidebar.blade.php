@@ -15,6 +15,12 @@
                 <span key="t-chat">Dashboard</span>
             </a>
         </li>
+        <li>
+            <a href="{{route('church-branches')}}" class="waves-effect">
+                <i class="bx bx-map"></i>
+                <span key="t-chat">Branches</span>
+            </a>
+        </li>
         <li class="menu-title" key="t-pages">TIME</li>
         <li>
             <a href="{{route('calendar')}}" class="waves-effect">
@@ -44,18 +50,6 @@
             <a href="{{route('manage-tasks')}}" class="waves-effect">
                 <i class="bx bx-chart"></i>
                 <span key="t-chat">Attendance</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{route('manage-tasks')}}" class="waves-effect">
-                <i class="bx bx-wallet"></i>
-                <span key="t-chat">Finance</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{route('manage-tasks')}}" class="waves-effect">
-                <i class="bx bxs-landmark"></i>
-                <span key="t-chat">Branches</span>
             </a>
         </li>
         <li class="menu-title">Persons</li>
@@ -99,7 +93,8 @@
             <ul class="sub-menu" aria-expanded="false">
                 <li><a href="{{route('chart-of-accounts')}}" key="t-wallet">Chart of Accounts</a></li>
                 <li><a href="{{route('add-new-account')}}" key="t-wallet">Add New Account</a></li>
-                <li><a href="{{route('sales')}}" key="t-wallet">Journal Voucher</a></li>
+                <li><a href="{{route('journal-voucher')}}" key="t-wallet">Journal Voucher</a></li>
+                <li><a href="{{route('sales')}}" key="t-wallet">Posting</a></li>
             </ul>
         </li>
         <li>
@@ -121,9 +116,9 @@
                 <span key="t-report"> Reports</span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                <li><a href="{{route('appointment-reports')}}" key="t-report">Appointments</a></li>
-                <li><a href="{{route('practitioner-report')}}" key="t-report">Practitioner</a></li>
-                <li><a href="{{route('show-revenue-reports')}}" key="t-report">Revenue</a></li>
+                <li><a href="{{route('appointment-reports')}}" key="t-report">Attendance</a></li>
+                <li><a href="{{route('practitioner-report')}}" key="t-report">Inflow</a></li>
+                <li><a href="{{route('show-revenue-reports')}}" key="t-report">Outflow</a></li>
             </ul>
         </li>
         <li class="menu-title">Settings</li>
@@ -134,11 +129,10 @@
             </a>
             <ul class="sub-menu" aria-expanded="false">
                 <li><a href="{{route('settings')}}" key="t-wallet">General Settings</a></li>
-                <li><a href="{{route('purchase-or-upgrade-plan')}}" key="t-wallet">Purchase/Upgrade Plan</a></li>
                 <li><a href="{{route('purchase-or-upgrade-plan')}}" key="t-wallet">Regions</a></li>
-                <li><a href="{{route('purchase-or-upgrade-plan')}}" key="t-wallet">Branches</a></li>
-                <li><a href="{{route('purchase-or-upgrade-plan')}}" key="t-wallet">Cells</a></li>
-                <li><a href="{{route('purchase-or-upgrade-plan')}}" key="t-wallet">Cells</a></li>
+                <li><a href="{{route('branches-settings')}}" key="t-wallet">Branches</a></li>
+                <li><a href="{{route('branches-settings')}}" key="t-wallet">Branch Assignment</a></li>
+                {{--<li><a href="{{route('cells-settings')}}" key="t-wallet">Cells</a></li>--}}
             </ul>
         </li>
 
