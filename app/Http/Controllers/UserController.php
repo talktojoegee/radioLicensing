@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChurchBranch;
+use App\Models\Country;
+use App\Models\MaritalStatus;
 use App\Models\ModuleManager;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,7 +15,11 @@ class UserController extends Controller
     public function __construct(){
         $this->middleware('auth');
         $this->user = new User();
+        $this->country = new Country();
+        $this->churchbranch = new ChurchBranch();
+        $this->maritalstatus = new MaritalStatus();
         $this->modulemanager = new ModuleManager();
+        $this->role = new Role();
     }
 
     public function customerDashboard(){
@@ -49,12 +57,20 @@ class UserController extends Controller
     }
 
     public function addNewUser(Request $request){
+        //return dd($request->all());
         $this->validate($request,[
             "firstName"=>"required",
             "lastName"=>"required",
             "email"=>"required|email|unique:users,email",
             "userType"=>'required',
             "mobileNo"=>'required',
+            "dob"=>'required|date',
+            "occupation"=>'required',
+            "nationality"=>'required',
+            "maritalStatus"=>'required',
+            "presentAddress"=>'required',
+            "branch"=>'required',
+            "role"=>'required',
         ],[
             "firstName.required"=>"What's the person's first name?",
             "lastName.required"=>"Last name is very much important. What's the person's last name?",
@@ -62,6 +78,14 @@ class UserController extends Controller
             "email.email"=>"Enter a valid email address",
             "email.unique"=>"There's already an account with this email address. Try another one.",
             "mobileNo.required"=>"Enter mobile number.",
+            "dob.required"=>"Enter date of birth",
+            "dob.date"=>"Invalid date format",
+            "occupation.required"=>"What does this person do for a living?",
+            "nationality.required"=>"What's the person's country or nationality?",
+            "maritalStatus.required"=>"Choose marital status",
+            "presentAddress.required"=>"Enter current or residential address",
+            "branch.required"=>"Assign this person to a branch",
+            "role.required"=>"What role best fits this person?",
         ]);
         $this->user->createUser($request);
         $message = "You've successfully added a new  user to the system.";
@@ -103,6 +127,11 @@ class UserController extends Controller
 
 
     public function showAddNewPastorForm(){
-        return view('administration.add-new-user');
+        return view('administration.add-new-user',[
+            'countries'=>$this->country->getCountries(),
+            'branches'=>$this->churchbranch->getAllChurchBranches(),
+            'maritalstatus'=>$this->maritalstatus->getMaritalStatuses(),
+            'roles'=>$this->role->getRoles()
+        ]);
     }
 }

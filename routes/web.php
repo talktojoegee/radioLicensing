@@ -182,6 +182,10 @@ Route::group(['prefix'=>'/website', 'middleware'=>'auth'], function(){
     Route::post('/web-pages/edit-service', [App\Http\Controllers\Portal\WebsiteController::class, 'editService'])->name('edit-website-service');
 });
 
+Route::group(['prefix'=>'/newsfeed', 'middleware'=>'auth'], function(){
+
+});
+
 Route::group(['prefix'=>'/users', 'middleware'=>'auth'], function(){
     Route::get('/practitioners', [App\Http\Controllers\UserController::class, 'showPractitioners'])->name('practitioners');
     Route::get('/pastors', [App\Http\Controllers\UserController::class, 'showAdministrators'])->name('pastors');
@@ -230,3 +234,18 @@ Route::group(['domain'=>'{account}.'.env('APP_URL')],function(){
 /*
  * You'll need a team to run the race of life faithfully. We offer ourselves to be that family you can hold unto.
  */
+
+
+/*DB::beginTransaction();
+try {
+    $this->pippo();
+} catch (\Exception $ex) {
+    DB::rollback();
+}
+DB::commit();
+
+public function pippo(){
+    $type=Cga_type::create(['name'=>'vvvv','description'=>'yyy']);
+    throw new Exception('error');
+
+}*/

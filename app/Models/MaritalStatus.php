@@ -13,6 +13,10 @@ class MaritalStatus extends Model
     protected $fillable = ['ms_name'];
 
 
+    public function getMaritalStatuses(){
+        return MaritalStatus::all();
+    }
+
 
 
 }

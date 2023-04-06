@@ -38,8 +38,8 @@
         <div class="row">
             <div class="col-xl-12 col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <a href="javascript:void(0);"  class="btn btn-primary  mb-3">Manage Users <i class="bx bxs-plus-circle"></i> </a>
+                    <div class="card-header d-flex justify-content-end">
+                        <a href="javascript:void(0);"  class="btn btn-primary  mb-3"><i class="bx bx-food-menu"></i> Manage Users  </a>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -124,7 +124,9 @@
                                                      <div class="form-group mt-1">
                                                          <label for=""> Nationality <span class="text-danger">*</span></label>
                                                          <select name="nationality" id="" data-parsley-required-message="Select nationality" class="form-control select2">
-
+                                                            @foreach($countries as $country)
+                                                                 <option value="{{$country->id}}">{{$country->name ?? '' }}</option>
+                                                             @endforeach
                                                          </select>
                                                          @error('nationality') <i class="text-danger">{{$message}}</i>@enderror
                                                      </div>
@@ -133,20 +135,22 @@
                                                      <div class="form-group mt-1">
                                                          <label for="">Marital Status <span class="text-danger">*</span></label>
                                                          <select name="maritalStatus" data-parsley-required-message="Select marital status" id="maritalStatus" class="form-control select2">
-
+                                                             @foreach($maritalstatus as $status)
+                                                                 <option value="{{$status->ms_id}}">{{$status->ms_name ?? '' }}</option>
+                                                             @endforeach
                                                          </select>
                                                          @error('maritalStatus') <i class="text-danger">{{$message}}</i>@enderror
                                                      </div>
                                                  </div>
                                                  <div class="col-md-6 col-sm-12 col-lg-6">
                                                      <div class="form-check form-switch mt-3">
-                                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked="">
+                                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="pastor" checked="">
                                                          <label class="form-check-label" for="flexSwitchCheckChecked">Is this person a pastor?</label>
                                                      </div>
                                                  </div>
                                                  <div class="col-md-6 col-sm-12 col-lg-6">
                                                      <div class="form-check form-switch mt-3">
-                                                         <input class="form-check-input" type="checkbox" id="genderSwitchCheck" checked="">
+                                                         <input class="form-check-input" type="checkbox" id="genderSwitchCheck" name="gender" checked="">
                                                          <label class="form-check-label" for="genderSwitchCheck">Male?</label>
                                                      </div>
                                                  </div>
@@ -166,7 +170,9 @@
                                                      <div class="form-group mt-1">
                                                          <label for=""> Branch <span class="text-danger">*</span></label>
                                                          <select name="branch" id="" data-parsley-required-message="Select branch" class="form-control select2">
-
+                                                             @foreach($branches as $branch)
+                                                                 <option value="{{$branch->cb_id}}">{{$branch->cb_name ?? '' }}</option>
+                                                             @endforeach
                                                          </select>
                                                          @error('branch') <i class="text-danger">{{$message}}</i>@enderror
                                                      </div>
@@ -175,7 +181,9 @@
                                                      <div class="form-group mt-1">
                                                          <label for="">Assign Role <span class="text-danger">*</span></label>
                                                          <select name="role" data-parsley-required-message="Select role" id="role" class="form-control select2">
-
+                                                             @foreach($roles as $role)
+                                                                 <option value="{{$role->id}}">{{$role->name ?? '' }}</option>
+                                                             @endforeach
                                                          </select>
                                                          @error('role') <i class="text-danger">{{$message}}</i>@enderror
                                                      </div>
