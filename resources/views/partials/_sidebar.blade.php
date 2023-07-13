@@ -6,7 +6,7 @@
         <li>
             <a href="{{route('dashboard')}}" class="waves-effect">
                 <i class="bx bx-news"></i>
-                <span key="t-chat">Newsfeed</span>
+                <span key="t-chat">Timeline</span>
             </a>
         </li>
         <li>
@@ -88,13 +88,14 @@
         <li>
             <a href="javascript: void(0);" class="has-arrow waves-effect">
                 <i class="bx bxs-landmark"></i>
-                <span key="t-crypto"> Accounting</span>
+                <span key="t-crypto"> Financials </span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                <li><a href="{{route('chart-of-accounts')}}" key="t-wallet">Chart of Accounts</a></li>
-                <li><a href="{{route('add-new-account')}}" key="t-wallet">Add New Account</a></li>
-                <li><a href="{{route('journal-voucher')}}" key="t-wallet">Journal Voucher</a></li>
-                <li><a href="{{route('sales')}}" key="t-wallet">Posting</a></li>
+                <li><a href="{{route('income')}}" key="t-wallet">Income</a></li>
+                <li><a href="{{route('expense')}}" key="t-wallet">Expenses</a></li>
+                <li><a href="{{route('remittance')}}" key="t-wallet">Remittance</a></li>
+                <li><a href="{{route('accounting.accounts')}}" key="t-wallet">Manage Accounts</a></li>
+                <li><a href="{{route('accounting.categories')}}" key="t-wallet">Manage Categories</a></li>
             </ul>
         </li>
         <li>
@@ -103,10 +104,14 @@
                 <span key="t-report"> Reports</span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                <li><a href="{{route('appointment-reports')}}" key="t-report">Trial Balance</a></li>
+                <li><a href="{{route('cashbook')}}" key="t-report">Cashbook</a></li>
+                <li><a href="{{route('appointment-reports')}}" key="t-report">Income</a></li>
+                <li><a href="{{route('appointment-reports')}}" key="t-report">Remittance</a></li>
+                <li><a href="{{route('appointment-reports')}}" key="t-report">Expenditure</a></li>
+                <li><a href="{{route('appointment-reports')}}" key="t-report">Audit Trail</a></li>
+                {{--<li><a href="{{route('appointment-reports')}}" key="t-report">Trial Balance</a></li>
                 <li><a href="{{route('practitioner-report')}}" key="t-report">Profit/Loss</a></li>
-                <li><a href="{{route('show-revenue-reports')}}" key="t-report">Balance Sheet</a></li>
-                <li><a href="{{route('client-report')}}" key="t-report">Client</a></li>
+                <li><a href="{{route('show-revenue-reports')}}" key="t-report">Balance Sheet</a></li>--}}
             </ul>
         </li>
         <li class="menu-title">Other Reports</li>

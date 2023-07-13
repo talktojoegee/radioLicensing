@@ -50,6 +50,21 @@ class User extends Authenticatable
     public function getUserCountry(){
         return $this->belongsTo(Country::class, 'country_id');
     }
+    public function getUserState(){
+        return $this->belongsTo(State::class, 'state_id');
+    }
+
+    public function getUserMaritalStatus(){
+        return $this->belongsTo(MaritalStatus::class, 'marital_status');
+    }
+    public function getUserRole(){
+        return $this->belongsTo(Role::class, 'role');
+    }
+
+
+    public function getUserChurchBranch(){
+        return $this->belongsTo(ChurchBranch::class, 'branch');
+    }
     public function getUserAccount(){
         return $this->hasMany(BulkSmsAccount::class, 'user_id')->orderBy('id', 'DESC');
     }
@@ -180,6 +195,10 @@ class User extends Authenticatable
 
     public function getUserBySlug($slug){
         return User::where('slug', $slug)->first();
+    }
+
+    public function getOtherUsersSameBranch($branch){
+        return User::where('branch', $branch)->take(5)->get();
     }
 
 /*

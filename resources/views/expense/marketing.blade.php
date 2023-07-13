@@ -37,7 +37,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
-                       @include('sales.partial._top-navigation')
+                       @include('income.partial._top-navigation')
                             <div class="row mt-5">
                                 <div class="col-md-12 col-xxl-12 col-sm-12">
                                     <p>Currently showing revenue report for @if($search == 0)<code>{{date('Y')}}</code> @else

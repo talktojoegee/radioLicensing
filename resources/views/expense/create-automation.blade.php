@@ -1,7 +1,7 @@
 
 @extends('layouts.master-layout')
 @section('current-page')
-    <small>Marketing > Edit Automation</small>
+    <small>Marketing > Create Automation</small>
 @endsection
 @section('extra-styles')
     <link href="/css/parsley.css" rel="stylesheet" type="text/css" />
@@ -34,12 +34,12 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
-                        @include('sales.partial._top-navigation')
+                        @include('income.partial._top-navigation')
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <a href="{{route('marketing-automations')}}"  class="btn btn-primary">  Automations <i class="bx bxs-send"></i> </a>
+                        <a href="{{route('marketing-automations')}}"  class="btn btn-primary"> Automations <i class="bx bxs-send"></i> </a>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -50,11 +50,11 @@
                                     <div class="card-header">
                                         Create Automation
                                     </div>
-                                    <form autocomplete="off" class="mt-3" action="{{route('save-marketing-automation-changes')}}" enctype="multipart/form-data" method="post" id="leadForm">
+                                    <form autocomplete="off" class="mt-3" action="{{route('marketing-create-automation')}}" enctype="multipart/form-data" method="post" id="leadForm">
                                         @csrf
                                         <div class="form-group mt-1">
                                             <label for="">Automation Title <span class="text-danger">*</span></label>
-                                            <input type="text" data-parsley-required-message="What's the title of this automation?" required name="automationTitle" value="{{old('automationTitle', $automation->title )}}" placeholder="Automation Title" class="form-control">
+                                            <input type="text" data-parsley-required-message="What's the title of this automation?" required name="automationTitle" value="{{old('automationTitle')}}" placeholder="Automation Title" class="form-control">
                                             @error('automationTitle') <i class="text-danger">{{$message}}</i>@enderror
                                         </div>
                                         <div class="form-group mt-3 col-md-4">
@@ -71,16 +71,15 @@
                                                 <option value="6">Member Cancelled</option>
                                                 <option value="6">Manually Triggered</option>
                                             </select>
-                                            <input type="hidden" name="automateId" value="{{$automation->id}}">
                                             @error('triggerAction') <i class="text-danger">{{$message}}</i>@enderror
                                         </div>
                                         <div class="form-group mt-3">
                                             <label for="">Period<span class="text-danger">*</span></label> <br>
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text" >Send After<small>(in days)</small></span>
-                                                <input type="number" class="form-control" name="sendAfter" value="{{old('sendAfter',$automation->send_after)}}" placeholder="Send After">
+                                                <input type="number" class="form-control" name="sendAfter" value="{{old('sendAfter',0)}}" placeholder="Send After">
                                                 <span class="input-group-text" >Time</span>
-                                                <input type="number" class="form-control" name="time" value="{{old('time',$automation->time )}}" placeholder="Time">
+                                                <input type="number" class="form-control" name="time" value="{{old('time',0)}}" placeholder="Time">
                                                 <span class="input-group-text" >Type</span>
                                                 <select name="type" class="form-control">
                                                     <option value="1">Email</option>
@@ -92,17 +91,17 @@
                                         </div>
                                         <div class="form-group mt-1">
                                             <label for="">Subject<span class="text-danger">*</span></label>
-                                            <input type="text" data-parsley-required-message="Enter subject" required name="subject" value="{{old('subject', $automation->subject)}}" placeholder="Subject" class="form-control">
+                                            <input type="text" data-parsley-required-message="Enter subject" required name="subject" value="{{old('subject')}}" placeholder="Subject" class="form-control">
                                             @error('subject') <i class="text-danger">{{$message}}</i>@enderror
                                         </div>
                                         <div class="form-group mt-3">
                                             <label for="">Message <span class="text-danger">*</span></label>
-                                            <textarea name="message"  id="message" style="resize: none;" placeholder="Type message here..." class="form-control">{{old('message', $automation->message)}}</textarea>
+                                            <textarea name="message"  id="message" style="resize: none;" placeholder="Type message here..." class="form-control">{{old('message')}}</textarea>
                                             @error('message') <i class="text-danger">{{$message}}</i>@enderror
                                         </div>
                                         <div class="form-group d-flex justify-content-center mt-3">
                                             <div class="btn-group">
-                                                <button type="submit"  class="btn btn-primary  waves-effect waves-light">Save Automation <i class="bx bx-right-arrow"></i> </button>
+                                                <button type="submit"  class="btn btn-primary  waves-effect waves-light">Create Automation <i class="bx bx-right-arrow"></i> </button>
                                             </div>
                                         </div>
                                     </form>

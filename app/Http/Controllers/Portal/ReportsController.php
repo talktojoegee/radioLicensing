@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Calendar;
+use App\Models\CashBook;
 use App\Models\Client;
 use App\Models\Sale;
 use App\Models\User;
@@ -20,6 +21,9 @@ class ReportsController extends Controller
         $this->sale = new Sale();
         $this->user = new User();
         $this->client = new Client();
+
+
+        $this->cashbook = new CashBook();
 
     }
 
@@ -283,5 +287,46 @@ class ReportsController extends Controller
                 'to.date'=>'Enter a valid date format',
             ]);
         }
+    }
+
+
+
+    public function showCashbookReport(){
+        $from = date('Y-m-d', strtotime("-30 days"));
+        $to = date('Y-m-d');
+        return view('cashbook.index',[
+            'defaultCurrency'=>$this->cashbook->getDefaultCurrency(),
+            'search'=>0,
+            'from'=>$from,
+            'to'=>$to,
+
+        ]);
+    }
+
+    public function generateCashbookReport(Request $request){
+        $branchId = Auth::user()->branch;
+        $this->validate($request,[
+            'from'=>'required|date',
+            'to'=>'required|date'
+        ],[
+            'from.required'=>'Choose start date',
+            'from.date'=>'Enter a valid date',
+            'to.date'=>'Enter a valid date',
+            'to.required'=>'Choose end date',
+        ]);
+        $from = $request->from;
+        $to = $request->to;
+        //$ids = $this->cashbook->pluckCashbookIdsByDateRange($from, $to, $branchId);
+        return view('cashbook.index',[
+            'transactions'=>$this->cashbook->getCashbookTransactionsByDateRange($from, $to, $branchId),
+            // 'fxIncomes'=>$this->cashbook->getAllBranchFxTransactions(2),
+            'defaultCurrency'=>$this->cashbook->getDefaultCurrency(),
+            //'localCashbookIds'=>$this->cashbook->pluckCashbookIdsByDateRange($from, $to, $branchId),
+            'search'=>1,
+            'from'=>$from,
+            'to'=>$to,
+            'balance'=>0
+
+        ]);
     }
 }

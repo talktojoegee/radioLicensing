@@ -37,7 +37,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
-                        @include('sales.partial._top-navigation')
+                        @include('income.partial._top-navigation')
                     </div>
                 </div>
                 <div class="row">

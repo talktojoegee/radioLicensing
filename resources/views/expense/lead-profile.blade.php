@@ -27,7 +27,7 @@
 
     <div class="card">
         <div class="card-header">
-            @include('sales.partial._top-navigation')
+            @include('income.partial._top-navigation')
         </div>
         <div class="row">
             <div class="col-xl-4">

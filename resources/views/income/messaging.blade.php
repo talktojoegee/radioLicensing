@@ -1,7 +1,7 @@
 
 @extends('layouts.master-layout')
 @section('current-page')
-    <small>Marketing > Automations</small>
+     <small>Marketing > Messaging</small>
 @endsection
 @section('extra-styles')
     <link rel="stylesheet" href="/css/nprogress.css">
@@ -37,12 +37,12 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
-                        @include('sales.partial._top-navigation')
+                        @include('income.partial._top-navigation')
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <a href="{{route('marketing-create-automation')}}"  class="btn btn-primary"> Create Automation <i class="bx bxs-send"></i> </a>
+                        <a href="{{route('marketing-compose-messaging')}}"  class="btn btn-primary"> Compose Message <i class="bx bxs-envelope"></i> </a>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -51,7 +51,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="card-header">
-                                        Automations
+                                         Messages
                                     </div>
                                     <div class="table-responsive mt-3">
                                         <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
@@ -59,54 +59,58 @@
                                             <tr>
                                                 <th class="">#</th>
                                                 <th class="wd-15p">Date</th>
-                                                <th class="wd-15p">Title</th>
-                                                <th class="wd-15p">Triggers on...</th>
+                                                <th class="wd-15p">Subject</th>
+                                                <th class="wd-15p">Excerpt</th>
+                                                <th class="wd-15p">Recipients</th>
                                                 <th class="wd-15p">Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             @php $index = 1; @endphp
-                                            @foreach($automations as $automate)
+                                            @foreach($messages as $message)
                                                 <tr>
                                                     <td>{{$index++}}</td>
-                                                    <td>{{date('d M, Y', strtotime($automate->created_at))}}</td>
-                                                    <td>{{$automate->title ?? '' }}</td>
+                                                    <td>{{date('d M, Y h:ia', strtotime($message->created_at))}}</td>
+                                                    <td>{{$message->title ?? '' }}</td>
+                                                    <td>{{ strlen(strip_tags($message->content)) > 50 ? substr(strip_tags($message->content),0,50).'...' : strip_tags($message->content) }}</td>
                                                     <td>
-                                                        @switch($automate->trigger_action)
-                                                            @case(1)
-                                                            Member Sign-up
-                                                            @break
-                                                            @case(2)
-                                                            Visitor Sign-up
-                                                            @break
-                                                            @case(3)
-                                                            New Lead
-                                                            @break
-                                                            @case(4)
-                                                            Membership Start
-                                                            @break
-                                                            @case(5)
-                                                            Promotion
-                                                            @break
-                                                            @case(6)
-                                                            Absence
-                                                            @break
-                                                            @case(7)
-                                                            Member Frozen
-                                                            @break
-                                                            @case(8)
-                                                            Member Cancelled
-                                                            @break
-                                                            @case(9)
-                                                            Manually Triggered
-                                                            @break
-                                                        @endswitch
+                                                        <div class="d-flex justify-content-center">
+                                                            <span class="badge rounded-pill bg-danger ">{{number_format(count(json_decode($message->sent_to)))}}</span>
+                                                        </div>
                                                     </td>
                                                     <td>
-                                                        <a class="btn btn-warning btn-sm" href="{{route('edit-marketing-automation', ['slug'=>$automate->slug])}}"> <i class="bx bx-pencil"></i> Edit</a>
+                                                        <button class="btn btn-primary" data-bs-target="#messageDetail_{{$message->id}}" data-bs-toggle="modal">View</button>
+                                                        <div class="modal right fade" id="messageDetail_{{$message->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+                                                            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header" >
+                                                                        <h4 class="modal-title" id="myModalLabel2">Message Details</h4>
+                                                                        <button type="button" style="margin: 0px; padding: 0px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+
+                                                                    <div class="modal-body text-wrap">
+                                                                        <h5 class="font-size-15 mt-4">{{$message->title ?? '' }}</h5>
+                                                                        {!! $message->content ?? ''  !!}
+                                                                        <div class="text-muted mt-4 bg-light p-2">
+                                                                            <h6 class="font-size-12 mt-4">Sent to...</h6>
+                                                                            @foreach($message->getReceivers(json_decode($message->sent_to))  as $re)
+                                                                                <p><i class="mdi mdi-chevron-right text-primary me-1"></i>
+                                                                                    {{$re->first_name ?? '' }} {{$re->last_name ?? '' }}
+                                                                                </p>
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <div class="mt-4">
+                                                                            <h6 class="font-size-12 mt-4">Date & Time</h6>
+                                                                            <p class="text-muted mb-0">{{date('d M, Y h:ia', strtotime($message->created_at))}}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
+
                                             </tbody>
                                         </table>
                                     </div>
