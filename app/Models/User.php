@@ -201,6 +201,10 @@ class User extends Authenticatable
         return User::where('branch', $branch)->take(5)->get();
     }
 
+    public function getAllBranchUsers($branchId){
+        return User::where('branch', $branchId)->orderBy('first_name', 'ASC')->get();
+    }
+
 /*
     public function apiTokenGenerator(){
         $user = User::find(Auth::user()->id);

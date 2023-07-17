@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+/*
+Route::get('/',function(){
+    return redirect()->route('login');
+})->name('home-redirect');*/
 Route::get('/book-appointment', [App\Http\Controllers\Portal\BookingController::class, 'showBookingForm'])->name('book-appointment');
 
 
@@ -132,8 +136,10 @@ Route::group(['prefix'=>'/financials', 'middleware'=>'auth'],function(){
     Route::post('/process-remittance-request', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'processRemittanceRequest'])->name('process-remittance-request');
 
    Route::prefix('/reports')->group(function(){
-       Route::get('/cashbook', [App\Http\Controllers\Portal\ReportsController::class, 'showCashbookReport'])->name('cashbook');
+       Route::get('/cashbook/{type}', [App\Http\Controllers\Portal\ReportsController::class, 'showCashbookReport'])->name('cashbook');
        Route::get('/generate-cashbook-report', [App\Http\Controllers\Portal\ReportsController::class, 'generateCashbookReport'])->name('generate-cashbook-report');
+       Route::get('/remittance', [App\Http\Controllers\Portal\ReportsController::class, 'showRemittanceReport'])->name('show-remittance-report');
+       Route::get('/generate-remittance-report', [App\Http\Controllers\Portal\ReportsController::class, 'generateRemittanceReport'])->name('generate-remittance-report');
    });
 
     Route::prefix('/marketing')->group(function(){
@@ -155,6 +161,19 @@ Route::group(['prefix'=>'/financials', 'middleware'=>'auth'],function(){
         Route::post('/save-marketing-automation-changes', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'editAutomation'])->name('save-marketing-automation-changes');
     });
 
+});
+
+Route::group(['prefix'=>'/attendance', 'middleware'=>'auth'], function(){
+    Route::get('/', [App\Http\Controllers\Portal\CalendarController::class, 'showAttendance'])->name('attendance');
+    Route::post('/', [App\Http\Controllers\Portal\CalendarController::class, 'publishAttendance']);
+    Route::post('/edit-attendance', [App\Http\Controllers\Portal\CalendarController::class, 'publishAttendance'])->name('edit-attendance');
+    Route::get('/chart-attendance', [App\Http\Controllers\Portal\CalendarController::class, 'getAttendanceChart'])->name('chart-attendance');
+});
+
+Route::group(['prefix'=>'workflow', 'middleware'=>'auth'], function(){
+    Route::get('/', [App\Http\Controllers\Portal\WorkflowController::class, 'showWorkflowView'])->name('workflow');
+    Route::post('/', [App\Http\Controllers\Portal\WorkflowController::class, 'storeWorkflowRequest']);
+    Route::get('/{slug}', [App\Http\Controllers\Portal\WorkflowController::class, 'viewWorkflowRequest'])->name('view-workflow');
 });
 
 Route::group(['prefix'=>'/reports', 'middleware'=>'auth'],function(){
@@ -235,7 +254,10 @@ Route::group(['prefix'=>'app', 'middleware'=>'auth'],function(){
 //Route::get('/', [App\Http\Controllers\Controller::class, 'showOrganizationPageDetails'])->name('homepage');
 
 
-Route::get('/', [App\Http\Controllers\Controller::class, 'homepage'])->name('homepage');
+//Route::get('/', [App\Http\Controllers\Controller::class, 'homepage'])->name('homepage');
+Route::get('/', function(){
+    return redirect()->route('login');
+})->name('homepage');
 
 
 Route::group(['domain'=>'{account}.'.env('APP_URL')],function(){

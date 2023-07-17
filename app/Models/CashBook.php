@@ -195,10 +195,21 @@ class CashBook extends Model
         $defaultCurrency = $this->getDefaultCurrency();
         return CashBook::whereBetween('cashbook_transaction_date', [$from, $to])
             ->where('cashbook_branch_id', $branchId)
-            ->where('cashbook_currency_id', $defaultCurrency->id)
+            //->where('cashbook_currency_id', $defaultCurrency->id)
             ->whereMonth('cashbook_transaction_date', date('m'))
             ->whereYear('cashbook_transaction_date', date('Y'))
             //->groupBy('cashbook_category_id')
+            ->orderBy('cashbook_id', 'ASC')
+            ->get();
+    }
+    public function getCashbookFXTransactionsByDateRange($from, $to, $branchId){
+        $defaultCurrency = $this->getDefaultCurrency();
+        return CashBook::whereBetween('cashbook_transaction_date', [$from, $to])
+            ->where('cashbook_branch_id', $branchId)
+            ->whereNot('cashbook_currency_id', $defaultCurrency->id)
+            ->whereMonth('cashbook_transaction_date', date('m'))
+            ->whereYear('cashbook_transaction_date', date('Y'))
+            ->groupBy('cashbook_currency_id')
             ->orderBy('cashbook_id', 'ASC')
             ->get();
     }

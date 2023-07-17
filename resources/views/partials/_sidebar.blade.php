@@ -41,13 +41,13 @@
             </a>
         </li>
         <li>
-            <a href="{{route('manage-tasks')}}" class="waves-effect">
+            <a href="{{route('workflow')}}" class="waves-effect">
                 <i class="bx bx-infinite"></i>
                 <span key="t-chat">Workflow</span>
             </a>
         </li>
         <li>
-            <a href="{{route('manage-tasks')}}" class="waves-effect">
+            <a href="{{route('attendance')}}" class="waves-effect">
                 <i class="bx bx-chart"></i>
                 <span key="t-chat">Attendance</span>
             </a>
@@ -104,26 +104,12 @@
                 <span key="t-report"> Reports</span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                <li><a href="{{route('cashbook')}}" key="t-report">Cashbook</a></li>
-                <li><a href="{{route('appointment-reports')}}" key="t-report">Income</a></li>
-                <li><a href="{{route('appointment-reports')}}" key="t-report">Remittance</a></li>
-                <li><a href="{{route('appointment-reports')}}" key="t-report">Expenditure</a></li>
-                <li><a href="{{route('appointment-reports')}}" key="t-report">Audit Trail</a></li>
-                {{--<li><a href="{{route('appointment-reports')}}" key="t-report">Trial Balance</a></li>
-                <li><a href="{{route('practitioner-report')}}" key="t-report">Profit/Loss</a></li>
-                <li><a href="{{route('show-revenue-reports')}}" key="t-report">Balance Sheet</a></li>--}}
-            </ul>
-        </li>
-        <li class="menu-title">Other Reports</li>
-        <li>
-            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                <i class="bx bxs-report"></i>
-                <span key="t-report"> Reports</span>
-            </a>
-            <ul class="sub-menu" aria-expanded="false">
+                <li><a href="{{route('cashbook', 'income')}}" key="t-report">Income</a></li>
+                <li><a href="{{route('cashbook', 'expense')}}" key="t-report">Expense</a></li>
+                <li><a href="{{route('cashbook', 'cashbook')}}" key="t-report">Cashbook</a></li>
+                <li><a href="{{route('show-remittance-report')}}" key="t-report">Remittance</a></li>
                 <li><a href="{{route('appointment-reports')}}" key="t-report">Attendance</a></li>
-                <li><a href="{{route('practitioner-report')}}" key="t-report">Inflow</a></li>
-                <li><a href="{{route('show-revenue-reports')}}" key="t-report">Outflow</a></li>
+                <li><a href="{{route('appointment-reports')}}" key="t-report">Audit Trail</a></li>
             </ul>
         </li>
         <li class="menu-title">Settings</li>
@@ -137,7 +123,6 @@
                 <li><a href="{{route('purchase-or-upgrade-plan')}}" key="t-wallet">Regions</a></li>
                 <li><a href="{{route('branches-settings')}}" key="t-wallet">Branches</a></li>
                 <li><a href="{{route('branches-settings')}}" key="t-wallet">Branch Assignment</a></li>
-                {{--<li><a href="{{route('cells-settings')}}" key="t-wallet">Cells</a></li>--}}
             </ul>
         </li>
 
