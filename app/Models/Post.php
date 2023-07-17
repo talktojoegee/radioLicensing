@@ -12,7 +12,7 @@ class Post extends Model
     protected $primaryKey = 'p_id';
 
     public function getCurrency(){
-        return $this->belongsTo(Currency::class, 'p_currency_id');
+        return $this->belongsTo(Currency::class, 'p_currency');
     }
 
     public function getAuthor(){
@@ -20,11 +20,26 @@ class Post extends Model
     }
 
     public function getAuthorizingPersons(){
-        return $this->hasMany(AuthorizingPerson::class, 'ap_user_id');
+        return $this->hasMany(AuthorizingPerson::class, 'ap_post_id');
+    }
+
+    public function getPostComments(){
+        return $this->hasMany(PostComment::class, 'pc_post_id')->orderBy('pc_id', 'DESC');
+    }
+
+    public function getAttachments(){
+        return $this->hasMany(PostAttachment::class, 'pa_post_id');
+    }
+
+    public function getCategory(){
+        return $this->belongsTo(TransactionCategory::class, 'p_category_id');
+    }
+    public function getBranch(){
+        return $this->belongsTo(ChurchBranch::class, 'p_category_id');
     }
 
     public static function publishPost($author, $branch, $title, $content, $type = 1,
-    $amount = 0, $currency=76, $startDate, $endDate, $authorization, $scope = 2){
+    $amount = 0, $currency=76, $startDate, $endDate, $authorization, $scope = 2, $cat=null){
         $post = new Post();
         $post->p_posted_by = $author;
         $post->p_branch_id = $branch;
@@ -37,6 +52,7 @@ class Post extends Model
         $post->p_end_date = $endDate;
         $post->p_authorization = $authorization;
         $post->p_scope = $scope;
+        $post->p_category_id = $cat;
         $post->p_slug = Str::slug($title).'-'.substr(sha1(time()),31,40);
         $post->save();
         return $post;

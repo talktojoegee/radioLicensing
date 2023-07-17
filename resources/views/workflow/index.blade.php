@@ -164,9 +164,19 @@
                                 @error('type') <i class="text-danger">{{$message}}</i>@enderror
                             </div>
 
-                            <div class="form-group mt-3 col-md-12">
+                            <div class="form-group mt-3 col-md-6">
                                 <label for="">Attachment <small>(Optional)</small></label> <br>
                                 <input type="file" multiple name="attachments[]" class="form-control-file">
+                            </div>
+                            <div class="form-group mt-3 col-md-6">
+                                <label for="">Category <span class="text-danger">*</span></label> <br>
+                                <select name="category"  class="form-control ">
+                                    <option selected disabled>--Select category--</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->tc_id }}">{{$category->tc_name ?? '' }} </option>
+                                    @endforeach
+                                </select>
+                                @error('category') <i class="text-danger">{{$message}}</i>@enderror
                             </div>
                         </div>
                         <div class="row mb-3">
