@@ -22,6 +22,7 @@ class WorkflowController extends Controller
         $this->currency = new Currency();
         $this->user = new User();
         $this->transactioncategory = new TransactionCategory();
+        $this->authorizingperson = new AuthorizingPerson();
 
     }
 
@@ -84,7 +85,14 @@ class WorkflowController extends Controller
         if(empty($workflow)){
             abort(404);
         }
-        return view('workflow.view', ['workflow'=>$workflow]);
+        $authIds = AuthorizingPerson::pluckPendingAuthorizingPersonsByPostId($workflow->p_id);
+        return view('workflow.view',
+            [
+                'workflow'=>$workflow,
+                'authIds'=>$authIds,
+                'persons'=>$this->user->getAllBranchUsers(Auth::user()->branch),
+                'pendingId'=>0
+            ]);
     }
 
     public function commentOnPost(Request $request){
@@ -103,6 +111,46 @@ class WorkflowController extends Controller
         return view('workflow.partials._comments',[
             'comments'=>$comments
         ]);
+    }
+
+    public function updateWorkflowStatus(Request $request){
+        if(isset($request->final)){
+            $this->validate($request, [
+                'workflowId'=>'required',
+                'authId'=>'required',
+                'comment'=>'required',
+                'status'=>'required',
+            ],[
+                'comment.required'=>'Type comment in the field provided',
+                'authId'=>''
+            ]);
+        }else{
+            $this->validate($request, [
+                'workflowId'=>'required',
+                'comment'=>'required',
+                'nextAuth'=>'required',
+                'authId'=>'required',
+                'status'=>'required',
+            ],[
+                'nextAuth.required'=>'Choose who is next to act on this',
+                'comment.required'=>'Type comment in the field provided',
+                'authId.required'=>''
+            ]);
+        }
+        $userId = Auth::user()->id;
+        $postId = $request->workflowId;
+        $final = isset($request->final) ? 1 : 0;
+        $status = $request->status;
+        $authId = $request->authId;
+        AuthorizingPerson::updateStatus($postId, $authId, $userId, $status, $request->comment, $final);
+        if($final == 1){
+            Post::updatePostStatus($postId, $status);
+        }else{
+            AuthorizingPerson::publishAuthorizingPerson($postId, $request->nextAuth);
+        }
+
+        session()->flash("success", "Action successful!");
+        return back();
 
     }
 }

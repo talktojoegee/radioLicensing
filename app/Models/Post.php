@@ -73,7 +73,7 @@ class Post extends Model
         return Post::where('p_slug', $slug)->first();
     }
 
-    public function updatePostStatus($postId, $status){
+    public static function updatePostStatus($postId, $status){
         $post = Post::find($postId);
         $post->p_status = $status;
         $post->save();

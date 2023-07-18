@@ -22,7 +22,12 @@
                     <div class="card-header">
                         <a href="{{ url()->previous() }}" class="btn btn-secondary "> <i
                                 class="bx bx bxs-left-arrow"></i> Go back</a>
-                        <a href="#" class="btn btn-primary">Process Workflow <i class="bx bxs-timer"></i> </a>
+                        @if(in_array(Auth::user()->id, $authIds))
+                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#declineModal_" class="btn btn-danger ">  Decline <i
+                                class="bx bx-x"></i></a>
+                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#approveModal_" class="btn btn-success ">  Approve <i
+                                    class="bx bx-check"></i></a>
+                        @endif
                     </div>
 
                     @if(session()->has('success'))
@@ -102,6 +107,7 @@
                                                         <div class="event-down-icon">
                                                             @if($auth->ap_status == 0)
                                                              <i class="bx bxs-hourglass-top h1 text-secondary down-arrow-icon"></i>
+                                                                <?php $pendingId = $auth->ap_id ?>
                                                             @elseif($auth->ap_status == 1)
                                                                 <i class="bx bx-check-circle h1 text-success down-arrow-icon"></i>
                                                             @else
@@ -116,6 +122,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         @endforeach
                                     </div>
                                 </div>
@@ -178,53 +185,108 @@
                     </div>
                     <div class="col-md-12 col-lg-12">
                         <div class="card">
-                            <div class="modal-header">
-                                <div class="modal-title text-uppercase">Comment(s)</div>
-                            </div>
                             <div class="card-body">
-                                <div id="commentWrapper" class="simplebar-content-wrapper" style="height: 300px; padding-right: 20px; padding-bottom: 0px; overflow: hidden scroll;">
-                                    @foreach($workflow->getPostComments as $comment)
-                                        <div class="d-flex py-3 border-top">
-                                            <div class="flex-shrink-0 me-3">
-                                                <div class="avatar-xs">
-                                                    <img src="{{url('storage/'.$comment->getUser->image)}}" alt=""
-                                                         class="img-fluid d-block rounded-circle">
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#home1" role="tab">
+                                            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                            <span class="d-none d-sm-block">Workflow Trail</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#profile1" role="tab">
+                                            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                            <span class="d-none d-sm-block">Comment(s)</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content p-3 text-muted">
+                                    <div class="tab-pane active" id="home1" role="tabpanel">
+                                        <div class="col-md-12 col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div id="commentWrapper" class="simplebar-content-wrapper" style="height: 300px; padding-right: 20px; padding-bottom: 0px; overflow: hidden scroll;">
+                                                        @foreach($workflow->getAuthorizingPersons as $trail)
+                                                            <div class="d-flex py-3 border-top">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <img src="{{url('storage/'.$trail->getUser->image)}}" alt=""
+                                                                             class="img-fluid d-block rounded-circle">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h5 class="font-size-14 mb-1">{{$trail->getUser->title ?? '' }} {{$trail->getUser->first_name ?? '' }} {{$trail->getUser->last_name ?? '' }} <small
+                                                                            class="text-muted float-end">{{\Carbon\Carbon::parse($trail->created_at)->diffForHumans()}}</small></h5>
+                                                                    <p class="text-muted">
+                                                                        {{$trail->ap_comment ?? '' }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1">
-                                                <h5 class="font-size-14 mb-1">{{$comment->getUser->title ?? '' }} {{$comment->getUser->first_name ?? '' }} {{$comment->getUser->last_name ?? '' }} <small
-                                                        class="text-muted float-end">{{\Carbon\Carbon::parse($comment->created_at)->diffForHumans()}}</small></h5>
-                                                <p class="text-muted">
-                                                    {{$comment->pc_comment ?? '' }}
-                                                </p>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="profile1" role="tabpanel">
+                                        <div class="col-md-12 col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div id="commentWrapper" class="simplebar-content-wrapper" style="height: 300px; padding-right: 20px; padding-bottom: 0px; overflow: hidden scroll;">
+                                                        @foreach($workflow->getPostComments as $comment)
+                                                            <div class="d-flex py-3 border-top">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <img src="{{url('storage/'.$comment->getUser->image)}}" alt=""
+                                                                             class="img-fluid d-block rounded-circle">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h5 class="font-size-14 mb-1">{{$comment->getUser->title ?? '' }} {{$comment->getUser->first_name ?? '' }} {{$comment->getUser->last_name ?? '' }} <small
+                                                                            class="text-muted float-end">{{\Carbon\Carbon::parse($comment->created_at)->diffForHumans()}}</small></h5>
+                                                                    <p class="text-muted">
+                                                                        {{$comment->pc_comment ?? '' }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+
+                                                    <div class="mt-4">
+                                                        <h5 class="font-size-16 mb-3">Leave a comment</h5>
+                                                        <form id="commentForm" data-parsley-validate="">
+                                                            @csrf
+                                                            <div class="mb-3">
+                                                                <label for="comment" class="form-label">Comment</label>
+                                                                <textarea data-parsley-required-message="Type your comment in the field provided" required name="comment" class="form-control" id="comment"
+                                                                          placeholder="Your comment..." style="resize: none;" rows="3"></textarea>
+                                                                <input type="hidden" name="postId" id="postId" value="{{$workflow->p_id}}">
+                                                            </div>
+
+                                                            <div class="text-end">
+                                                                <button type="submit" class="btn btn-primary w-sm">Submit <i class="bxs-comment-add bx "></i> </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
-                                    @endforeach
-                                </div>
-
-                                <div class="mt-4">
-                                    <h5 class="font-size-16 mb-3">Leave a comment</h5>
-                                    <form id="commentForm" data-parsley-validate="">
-                                        @csrf
-                                        <div class="mb-3">
-                                            <label for="comment" class="form-label">Comment</label>
-                                            <textarea data-parsley-required-message="Type your comment in the field provided" required name="comment" class="form-control" id="comment"
-                                                      placeholder="Your comment..." style="resize: none;" rows="3"></textarea>
-                                            <input type="hidden" name="postId" id="postId" value="{{$workflow->p_id}}">
-                                        </div>
-
-                                        <div class="text-end">
-                                            <button type="submit" class="btn btn-primary w-sm">Submit <i class="bxs-comment-add bx "></i> </button>
-                                        </div>
-                                    </form>
+                                    </div>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                    <!-- end col -->
+
                 </div>
             </div>
+
             <div class="col-lg-4">
                 <div class="card">
                     <div class="modal-header">
@@ -267,12 +329,61 @@
                     </div>
                 </div>
             </div>
-            <!-- end col -->
         </div>
     </div>
 
 
+    <div class="modal right fade" id="approveModal_" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" style="width: 900px;">
+        <div class="modal-dialog w-100" role="document">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h6 class="modal-title text-uppercase" style="text-align: center;" id="myModalLabel2">Are you sure you want to approve this?</h6>
+                    <button type="button" style="margin: 0px; padding: 0px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
+                <div class="modal-body">
+                    <p><strong class="text-danger">Note:</strong> This action cannot be undone. Are you sure you want to approve this?</p>
+                    <form autocomplete="off" action="{{route('update-workflow')}}" id="createIncomeForm" data-parsley-validate="" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row mb-3">
+                            <div class="col-md-12 col-sm-12 col-lg-12 mb-3">
+                                <div class="form-check form-switch form-switch-lg mb-3" dir="ltr">
+                                    <input class="form-check-input" type="checkbox" id="markedAsFinal" name="final" checked="">
+                                    <label class="form-check-label" for="markedAsFinal">Should your action be marked as final?</label>
+                                </div>
+                                <input type="hidden" name="workflowId" value="{{$workflow->p_id}}">
+                            </div>
+                            <div class="form-group mt-1 col-md-12 mt-3 " id="nextAuthWrapper">
+                                <label for="">Next Authorizing Person</label>
+                                <select name="nextAuth"  class="form-control">
+                                    <option disabled selected>-- Select next auth person --</option>
+                                    @foreach($persons as $person)
+                                        <option value="{{$person->id}}">{{ $person->title ?? '' }} {{ $person->first_name ?? '' }} {{ $person->last_name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                                @error('nextAuth') <i class="text-danger">{{$message}}</i>@enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="form-group mt-1 col-md-12">
+                                <label for="">Comment</label> <br>
+                                <input type="hidden" name="status" value="1">
+                                <textarea name="comment" style="resize: none;" placeholder="Leave your comment here..." class="form-control">{{old('comment')}}</textarea>
+                                @error('comment') <i class="text-danger">{{$message}}</i>@enderror
+                                <input type="hidden" name="authId" value="{{ $pendingId }}">
+                            </div>
+                        </div>
+                        <div class="form-group d-flex justify-content-center mt-3">
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary  waves-effect waves-light">Submit  <i class="bx bxs-right-arrow"></i> </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('extra-scripts')
@@ -282,8 +393,18 @@
     <script src="/js/axios.min.js"></script>
     <script>
         $(document).ready(function(){
+            $('#markedAsFinal').on('click', function(){
+                isChecked = $(this).is(':checked')
+
+                if(isChecked){
+                    $('#nextAuthWrapper').show();
+                }
+                else{
+                    $('#nextAuthWrapper').hide();
+                }
+            });
             $('#commentForm').parsley().on('field:validated', function() {
-                var ok = $('.parsley-error').length === 0;
+                let ok = $('.parsley-error').length === 0;
                 $('.bs-callout-info').toggleClass('hidden', !ok);
                 $('.bs-callout-warning').toggleClass('hidden', ok);
                 let comment = $('#comment').val();

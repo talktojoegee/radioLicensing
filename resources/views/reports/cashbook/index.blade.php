@@ -119,7 +119,7 @@
                                                         @csrf
                                                         <input type="hidden" name="collectionFrom" value="{{$from}}">
                                                         <input type="hidden" name="collectionTo" value="{{$to}}">
-                                                        <p class="text-center">Showing cashbook report between <code>{{date('d M, Y', strtotime($from))}}</code> and <code>{{date('d M, Y', strtotime($to))}}</code></p>
+                                                        <p class="text-center">Showing cashbook report between <code>{{date('d M, Y', strtotime($from))}}</code> to <code>{{date('d M, Y', strtotime($to))}}</code></p>
                                                         <div class="table-responsive mt-3">
                                                             <table id="complex-header" class="table table-striped table-bordered nowrap dataTable" role="grid" aria-describedby="complex-header_info" style="width: 100%; margin:0px auto;">
                                                                 <thead style="position: sticky;top: 0">
@@ -339,7 +339,7 @@
                                                     @csrf
                                                     <input type="hidden" name="collectionFrom" value="{{$from}}">
                                                     <input type="hidden" name="collectionTo" value="{{$to}}">
-                                                    <p class="text-center">Showing cashbook report between <code>{{date('d M, Y', strtotime($from))}}</code> and <code>{{date('d M, Y', strtotime($to))}}</code></p>
+                                                    <p class="text-center">Showing cashbook report between <code>{{date('d M, Y', strtotime($from))}}</code> to <code>{{date('d M, Y', strtotime($to))}}</code></p>
                                                     <div class="table-responsive mt-3">
                                                         <table id="complex-header" class="table table-striped table-bordered nowrap dataTable" role="grid" aria-describedby="complex-header_info" style="width: 100%; margin:0px auto;">
                                                             <thead style="position: sticky;top: 0">

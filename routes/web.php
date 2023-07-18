@@ -175,6 +175,8 @@ Route::group(['prefix'=>'workflow', 'middleware'=>'auth'], function(){
     Route::post('/', [App\Http\Controllers\Portal\WorkflowController::class, 'storeWorkflowRequest']);
     Route::get('/{slug}', [App\Http\Controllers\Portal\WorkflowController::class, 'viewWorkflowRequest'])->name('view-workflow');
     Route::post('/comment-on-post', [App\Http\Controllers\Portal\WorkflowController::class, 'commentOnPost'])->name('comment-on-post');
+    Route::post('/update-workflow', [App\Http\Controllers\Portal\WorkflowController::class, 'updateWorkflowStatus'])->name('update-workflow');
+
 });
 
 Route::group(['prefix'=>'/reports', 'middleware'=>'auth'],function(){

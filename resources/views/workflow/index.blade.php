@@ -70,7 +70,7 @@
                                             <td class="">{{$a++}}</td>
                                             <td class="sorting_1 text-left">{{ date('d M, Y', strtotime($flow->created_at)) }}</td>
                                             <td class="">{{$flow->p_title ?? ''}}</td>
-                                            <td class="" style="text-align: right">{{ number_format($flow->p_amount ?? 0, 2) }}</td>
+                                            <td class="" style="text-align: right">{{$flow->getCurrency->code ?? ''}} {{$flow->getCurrency->symbol ?? '' }}{{ number_format($flow->p_amount ?? 0, 2) }}</td>
                                             <td class="">
                                                 @switch($flow->p_status)
                                                     @case(0)
