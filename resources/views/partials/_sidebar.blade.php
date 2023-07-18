@@ -21,6 +21,32 @@
                 <span key="t-chat">Branches</span>
             </a>
         </li>
+        <li class="menu-title" key="t-pages">COMMUNICATION</li>
+        <li>
+            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                <i class="bx bxs-message"></i>
+                <span key="t-crypto"> Bulk SMS </span>
+            </a>
+            <ul class="sub-menu" aria-expanded="false">
+                <li><a href="{{route('top-up-transactions')}}" key="t-wallet">Wallet</a></li>
+                <li><a href="{{route('compose-sms')}}" key="t-wallet">Compose</a></li>
+                <li><a href="{{route('schedule-sms')}}" key="t-wallet">Schedule</a></li>
+                <li><a href="{{route('top-up')}}" key="t-wallet">Top-up</a></li>
+                <li><a href="{{route('phone-groups')}}" key="t-wallet">Phone Group</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                <i class="bx bx-phone-call"></i>
+                <span key="t-crypto"> Follow-up </span>
+            </a>
+            <ul class="sub-menu" aria-expanded="false">
+                <li><a href="{{route('income')}}" key="t-wallet">Add New</a></li>
+                <li><a href="{{route('expense')}}" key="t-wallet">Import</a></li>
+                <li><a href="{{route('remittance')}}" key="t-wallet">My Task</a></li>
+                <li><a href="{{route('accounting.accounts')}}" key="t-wallet">Assignment</a></li>
+            </ul>
+        </li>
         <li class="menu-title" key="t-pages">TIME</li>
         <li>
             <a href="{{route('calendar')}}" class="waves-effect">

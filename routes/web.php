@@ -179,6 +179,32 @@ Route::group(['prefix'=>'workflow', 'middleware'=>'auth'], function(){
 
 });
 
+Route::group(['prefix'=>'/bulk-sms', 'middleware'=>'auth'],function(){
+    //Route::get('/', [App\Http\Controllers\UserController::class, 'customerDashboard'])->name('customer-dashboard');
+    Route::get('/fund-wallet', [App\Http\Controllers\Portal\SMSController::class, 'showTopUpForm'])->name('top-up');
+    Route::post('/fund-wallet', [App\Http\Controllers\Portal\SMSController::class, 'processTopUpRequest']);
+    Route::get('/fund-wallet/transactions', [App\Http\Controllers\Portal\SMSController::class, 'showTopUpTransactions'])->name('top-up-transactions');
+    Route::get('/compose-sms', [App\Http\Controllers\Portal\SMSController::class, 'showComposeMessageForm'])->name('compose-sms');
+    Route::get('/preview-message',[App\Http\Controllers\Portal\SMSController::class, 'previewMessage'])->name('preview-message');
+    Route::post('/send-text-message',[App\Http\Controllers\Portal\SMSController::class, 'sendTextMessage'])->name('send-text-message');
+
+    Route::get('/schedule-sms', [App\Http\Controllers\Portal\SMSController::class, 'showScheduleSmsForm'])->name('schedule-sms');
+    Route::get('/api-settings', [App\Http\Controllers\Portal\SMSController::class, 'showApiInterface'])->name('api-settings');
+
+    Route::get('/senders/create', [App\Http\Controllers\Portal\SMSController::class, 'showSenderIdForm'])->name('create-senders');
+    Route::post('/senders/create', [App\Http\Controllers\Portal\SMSController::class, 'createSenderId']);
+    Route::get('/senders/registered', [App\Http\Controllers\Portal\SMSController::class, 'showRegisteredSenderIds'])->name('registered-senders');
+
+    Route::get('/phone-groups',[App\Http\Controllers\Portal\SMSController::class, 'showPhoneGroupForm'])->name('phone-groups');
+    Route::post('/phone-groups',[App\Http\Controllers\Portal\SMSController::class, 'setNewPhoneGroup']);
+    Route::post('/edit-phone-group',[App\Http\Controllers\Portal\SMSController::class, 'setNewPhoneGroup'])->name('edit-phone-group');
+
+    Route::get('/batch-report', [App\Http\Controllers\Portal\SMSController::class, 'batchReport'])->name('batch-report');
+
+    //Route::post('/regenerate-api-token',[App\Http\Controllers\UserController::class, 'reGenerateApiToken'])->name('regenerate-api-token');
+});
+
+
 Route::group(['prefix'=>'/reports', 'middleware'=>'auth'],function(){
     Route::get('/appointments', [App\Http\Controllers\Portal\ReportsController::class, 'showAppointmentReports'])->name('appointment-reports');
     Route::get('/filter-appointment-reports', [App\Http\Controllers\Portal\ReportsController::class, 'filterAppointments'])->name('filter-appointment-reports');

@@ -205,6 +205,69 @@ class User extends Authenticatable
         return User::where('branch', $branchId)->orderBy('first_name', 'ASC')->get();
     }
 
+
+/*
+    public function getUserAccount(){ //git test
+        return $this->hasMany(BulkSmsAccount::class, 'user_id')->orderBy('id', 'DESC');
+    }*/
+
+    public function getUserBulkSMSReport(){
+        return $this->hasMany(BulkMessage::class, 'user_id')->orderBy('id', 'DESC');
+    }
+
+    public function getUserPhoneGroups(){
+        return $this->hasMany(PhoneGroup::class, 'user_id');
+    }
+
+    public function getUserSenderIds(){
+        return $this->hasMany(SenderId::class, 'user_id');
+    }
+
+/*
+    public function createUser(Request $request){
+        $user = new User();
+        $user->first_name = $request->firstName;
+        $user->mobile_no = $request->phoneNumber;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->uuid = Str::uuid();
+        $user->api_token = Str::random(60);
+        $user->save();
+        return $user;
+    }*/
+
+
+    public function apiTokenGenerator(){
+        $user = User::find(Auth::user()->id);
+        $user->api_token = Str::random(60);
+        $user->save();
+    }
+
+    public function getUserByUuid($uuid){
+        return User::where('uuid', $uuid)->first();
+    }
+   /* public function getUserById($id){
+        return User::find( $id);
+    }*/
+
+    public function updateUser(Request $request, $mobile){
+        $user = User::find($request->id);
+        $user->first_name = $request->firstName;
+        $user->mobile_no = $request->phoneNumber;
+        //$user->email = $request->email;
+        //$user->password = bcrypt($request->password);
+        $user->uuid = Str::uuid();
+        $user->save();
+        return $user;
+    }
+   /* public function getUserByEmail($email){
+        return User::where('email', $email)->first();
+    }*/
+
+    public function getToken($token){
+        return User::select('api_token')->where('api_token', $token)->first();
+    }
+
 /*
     public function apiTokenGenerator(){
         $user = User::find(Auth::user()->id);
