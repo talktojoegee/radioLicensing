@@ -55,7 +55,7 @@
                                     <td>{{ strlen($report->message) > 35 ? substr($report->message,0,35).'...' : $report->message }}</td>
                                     <td>{{$report->sender_id ?? '' }}</td>
                                     <td>
-                                        <a href="" class="btn btn-custom">View Report</a>
+                                        <button type="bu]" class="btn btn-primary" disabled="">View Report</button>
                                     </td>
                                 </tr>
                             @endforeach

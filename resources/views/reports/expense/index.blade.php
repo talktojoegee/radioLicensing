@@ -147,7 +147,7 @@
                                                                                                             </div>
                                                                                                             <hr>
                                                                                                             <div class="row">
-                                                                                                                <div class="col-sm-6">
+                                                                                                                <div class="col-sm-6 text-muted">
                                                                                                                     <address>
                                                                                                                         <strong>Entry By:</strong><br>
                                                                                                                         {{$trans->getEntryBy->first_name ?? '' }} {{$trans->getEntryBy->last_name ?? '' }}<br>
@@ -157,7 +157,7 @@
                                                                                                                         {{ date('d M, Y h:ia', strtotime($trans->created_at)) }}
                                                                                                                     </address>
                                                                                                                 </div>
-                                                                                                                <div class="col-sm-6 text-sm-end">
+                                                                                                                <div class="col-sm-6 text-sm-end text-muted">
                                                                                                                     <address>
                                                                                                                         <strong>Branch:</strong><br>
                                                                                                                         {{$trans->getBranch->cb_name ?? ''  }}<br>
@@ -167,7 +167,7 @@
                                                                                                                     </address>
                                                                                                                 </div>
                                                                                                             </div>
-                                                                                                            <div class="row">
+                                                                                                            <div class="row text-muted">
                                                                                                                 <div class="col-sm-3 mt-3">
                                                                                                                     <address>
                                                                                                                         <strong>Account:</strong><br>

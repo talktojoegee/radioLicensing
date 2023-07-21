@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ServicesController;
+use App\Http\Traits\SMSServiceTrait;
 use App\Models\BulkMessage;
 use App\Models\BulkSmsAccount;
+use App\Models\CashBookAccount;
 use App\Models\PhoneGroup;
 //use App\Models\Tenant;
 use App\Models\SenderId;
+use App\Models\TransactionCategory;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +20,8 @@ use Yabacon\Paystack\Fee;
 
 class SMSController extends Controller
 {
+    use SMSServiceTrait;
+
     public $api;
     public $baseUrl;
     public $apiToken;
@@ -36,6 +41,9 @@ class SMSController extends Controller
         $this->bulkmessage = new BulkMessage();
         $this->service = new ServicesController();
         $this->senderid = new SenderId();
+
+        $this->cashbookaccounts = new CashBookAccount();
+        $this->transactioncategory = new TransactionCategory();
 
     }
 
@@ -92,16 +100,23 @@ class SMSController extends Controller
     }
 
     public function showTopUpForm(){
+        $branchId = Auth::user()->branch;
         return view('bulksms.top-up',[
-            'transactions'=>$this->bulksmsaccount->getBulkSmsTransactions()
+            'transactions'=>$this->bulksmsaccount->getBulkSmsTransactions(),
+            'accounts'=>$this->cashbookaccounts->getBranchAccounts($branchId),
+            'categories'=>$this->transactioncategory->getBranchCategoriesByType($branchId, 2),
         ]);
     }
 
     public function processTopUpRequest(Request $request){
         $this->validate($request,[
             'amount'=>'required',
+            'expenseCategory'=>'required',
+            'account'=>'required',
         ],[
-            'amount.required'=>"How much will you like to add?"  ,
+            'amount.required'=>"How much will you like to add?" ,
+            'expenseCategory.required'=>"Select an expense category" ,
+            'account.required'=>"Which account is funding this purchase?" ,
         ]);
         try{
             $paystack = new Paystack(env('PAYSTACK_SECRET_KEY'));
@@ -117,6 +132,8 @@ class SMSController extends Controller
              *  4 = SMS Top-up
              */
             $builder->withTransaction(4);
+            $builder->withAccount($request->account);
+            $builder->withCategory($request->expenseCategory);
             $metadata = $builder->build();
             $charge = $cost < 2500 ? ceil($cost*1.7/100) : ceil($cost*1.7/100)+100;
             $tranx = $paystack->transaction->initialize([
@@ -200,7 +217,7 @@ class SMSController extends Controller
                 for($i = 0; $i < $counter; $i++){
                     $slice = array_slice($filter,($batchMax * $i),$batchMax);
                     $implodeSlice = implode(",",$slice);
-                    $sortedPhoneNumbers = $this->service->getPhoneInfo($implodeSlice, 3);
+                    $sortedPhoneNumbers = $this->getPhoneInfo($implodeSlice, 3); //$this->service->getPhoneInfo($implodeSlice, 3);
                     $data = $sortedPhoneNumbers->data;
                     /*
                      * Sort phone numbers according to network and DND status
@@ -351,7 +368,8 @@ class SMSController extends Controller
         ]);
         $this->senderid->createSenderId($request);
         try{
-            $this->service->senderIdRequest($request->sender_id, $request->purpose);
+            $this->senderIdRequest($request->sender_id, $request->purpose);
+            //$this->service->senderIdRequest($request->sender_id, $request->purpose);
         }catch (\Exception $ex){
 
         }

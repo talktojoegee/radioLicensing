@@ -4,23 +4,13 @@
     <ul class="metismenu list-unstyled" id="side-menu">
         <li class="menu-title" key="t-menu">Menu</li>
         <li>
-            <a href="{{route('dashboard')}}" class="waves-effect">
+            <a href="{{route('timeline')}}" class="waves-effect">
                 <i class="bx bx-news"></i>
-                <span key="t-chat">Timeline</span>
+                <span key="t-chat">Newsfeed</span>
             </a>
         </li>
         <li>
-            <a href="{{route('dashboard')}}" class="waves-effect">
-                <i class="bx bxs-dashboard"></i>
-                <span key="t-chat">Dashboard</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{route('church-branches')}}" class="waves-effect">
-                <i class="bx bx-map"></i>
-                <span key="t-chat">Branches</span>
-            </a>
-        </li>
+
         <li class="menu-title" key="t-pages">COMMUNICATION</li>
         <li>
             <a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -33,6 +23,7 @@
                 <li><a href="{{route('schedule-sms')}}" key="t-wallet">Schedule</a></li>
                 <li><a href="{{route('top-up')}}" key="t-wallet">Top-up</a></li>
                 <li><a href="{{route('phone-groups')}}" key="t-wallet">Phone Group</a></li>
+                <li><a href="{{route('batch-report')}}" key="t-report">Delivery Report</a></li>
             </ul>
         </li>
         <li>
@@ -41,8 +32,7 @@
                 <span key="t-crypto"> Follow-up </span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                <li><a href="{{route('income')}}" key="t-wallet">Add New</a></li>
-                <li><a href="{{route('expense')}}" key="t-wallet">Import</a></li>
+                <li><a href="{{route('clients')}}" key="t-wallet">Add User</a></li>
                 <li><a href="{{route('remittance')}}" key="t-wallet">My Task</a></li>
                 <li><a href="{{route('accounting.accounts')}}" key="t-wallet">Assignment</a></li>
             </ul>
@@ -58,12 +48,6 @@
             <a href="{{route('show-appointments')}}" class="waves-effect">
                 <i class="bx bx-timer"></i>
                 <span key="t-chat">Appointments</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{route('manage-tasks')}}" class="waves-effect">
-                <i class="bx bx-task"></i>
-                <span key="t-chat">Projects</span>
             </a>
         </li>
         <li>
@@ -91,13 +75,13 @@
                 <span key="t-chat">Users</span>
             </a>
         </li>
+        <li class="menu-title">Extras</li>
         <li>
-            <a href="{{route('practitioners')}}" class="waves-effect">
-                <i class="bx bxs-user-plus"></i>
-                <span key="t-chat">New Converts</span>
+            <a href="{{route('church-branches')}}" class="waves-effect">
+                <i class="bx bx-map"></i>
+                <span key="t-chat">Branches</span>
             </a>
         </li>
-        <li class="menu-title">Extras</li>
         <li>
             <a href="{{route('cloud-storage')}}" class="waves-effect">
                 <i class="bx bx-file"></i>
@@ -138,14 +122,15 @@
                 <li><a href="{{route('appointment-reports')}}" key="t-report">Audit Trail</a></li>
             </ul>
         </li>
-        <li class="menu-title">Settings</li>
+        <li class="menu-title">Administration</li>
         <li>
             <a href="javascript: void(0);" class="has-arrow waves-effect">
                 <i class="bx bx-cog"></i>
                 <span key="t-crypto">Settings</span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                <li><a href="{{route('settings')}}" key="t-wallet">General Settings</a></li>
+                <li><a href="{{route('organization')}}" key="t-wallet">Basic</a></li>
+                <li><a href="{{route('settings')}}" key="t-wallet">General </a></li>
                 <li><a href="{{route('purchase-or-upgrade-plan')}}" key="t-wallet">Regions</a></li>
                 <li><a href="{{route('branches-settings')}}" key="t-wallet">Branches</a></li>
                 <li><a href="{{route('branches-settings')}}" key="t-wallet">Branch Assignment</a></li>

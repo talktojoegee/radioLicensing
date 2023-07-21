@@ -55,9 +55,9 @@ class LoginController extends Controller
         if(!empty($user)){
             if(Auth::attempt(['email'=>$request->email, 'password'=>$request->password], $request->remember)){
                 if(Auth::user()->is_admin == 2){
-                    return redirect()->route('dashboard');
+                    return redirect()->route('timeline');
                 }else{
-                    return redirect()->route('dashboard');
+                    return redirect()->route('timeline');
                 }
 
             }else{

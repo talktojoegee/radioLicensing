@@ -111,8 +111,6 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="{{route('settings')}}"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Account Settings</span></a>
-                    <a class="dropdown-item" href="{{route('organization')}}"><i class="bx bx-briefcase-alt-2 font-size-16 align-middle me-1"></i> <span key="t-my-wallet">Organization</span></a>
-                    <a class="dropdown-item" href="{{route('purchase-or-upgrade-plan')}}"><i class="bx bx-card font-size-16 align-middle me-1"></i> <span key="t-lock-screen">Purchase/Upgrade Plan</span></a>
                     <a class="dropdown-item" href="{{route('change-password')}}"><i class="bx bx-lock-alt font-size-16 align-middle me-1"></i> <span key="t-lock-screen">Change Password</span></a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="{{route('logout')}}">

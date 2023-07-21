@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Models\AuthorizingPerson;
+use App\Models\CashBook;
+use App\Models\CashBookAccount;
 use App\Models\Currency;
 use App\Models\Post;
 use App\Models\PostAttachment;
@@ -23,6 +25,8 @@ class WorkflowController extends Controller
         $this->user = new User();
         $this->transactioncategory = new TransactionCategory();
         $this->authorizingperson = new AuthorizingPerson();
+        $this->cashbook = new CashBook();
+        $this->cashbookaccount = new CashBookAccount();
 
     }
 
@@ -145,6 +149,16 @@ class WorkflowController extends Controller
         AuthorizingPerson::updateStatus($postId, $authId, $userId, $status, $request->comment, $final);
         if($final == 1){
             Post::updatePostStatus($postId, $status);
+            #Push to cashbook
+            $workflow = $this->post->getPostById($postId);
+            if(!empty($workflow)){
+                $note = $workflow->p_title.' '.$workflow->p_content;
+                $cashbookAccount = $this->cashbookaccount->getBranchFirstAccount($workflow->p_branch_id);
+                $this->cashbook->addCashBook($workflow->p_branch_id, $workflow->p_category_id, $cashbookAccount->cba_id,
+                    $workflow->p_currency, 1, 0, 2, now(),
+                    $note, $note,
+                    $workflow->p_amount,  0, substr(sha1(time()),31,40));
+            }
         }else{
             AuthorizingPerson::publishAuthorizingPerson($postId, $request->nextAuth);
         }

@@ -77,9 +77,6 @@
                                                         <span class="text-info">Pending</span>
                                                     @break
                                                     @case(1)
-                                                        <span class="text-warning">Processing</span>
-                                                    @break
-                                                    @case(2)
                                                         <span class="text-success">Approved</span>
                                                     @break
                                                     @case(3)

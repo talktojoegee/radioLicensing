@@ -40,6 +40,7 @@ class CashBook extends Model
     }
 
     public function addCashBook($branchId, $categoryId, $accountId, $currency, $paymentMethod, $level, $transactionType, $transactionDate, $description, $narration = null, $debit = 0, $credit = 0, $refCode){
+        $category = $this->getTransactionCategory($categoryId);
         $cashbook = new CashBook();
         $cashbook->cashbook_branch_id = $branchId;
         $cashbook->cashbook_category_id = $categoryId;
@@ -57,6 +58,7 @@ class CashBook extends Model
         $cashbook->cashbook_debit = $debit;
         $cashbook->cashbook_credit = $credit;
         $cashbook->cashbook_ref_code = $refCode;
+        $cashbook->cashbook_remit_table = $category->tc_remittable ?? 0;
         $cashbook->save();
         return $cashbook;
     }
@@ -84,6 +86,10 @@ class CashBook extends Model
 
     public function getAllCashBookEntriesByUser($userId){
         return CashBook::where('cashbook_user_id', $userId)->get();
+    }
+
+    public function getTransactionCategory($catId){
+        return TransactionCategory::find($catId);
     }
 
 
@@ -184,6 +190,7 @@ class CashBook extends Model
             ->where('cashbook_branch_id', $branchId)
             ->where('cashbook_currency_id', $defaultCurrency->id)
             ->where('cashbook_remittance_paid', 2)
+            ->where('cashbook_remit_table', 1) //remittance is to be paid
             ->where('cashbook_transaction_type', 1)
             ->whereMonth('cashbook_transaction_date', date('m'))
             ->whereYear('cashbook_transaction_date', date('Y'))

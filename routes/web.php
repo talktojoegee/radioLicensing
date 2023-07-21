@@ -19,7 +19,7 @@ Route::get('/',function(){
 Route::get('/book-appointment', [App\Http\Controllers\Portal\BookingController::class, 'showBookingForm'])->name('book-appointment');
 
 
-
+Route::get('/process/payment',[App\Http\Controllers\OnlinePaymentController::class, 'processOnlinePayment']);
 Route::prefix('/settings')->group(function(){
    // Route::get('/locations', [App\Http\Controllers\Admin\SettingsController::class, 'locationSetup'])->name('location-setup');
 });
@@ -101,14 +101,14 @@ Route::prefix('/cloud-storage')->group(function(){
     Route::post('/delete-folder', [App\Http\Controllers\Portal\CloudStorageController::class, 'deleteFolder'])->name('delete-folder');
 });
 
-Route::group(['prefix'=>'/clients', 'middleware'=>'auth'], function(){
+Route::group(['prefix'=>'/users', 'middleware'=>'auth'], function(){
     Route::get('/', [App\Http\Controllers\Portal\ClientController::class, 'showClients'])->name('clients');
-    Route::post('/client-group', [App\Http\Controllers\Portal\ClientController::class, 'addClientGroup'])->name('client-group');
-    Route::post('/edit-client-group', [App\Http\Controllers\Portal\ClientController::class, 'changeClientGroup'])->name('edit-client-group');
-    Route::post('/add-client', [App\Http\Controllers\Portal\ClientController::class, 'addClient'])->name('add-client');
-    Route::post('/assign-client-to', [App\Http\Controllers\Portal\ClientController::class, 'assignClientTo'])->name('assign-client-to');
-    Route::post('/archive-unarchive-client', [App\Http\Controllers\Portal\ClientController::class, 'archiveUnarchiveClient'])->name('archive-unarchive-client');
-    Route::post('/edit-client-profile', [App\Http\Controllers\Portal\ClientController::class, 'editClientProfile'])->name('edit-client-profile');
+    Route::post('/user-group', [App\Http\Controllers\Portal\ClientController::class, 'addClientGroup'])->name('client-group');
+    Route::post('/edit-user-group', [App\Http\Controllers\Portal\ClientController::class, 'changeClientGroup'])->name('edit-client-group');
+    Route::post('/add-user', [App\Http\Controllers\Portal\ClientController::class, 'addClient'])->name('add-client');
+    Route::post('/assign-user-to', [App\Http\Controllers\Portal\ClientController::class, 'assignClientTo'])->name('assign-client-to');
+    Route::post('/archive-unarchive-user', [App\Http\Controllers\Portal\ClientController::class, 'archiveUnarchiveClient'])->name('archive-unarchive-client');
+    Route::post('/edit-user-profile', [App\Http\Controllers\Portal\ClientController::class, 'editClientProfile'])->name('edit-client-profile');
     Route::get('/view-profile/{slug}', [App\Http\Controllers\Portal\ClientController::class, 'viewClientProfile'])->name('view-client-profile');
 });
 
@@ -179,6 +179,11 @@ Route::group(['prefix'=>'workflow', 'middleware'=>'auth'], function(){
 
 });
 
+Route::group(['prefix'=>'newsfeed', 'middleware'=>'auth'], function(){
+   Route::get('/', [App\Http\Controllers\Portal\TimelineController::class, 'showTimeline'])->name('timeline');
+   Route::post('/publish-timeline-post', [App\Http\Controllers\Portal\TimelineController::class, 'storeTimelinePost'])->name('publish-timeline-post');
+});
+
 Route::group(['prefix'=>'/bulk-sms', 'middleware'=>'auth'],function(){
     //Route::get('/', [App\Http\Controllers\UserController::class, 'customerDashboard'])->name('customer-dashboard');
     Route::get('/fund-wallet', [App\Http\Controllers\Portal\SMSController::class, 'showTopUpForm'])->name('top-up');
@@ -218,11 +223,11 @@ Route::group(['prefix'=>'/reports', 'middleware'=>'auth'],function(){
 
 });
 
-Route::group(['prefix'=>'/medication', 'middleware'=>'auth'], function(){
-    Route::post('/add-medication', [App\Http\Controllers\Portal\MedicationController::class, 'addMedication'])->name('add-medication');
-    Route::post('/edit-medication', [App\Http\Controllers\Portal\MedicationController::class, 'editMedication'])->name('edit-medication');
-    Route::get('/medication-details/{slug}', [App\Http\Controllers\Portal\MedicationController::class, 'showMedicationDetails'])->name('medication-details');
-    Route::post('/medication-report', [App\Http\Controllers\Portal\MedicationController::class, 'submitMedicationReport'])->name('medication-report');
+Route::group(['prefix'=>'/follow-up', 'middleware'=>'auth'], function(){
+    Route::post('/add-follow-up', [App\Http\Controllers\Portal\MedicationController::class, 'addMedication'])->name('add-medication');
+    Route::post('/edit-follow-up', [App\Http\Controllers\Portal\MedicationController::class, 'editMedication'])->name('edit-medication');
+    Route::get('/follow-up-details/{slug}', [App\Http\Controllers\Portal\MedicationController::class, 'showMedicationDetails'])->name('medication-details');
+    Route::post('/follow-up-report', [App\Http\Controllers\Portal\MedicationController::class, 'submitMedicationReport'])->name('medication-report');
 });
 
 Route::group(['prefix'=>'/website', 'middleware'=>'auth'], function(){
@@ -274,7 +279,7 @@ Route::group(['prefix'=>'/accounting', 'middleware'=>'auth', 'as'=>'accounting.'
 
 Route::group(['prefix'=>'app', 'middleware'=>'auth'],function(){
     Route::prefix('/settings')->group(function(){
-        Route::get('/organization', \App\Http\Livewire\Portal\Settings\Organization::class)->name('organization');
+        Route::get('/church', \App\Http\Livewire\Portal\Settings\Organization::class)->name('organization');
         Route::get('/account', \App\Http\Livewire\Portal\Settings\Account::class)->name('account-settings');
         Route::get('/module-manager', \App\Http\Livewire\Portal\Settings\ModuleManager::class)->name('module-manager');
         Route::get('/purchase-or-upgrade-plan', \App\Http\Livewire\Portal\Settings\PurchaseUpgradePlan::class)->name('purchase-or-upgrade-plan');

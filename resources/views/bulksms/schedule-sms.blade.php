@@ -31,20 +31,14 @@
                             <p>{!! session()->get('error') !!}</p>
                         </div>
                     @endif
-                    @if(Auth::user()->getUserPhoneGroups->count() <= 0)
-                        <div class="alert alert-warning mb-4">
-                            <strong>Whoops!</strong>
-                            <hr class="message-inner-separator">
-                            <p>We're still processing your sender ID verification. You'll not be able to send messages till this process is done. We apologise for the inconvenience.</p>
+                        <div class="modal-header">
+
+                            <div class="modal-title text-uppercase">Schedule SMS </div>
                         </div>
-                    @endif
                     <div class="card-body">
                         <form action="{{route('preview-message')}}" method="get">
                             @csrf
                             <div class="card">
-                                <div class="card-header">
-                                    <h5 class="">Schedule SMS</h5>
-                                </div>
                                 <div class="card-body">
                                     <div class="row mb-3">
                                         <div class="col-md-6">

@@ -180,7 +180,7 @@
                                                                                                             </div>
                                                                                                             <hr>
                                                                                                             <div class="row">
-                                                                                                                <div class="col-sm-6">
+                                                                                                                <div class="col-sm-6 text-muted">
                                                                                                                     <address>
                                                                                                                         <strong>Entry By:</strong><br>
                                                                                                                         {{$trans->getEntryBy->first_name ?? '' }} {{$trans->getEntryBy->last_name ?? '' }}<br>
@@ -190,7 +190,7 @@
                                                                                                                         {{ date('d M, Y h:ia', strtotime($trans->created_at)) }}
                                                                                                                     </address>
                                                                                                                 </div>
-                                                                                                                <div class="col-sm-6 text-sm-end">
+                                                                                                                <div class="col-sm-6 text-sm-end text-muted">
                                                                                                                     <address>
                                                                                                                         <strong>Branch:</strong><br>
                                                                                                                         {{$trans->getBranch->cb_name ?? ''  }}<br>
@@ -200,7 +200,7 @@
                                                                                                                     </address>
                                                                                                                 </div>
                                                                                                             </div>
-                                                                                                            <div class="row">
+                                                                                                            <div class="row text-muted">
                                                                                                                 <div class="col-sm-3 mt-3">
                                                                                                                     <address>
                                                                                                                         <strong>Account:</strong><br>
@@ -268,15 +268,16 @@
                                                                                                                             @endswitch
                                                                                                                         </td>
                                                                                                                         <td>{{$trans->cashbook_ref_code ?? '' }}</td>
-                                                                                                                        <td class="text-end">{{ $trans->getCurrency->symbol ?? 'N' }}{{number_format($trans->cashbook_credit,2)}}</td>
+                                                                                                                        <td class="text-end">{{ $trans->getCurrency->symbol ?? 'N' }}{{number_format($trans->cashbook_transaction_type == 1 ? $trans->cashbook_credit : $trans->cashbook_debit,2)}}</td>
                                                                                                                     </tr>
                                                                                                                     <tr>
                                                                                                                         <td colspan="5" class="border-0 text-start">
                                                                                                                             <strong>Amount in words: </strong>
                                                                                                                             <?php
+                                                                                                                            $amount = $trans->cashbook_transaction_type == 1 ? $trans->cashbook_credit : $trans->cashbook_debit;
                                                                                                                             $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
                                                                                                                             $f->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numbering-verbose");
-                                                                                                                            echo ucfirst($f->format($trans->cashbook_credit)).' '.strtolower($trans->getCurrency->name);
+                                                                                                                            echo ucfirst($f->format($amount)).' '.strtolower($trans->getCurrency->name);
                                                                                                                             ?>
                                                                                                                         </td>
                                                                                                                     </tr>

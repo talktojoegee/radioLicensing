@@ -62,6 +62,12 @@ class CashBookAccount extends Model
     }
 
 
+
+    public function getBranchFirstAccount($branchId){
+        return CashBookAccount::where('cba_branch_id', $branchId)->first();
+    }
+
+
     public function getAllCashbookAccounts(){
         return CashBookAccount::orderBy('cba_name', 'ASC')->get();
     }

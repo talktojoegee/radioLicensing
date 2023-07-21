@@ -10,6 +10,7 @@ use App\Models\Country;
 use App\Models\Location;
 use App\Models\Organization;
 use App\Models\Region;
+use App\Models\State;
 use App\Models\User;
 use App\Models\UserNotificationSetting;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class SettingsController extends Controller
         $this->organization = new Organization();
         $this->churchbranch = new ChurchBranch();
         $this->region = new Region();
+        $this->state = new State();
     }
 
     public function showSettingsView(){
@@ -250,10 +252,12 @@ class SettingsController extends Controller
     }
 
     public function showBranchesSettingsView(){
+        $countryId = env('COUNTRY_ID') ?? 1;
         return view('settings.settings-branches',[
             'countries'=>$this->country->getCountries(),
             'branches'=>$this->churchbranch->getAllChurchBranches(),
-            'regions'=>$this->region->getRegions()
+            'regions'=>$this->region->getRegions(),
+            'states'=>$this->state->getStatesByCountryId($countryId)
         ]);
     }
 

@@ -145,7 +145,7 @@
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                             <hr>
-                                                                                                            <div class="row">
+                                                                                                            <div class="row text-muted">
                                                                                                                 <div class="col-sm-6">
                                                                                                                     <address>
                                                                                                                         <strong>Entry By:</strong><br>
@@ -166,7 +166,7 @@
                                                                                                                     </address>
                                                                                                                 </div>
                                                                                                             </div>
-                                                                                                            <div class="row">
+                                                                                                            <div class="row text-muted">
                                                                                                                 <div class="col-sm-3 mt-3">
                                                                                                                     <address>
                                                                                                                         <strong>Account:</strong><br>

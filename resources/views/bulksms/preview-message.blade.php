@@ -128,7 +128,7 @@
                                     @if( (Auth::user()->getUserAccount->sum('credit') - Auth::user()->getUserAccount->sum('debit')) < $cost )
                                         <a href="{{route('top-up')}}" target="_blank" class=" ml-3 btn-primary btn-lg text-center">Top-up <i class="bx bxs-bank"></i> </a>
                                     @else
-                                        <button type="submit" class="btn btn-custom w-25">Send Message</button>
+                                        <button type="submit" class=" ml-4 btn btn-primary w-25">Send Message <i class="bx bxs-right-arrow"></i> </button>
                                         <input type="hidden" name="message" value="{{$message}}">
                                         <input type="hidden" name="cost" value="{{$cost}}">
                                         <input type="hidden" name="pages" value="{{$pages}}">
