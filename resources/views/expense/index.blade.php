@@ -23,9 +23,11 @@
         <div class="row">
             <div class="col-xl-12 col-md-12">
                 <div class="card">
+                    @can('record-expenses')
                     <div class="card-header">
                         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addNewProduct" class="btn btn-danger  mb-3">Record Expense <i class="bx bx bx-highlight"></i> </a>
                     </div>
+                    @endcan
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
@@ -72,7 +74,7 @@
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row mb-1">
-                                                            <div class="col"> <p class="mb-2">Expense</p><h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format($yesterdays->sum('cashbook_debit'),2)}}</h5> </div>
+                                                            <div class="col"> <p class="mb-2">Expense</p><h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format($lastMonth->sum('cashbook_debit'),2)}}</h5> </div>
                                                             <div class="col-auto mb-0">
                                                                 <div class="dash-icon text-secondary1"> <i class="bx bxs-receipt text-warning fs-22"></i> </div>
                                                             </div>
@@ -87,7 +89,7 @@
                                                     <div class="card-body">
                                                         <div class="row mb-1">
                                                             <div class="col"> <p class="mb-2">Expense</p>
-                                                                <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format($todays->sum('cashbook_debit'),2)}}</h5>
+                                                                <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format($thisMonth->sum('cashbook_debit'),2)}}</h5>
                                                             </div>
                                                             <div class="col-auto mb-0">
                                                                 <div class="dash-icon text-secondary"> <i class="bx bxs-receipt text-primary fs-22"></i>
@@ -286,7 +288,7 @@
                                                                                                                         @endswitch
                                                                                                                     </td>
                                                                                                                     <td>{{$sale->cashbook_ref_code ?? '' }}</td>
-                                                                                                                    <td class="text-end">{{ $sale->getCurrency->symbol ?? 'N' }}{{number_format($sale->cashbook_credit,2)}}</td>
+                                                                                                                    <td class="text-end">{{ $sale->getCurrency->symbol ?? 'N' }}{{number_format($sale->cashbook_debit,2)}}</td>
                                                                                                                 </tr>
                                                                                                                 <tr>
                                                                                                                     <td colspan="5" class="border-0 text-start">
@@ -294,7 +296,7 @@
                                                                                                                         <?php
                                                                                                                         $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
                                                                                                                         $f->setTextAttribute(NumberFormatter::DEFAULT_RULESET, "%spellout-numbering-verbose");
-                                                                                                                        echo ucfirst($f->format($sale->cashbook_credit)).' '.strtolower($sale->getCurrency->name);
+                                                                                                                        echo ucfirst($f->format($sale->cashbook_debit)).' '.strtolower($sale->getCurrency->name);
                                                                                                                         ?>
                                                                                                                     </td>
                                                                                                                 </tr>

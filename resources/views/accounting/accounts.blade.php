@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('current-page')
-    Manage Accounts
+   Account Summary
 @endsection
 @section('extra-styles')
     <link rel="stylesheet" href="/css/nprogress.css">
@@ -28,7 +28,7 @@
                     </div>
                     <div class="card-body">
 
-                        <h4 class="card-title">Manage Accounts</h4>
+                        <h4 class="card-title">Account Summary</h4>
                         @if(session()->has('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <i class="mdi mdi-check-all me-2"></i>
@@ -93,8 +93,8 @@
                                                         <span class="badge badge-pill badge-soft-success font-size-11">Global</span>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                   {{ number_format(($account->getAccountCashbookRecords->sum('cashbook_credit') -  $account->getAccountCashbookRecords->sum('cashbook_debit')),2) }}
+                                                <td style="text-align: right;">
+                                                   {{ number_format(($account->getAccountCashbookRecords($account->cba_id)->sum('cashbook_credit') -  $account->getAccountCashbookRecords($account->cba_id)->sum('cashbook_debit')),2) }}
                                                 </td>
                                                 <td>
                                                     <div class="btn-group">

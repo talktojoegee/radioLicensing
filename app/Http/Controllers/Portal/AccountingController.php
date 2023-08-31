@@ -150,7 +150,8 @@ class AccountingController extends Controller
                 ->checkNameExistForBranch($request->name, Auth::user()->branch, $request->type);
             if(!empty($validation)){
                 if(($validation->tc_status != $request->status) || ($validation->tc_type != $request->type) || ($validation->tc_remittable != $request->remittance) || ($validation->tc_proposed_rate != $request->remittance_rate) ){
-                    $this->transactioncategory->editTransactionCategory($request->catId, $request->name, $request->type, $request->status,$request->remittance, $request->remittance_rate);
+                    $this->transactioncategory->editTransactionCategory($request->catId, $request->name,
+                        $request->type, $request->status,$request->remittance, $request->remittance_rate);
                     session()->flash("success", "Action successful. Your changes were saved!");
                     return back();
                 }else{
@@ -158,7 +159,8 @@ class AccountingController extends Controller
                     return back();
                 }
             }
-            $this->transactioncategory->editTransactionCategory($request->catId, $request->name, $request->type, $request->status);
+            $this->transactioncategory->editTransactionCategory($request->catId, $request->name,
+                $request->type, $request->status,$request->remittance, $request->remittance_rate);
             session()->flash("success", "Action successful. Your changes were saved!");
             return back();
         }catch (\Exception $exception){

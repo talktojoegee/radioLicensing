@@ -16,9 +16,6 @@ class CashBookAccount extends Model
     }
 
 
-    public function getAccountCashbookRecords(){
-        return $this->hasMany(CashBook::class, 'cashbook_account_id');
-    }
 
     public function checkForExistingAccount($name, $branchId, $type){
         return CashBookAccount::where('cba_name', $name)->where('cba_branch_id', $branchId)->where('cba_type', $type)->first();
@@ -77,5 +74,8 @@ class CashBookAccount extends Model
     }
 
 
+    public function getAccountCashbookRecords($accountId){
+        return CashBook::where('cashbook_account_id', $accountId)->get();
+    }
 
 }

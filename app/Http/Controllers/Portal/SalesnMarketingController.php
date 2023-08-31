@@ -126,10 +126,10 @@ class SalesnMarketingController extends Controller
             //'products'=>$this->product->getAllOrgProducts(),
             'income'=>$this->cashbook->getAllBranchLocalTransactions(1),
             'fxIncomes'=>$this->cashbook->getAllBranchFxTransactions(1),
-            'yesterdays'=>$this->cashbook->getBranchYesterdaysIncome($branchId),
             'defaultCurrency'=>$this->cashbook->getDefaultCurrency(),
-            'todays'=>$this->cashbook->getBranchTodaysIncome($branchId),
-            'thisWeek'=>$this->cashbook->getBranchThisWeekIncome($branchId),
+            'lastMonth'=>$this->cashbook->getBranchLastMonths($branchId),
+            'thisMonth'=>$this->cashbook->getBranchMonths($branchId),
+            'thisWeek'=>$this->cashbook->getBranchThisWeek($branchId),
         ]);
     }
 
@@ -187,10 +187,10 @@ class SalesnMarketingController extends Controller
             'currencies'=>$this->currency->getCurrencies(),
             'income'=>$this->cashbook->getAllBranchLocalTransactions(2),
             'fxIncomes'=>$this->cashbook->getAllBranchFxTransactions(2),
-            'yesterdays'=>$this->cashbook->getBranchYesterdaysIncome($branchId),
             'defaultCurrency'=>$this->cashbook->getDefaultCurrency(),
-            'todays'=>$this->cashbook->getBranchTodaysIncome($branchId),
-            'thisWeek'=>$this->cashbook->getBranchThisWeekIncome($branchId),
+            'lastMonth'=>$this->cashbook->getBranchLastMonths($branchId),
+            'thisMonth'=>$this->cashbook->getBranchMonths($branchId),
+            'thisWeek'=>$this->cashbook->getBranchThisWeek($branchId),
         ]);
     }
 

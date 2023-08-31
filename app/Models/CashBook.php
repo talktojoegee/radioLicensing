@@ -122,7 +122,7 @@ class CashBook extends Model
         return CashBook::where('cashbook_branch_id', Auth::user()->branch)->whereBetween('cashbook_transaction_date', [$from, $to])->get();
     }
 
-    public function getBranchYesterdaysIncome($branchId){
+    public function getBranchYesterdays($branchId){
         $yesterday = date("Y-m-d", strtotime( '-1 days' ) );
         $defaultCurrency = $this->getDefaultCurrency();
         return CashBook::where('cashbook_branch_id', $branchId)
@@ -130,18 +130,38 @@ class CashBook extends Model
             ->where('cashbook_currency_id', $defaultCurrency->id)->orderBy('cashbook_id', 'DESC')->get();
     }
 
-    public function getBranchTodaysIncome($branchId){
+    public function getBranchTodays($branchId){
         $defaultCurrency = $this->getDefaultCurrency();
-        return CashBook::where('cashbook_branch_id', $branchId)->where('cashbook_currency_id', $defaultCurrency->id)->whereDate('cashbook_transaction_date', now())->orderBy('cashbook_id', 'DESC')->get();
+        return CashBook::where('cashbook_branch_id', $branchId)
+            ->where('cashbook_currency_id', $defaultCurrency->id)
+            ->whereDate('cashbook_transaction_date', now())->orderBy('cashbook_id', 'DESC')->get();
     }
-    public function getBranchMonthsIncome($branchId){
+    public function getBranchMonths($branchId){
         $defaultCurrency = $this->getDefaultCurrency();
-        return CashBook::where('cashbook_branch_id', $branchId)->where('cashbook_currency_id', $defaultCurrency->id)->whereMonth('cashbook_transaction_date', date('m'))->whereYear('cashbook_transaction_date', date('Y'))->orderBy('cashbook_id', 'DESC')->get();
+        return CashBook::where('cashbook_branch_id', $branchId)
+            ->where('cashbook_currency_id', $defaultCurrency->id)
+            ->whereMonth('cashbook_transaction_date', date('m'))
+            ->whereYear('cashbook_transaction_date', date('Y'))->orderBy('cashbook_id', 'DESC')->get();
     }
-    public function getBranchThisWeekIncome($branchId){
+
+    public function getBranchLastMonths($branchId){
+        $currentMonth = date('m');
+        $lastMonth = $currentMonth - 1;
+        if($lastMonth == 0){
+            $lastMonth = 12;
+        }
         $defaultCurrency = $this->getDefaultCurrency();
-        return CashBook::where('cashbook_branch_id', $branchId)->where('cashbook_currency_id', $defaultCurrency->id)
-            ->whereBetween('cashbook_transaction_date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek() ])->orderBy('cashbook_id', 'DESC')->get();
+        return CashBook::where('cashbook_branch_id', $branchId)
+            ->where('cashbook_currency_id', $defaultCurrency->id)
+            ->whereMonth('cashbook_transaction_date', $lastMonth)
+            ->whereYear('cashbook_transaction_date', date('Y'))->orderBy('cashbook_id', 'DESC')->get();
+    }
+    public function getBranchThisWeek($branchId){
+        $defaultCurrency = $this->getDefaultCurrency();
+        return CashBook::where('cashbook_branch_id', $branchId)
+            ->where('cashbook_currency_id', $defaultCurrency->id)
+            ->whereBetween('cashbook_transaction_date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek() ])
+            ->orderBy('cashbook_id', 'DESC')->get();
     }
 
     public function getThisYearIncomeStat(){
@@ -203,8 +223,8 @@ class CashBook extends Model
         return CashBook::whereBetween('cashbook_transaction_date', [$from, $to])
             ->where('cashbook_branch_id', $branchId)
             //->where('cashbook_currency_id', $defaultCurrency->id)
-            ->whereMonth('cashbook_transaction_date', date('m'))
-            ->whereYear('cashbook_transaction_date', date('Y'))
+            //->whereMonth('cashbook_transaction_date', date('m'))
+            //->whereYear('cashbook_transaction_date', date('Y'))
             //->groupBy('cashbook_category_id')
             ->orderBy('cashbook_id', 'ASC')
             ->get();

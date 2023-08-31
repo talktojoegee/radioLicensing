@@ -89,41 +89,28 @@
                         <h6 class="modal-title text-uppercase">Logo & Favicon</h6>
                     </div>
                     <div class="card-body">
-                        <form wire:submit.prevent="saveLogo">
+                        <form action="{{route('save-logo')}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
                                 <label for="">Logo</label> &nbsp; &nbsp;
-                                <input type="file" wire:model.lazy="logo" class="form-control-file">
+                                <input type="file" name="logo" class="form-control-file">
                                 <span class="input-group-btn input-group-append">
                                     <button class="btn btn-primary bootstrap-touchspin-up" type="submit"><i class="bx bxs-cloud-upload mr-2"></i>Upload Logo</button>
                                 </span> <br>
                                 @error('logo') <i class="text-danger mt-2">{{$message}}</i> @enderror
                             </div>
-                            @if(isset($logo))
-                                <div class="form-group">
-                                    <label for="">Logo Preview:</label>
-                                    <img src="{{ $logo->temporaryUrl() }}" width="64" height="64">
-                                </div>
-                            @endif
                             </form>
-
-                        <form wire:submit.prevent="saveFavicon" class="mt-5">
-                            @csrf
-                            <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
-                                <label for="">Favicon</label> &nbsp; &nbsp;
-                                <input type="file" wire:model.lazy="favicon" class="form-control-file">
-                                <span class="input-group-btn input-group-append">
-                                    <button class="btn btn-primary bootstrap-touchspin-up" type="submit"><i class="bx bxs-cloud-upload mr-2"></i>Upload Favicon</button>
-                                </span> <br>
-                                @error('favicon') <i class="text-danger mt-2">{{$message}}</i> @enderror
-                            </div>
-                            @if(isset($favicon))
-                                <div class="form-group">
-                                    <label for="">Favicon Preview:</label>
-                                    <img src="{{ $favicon->temporaryUrl() }}" width="64" height="64">
+                            <form action="{{ route('save-favicon') }}" method="post" enctype="multipart/form-data" class="mt-5">
+                                @csrf
+                                <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                    <label for="">Favicon</label> &nbsp; &nbsp;
+                                    <input type="file" name="favicon" class="form-control-file">
+                                    <span class="input-group-btn input-group-append">
+                                        <button class="btn btn-primary bootstrap-touchspin-up" type="submit"><i class="bx bxs-cloud-upload mr-2"></i>Upload Favicon</button>
+                                    </span> <br>
+                                    @error('favicon') <i class="text-danger mt-2">{{$message}}</i> @enderror
                                 </div>
-                            @endif
-                        </form>
+                            </form>
                     </div>
                 </div>
 

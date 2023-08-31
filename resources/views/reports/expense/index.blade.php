@@ -84,7 +84,7 @@
                                                                         <div class="row mb-1">
                                                                             <div class="col">
                                                                                 <p class="mb-2">Total Expenses</p>
-                                                                                <h3 class="mb-0 number-font text-warning">{{$defaultCurrency->symbol ?? '' }}{{ number_format( $transactions->sum('cashbook_debit') ,2) }}</h3>
+                                                                                <h3 class="mb-0 number-font text-warning">{{$defaultCurrency->symbol ?? '' }}{{ number_format( $transactions->where('cashbook_debit', '>', 0)->where('cashbook_currency_id', $defaultCurrency->id)->sum('cashbook_debit') ,2) }}</h3>
                                                                             </div>
                                                                         </div>
                                                                     </div>

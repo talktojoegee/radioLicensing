@@ -255,6 +255,7 @@ Route::group(['prefix'=>'/users', 'middleware'=>'auth'], function(){
     Route::get('/pastors', [App\Http\Controllers\UserController::class, 'showAdministrators'])->name('pastors');
     Route::get('/pastors/add-new', [App\Http\Controllers\UserController::class, 'showAddNewPastorForm'])->name('add-new-pastor');
     Route::get('/{slug}', [App\Http\Controllers\UserController::class, 'showUserProfile'])->name('user-profile');
+    Route::post('/assign-revoke-role', [App\Http\Controllers\UserController::class, 'assignRevokeRole'])->name('assign-revoke-role');
     Route::post('/add-new-user', [App\Http\Controllers\UserController::class, 'addNewUser'])->name('add-new-user');
     Route::post('/delete-user', [App\Http\Controllers\UserController::class, 'deleteUser'])->name('delete-user');
     Route::post('/grant-permission', [App\Http\Controllers\UserController::class, 'grantPermission'])->name('grant-permission');
@@ -282,6 +283,14 @@ Route::group(['prefix'=>'app', 'middleware'=>'auth'],function(){
         Route::get('/church', \App\Http\Livewire\Portal\Settings\Organization::class)->name('organization');
         Route::get('/account', \App\Http\Livewire\Portal\Settings\Account::class)->name('account-settings');
         Route::get('/module-manager', \App\Http\Livewire\Portal\Settings\ModuleManager::class)->name('module-manager');
+        Route::get('/manage-roles', [App\Http\Controllers\Portal\SettingsController::class, 'manageRoles'])->name('manage-roles');
+        Route::post('/add-role', [App\Http\Controllers\Portal\SettingsController::class, 'storeRole'])->name('add-role');
+        Route::post('/update-role-permissions', [App\Http\Controllers\Portal\SettingsController::class, 'updateRolePermissions'])->name('update-role-permissions');
+        Route::post('/add-permission', [App\Http\Controllers\Portal\SettingsController::class, 'storePermission'])->name('add-permission');
+        Route::post('/edit-permission', [App\Http\Controllers\Portal\SettingsController::class, 'editPermission'])->name('edit-permission');
+        Route::get('/manage-permissions', [App\Http\Controllers\Portal\SettingsController::class, 'managePermissions'])->name('manage-permissions');
+        Route::post('/save-logo', [App\Http\Controllers\Portal\SettingsController::class, 'saveLogo'])->name('save-logo');
+        Route::post('/save-favicon', [App\Http\Controllers\Portal\SettingsController::class, 'saveFavicon'])->name('save-favicon');
         Route::get('/purchase-or-upgrade-plan', \App\Http\Livewire\Portal\Settings\PurchaseUpgradePlan::class)->name('purchase-or-upgrade-plan');
     });
 });

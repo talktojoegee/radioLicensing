@@ -83,7 +83,7 @@
                                                                     <div class="card-body">
                                                                         <div class="row mb-1">
                                                                             <div class="col"> <p class="mb-2">Total Income</p>
-                                                                                <h3 class="mb-0 number-font text-success">{{$defaultCurrency->symbol ?? '' }}{{number_format($transactions->sum('cashbook_credit'),2) }}</h3>
+                                                                                <h3 class="mb-0 number-font text-success">{{$defaultCurrency->symbol ?? '' }}{{number_format($transactions->where('cashbook_credit', '>', 0)->where('cashbook_currency_id', $defaultCurrency->id)->sum('cashbook_credit'),2) }}</h3>
                                                                             </div>
                                                                         </div>
                                                                     </div>

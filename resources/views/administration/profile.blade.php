@@ -12,50 +12,35 @@
 @endsection
 
 @section('main-content')
-    <div class="row">
+    <div class="row mb-10" style="margin-bottom: 70px;">
         <div class="col-12 grid-margin">
             <div class="card">
                 <div class="position-relative">
                     <figure class="overflow-hidden mb-0 d-flex justify-content-center">
-                        <img src="https://www.nobleui.com/html/template/assets/images/others/profile-cover.jpg" class="rounded-top" alt="profile cover">
+                        <img src="{{url('storage/covers/profile-cover.jpg')}}" class="rounded-top " alt="profile cover">
                     </figure>
                     <div class="d-flex justify-content-between align-items-center position-absolute top-90 w-100 px-2 px-md-4 mt-n4">
                         <div>
-                            <img class="wd-70 rounded-circle" src="https://www.nobleui.com/html/template/assets/images/faces/face1.jpg" alt="profile">
+                            <img class="wd-70 rounded-circle img-thumbnail avatar-xl" src="{{url('storage/'.$user->image)}}" alt="profile">
                             <span class="h4 ms-3 text-dark">{{$user->title ?? '' }} {{$user->first_name ?? '' }}</span> ||
                             <span class="badge badge-soft-info p-1">{{$user->getUserChurchBranch->cb_name ?? '' }}</span>
                         </div>
                         <div class="d-none d-md-block">
-                            <button class="btn btn-primary btn-sm btn-icon-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit btn-icon-prepend"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> Edit profile
-                            </button>
+                            <div class="btn-group">
+                                <a href="" class="btn btn-primary btn-sm btn-icon-text">
+                                    <i class="bx bx-user"></i> Edit profile
+                                </a>
+                                <a href="" class="btn btn-danger btn-sm btn-icon-text">
+                                  <i class="bx bx-x-circle"></i>  Deactivate Account
+                                </a>
+                                <a href="javascript:void(0);" data-bs-target="#permissionModal" data-bs-toggle="modal" class="btn btn-secondary btn-sm btn-icon-text">
+                                  <i class="bx bx-lock-alt"></i>  Access Level
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center p-3 rounded-bottom">
-                    <ul class="d-flex align-items-center m-0 p-0">
-                        <li class="d-flex align-items-center active">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-columns me-1 icon-md text-primary"><path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"></path></svg>
-                            <a class="pt-1px d-none d-md-block text-primary" href="#">Timeline</a>
-                        </li>
-                        <li class="ms-3 ps-3 border-start d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user me-1 icon-md"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                            <a class="pt-1px d-none d-md-block text-body" href="#">About</a>
-                        </li>
-                        <li class="ms-3 ps-3 border-start d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users me-1 icon-md"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            <a class="pt-1px d-none d-md-block text-body" href="#">Members <span class="text-muted tx-12">3,765</span></a>
-                        </li>
-                        <li class="ms-3 ps-3 border-start d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image me-1 icon-md"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                            <a class="pt-1px d-none d-md-block text-body" href="#">Photos</a>
-                        </li>
-                        <li class="ms-3 ps-3 border-start d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video me-1 icon-md"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
-                            <a class="pt-1px d-none d-md-block text-body" href="#">Wallet</a>
-                        </li>
-                    </ul>
-                </div>
+
             </div>
         </div>
     </div>
@@ -75,9 +60,9 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal icon-lg text-muted pb-3px"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 icon-sm me-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> <span class="">Edit</span></a>
-                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-git-branch icon-sm me-2"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg> <span class="">Update</span></a>
-                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye icon-sm me-2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> <span class="">View all</span></a>
+                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 icon-sm me-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> <span class="">Manage Permission</span></a>
+                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-git-branch icon-sm me-2"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg> <span class="">Change Password</span></a>
+                                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye icon-sm me-2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> <span class="">View Newsfeed</span></a>
                             </div>
                         </div>
                     </div>
@@ -103,7 +88,7 @@
                     </div>
                     <div class="mt-1">
                         <label class="tx-11 fw-bolder mb-0 text-uppercase">Birth Date</label>
-                        <p class="text-muted">{{!is_null($user->birth_day) ? date('d', strtotime($user->birth_day)) : '' }} {{!is_null($user->birth_month) ? date('M', strtotime($user->birth_month)) : '' }}, {{!is_null($user->birth_year) ? date('Y', strtotime($user->birth_year)) : '' }}</p>
+                        <p class="text-muted">{{!is_null($user->birth_date) ? date('d M', strtotime($user->birth_date)) : '' }}</p>
                     </div>
                     <div class="mt-1">
                         <label class="tx-11 fw-bolder mb-0 text-uppercase">Nationality</label>
@@ -122,36 +107,66 @@
                         <p class="text-muted">{{$user->address_1 ?? '' }}</p>
                     </div>
                     <div class="mt-1">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Website:</label>
-                        <p class="text-muted">www.nobleui.com</p>
-                    </div>
-                    <div class="mt-3 d-flex social-links">
-                        <a href="javascript:;" class="btn btn-icon border btn-xs me-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                        </a>
-                        <a href="javascript:;" class="btn btn-icon border btn-xs me-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
-                        </a>
-                        <a href="javascript:;" class="btn btn-icon border btn-xs me-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                        </a>
-                    </div>
-                    <div class="mt-1">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Role</label>
-                        <p class="text-muted">{{$user->getUserRole->name ?? '' }}</p>
-                    </div>
-                    <div class="mt-1">
                         <label class="tx-11 fw-bolder mb-0 text-uppercase">Branch</label>
                         <p class="text-muted">{{$user->getUserChurchBranch->cb_name ?? '' }}</p>
                     </div>
+                    <div class="mt-1">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Role <span style="cursor: pointer;" id="clientAssignmentToggler"><i class="bx bxs-pencil text-warning"></i></span></label>
+                        <p class="text-muted">{{$user->roles->first()->name ?? '' }}</p>
+                    </div>
+                    <div class="mt-1 bg-light p-4" id="clientAssignmentWrapper">
+                        <form action="{{route('assign-revoke-role')}}" method="post">
+                            @csrf
+                            <h6 class="card-header bg-custom text-white mb-3">Assign Role</h6>
+                            <div class="form-group">
+                                <label for="">Role Assignment</label>
+                                <select name="role" id="role" class="form-control">
+                                    <option disabled selected>--Choose someone--</option>
+                                    @foreach($roles as $role)
+                                        <option value="{{$role->id}}"> {{$role->name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="userId" value="{{$user->id}}">
+                                <input type="hidden" name="action" value="1">
+                            </div>
+                            <div class="form-group mt-3 d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary btn-sm">Save changes <i class="bx bxs-right-arrow"></i> </button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <!-- left wrapper end -->
-        <!-- middle wrapper start -->
         <div class="col-md-8 col-xl-6 middle-wrapper">
             <div class="row">
                 <div class="col-md-12 grid-margin">
+                    @if(session()->has('success'))
+                        <div class="row" role="alert">
+                            <div class="col-md-12">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <i class="mdi mdi-check-all me-2"></i>
+
+                                    {!! session()->get('success') !!}
+
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                        @if(session()->has('error'))
+                            <div class="row" role="alert">
+                                <div class="col-md-12">
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <i class="mdi mdi-check-all me-2"></i>
+
+                                        {!! session()->get('error') !!}
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     <div class="card rounded">
                         <div class="card-header">
                             <div class="d-flex align-items-center justify-content-between">
@@ -376,7 +391,49 @@
         </div>
         <!-- right wrapper end -->
     </div>
+    <div class="modal fade" id="permissionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h6 class="modal-title text-uppercase" id="myModalLabel2">Access Level</h6>
+                    <button type="button" style="margin: 0px; padding: 0px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
+                <div class="modal-body">
+                    <form autocomplete="off" autcomplete="off" action="{{route('add-permission')}}" method="post" id="addBranch" data-parsley-validate="">
+                        @csrf
+                            <div class="accordion-item mb-2">
+                                <h2 class="accordion-header" id="flush-heading_">
+                                    <button class="accordion-button fw-medium " type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_" aria-expanded="false" aria-controls="flush-collapse_">
+                                        {{$user->roles->first()->name ?? '' }}
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse_" class="accordion-collapse collapse show" aria-labelledby="flush-heading_" data-bs-parent="#accordionFlushExample_" style="">
+                                    <div class="accordion-body text-muted">
+                                        <form action="">
+                                            <div class="row">
+                                                @foreach($user->roles->first()->permissions as $p)
+                                                    <div class="col-md-3 col-lg-3">
+                                                        <div class="form-check form-checkbox-outline form-check-primary mb-3">
+                                                            <input class="form-check-input" type="checkbox"  checked="">
+                                                            <label class="form-check-label" >
+                                                                {{$p->name ?? ''}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        <hr>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('extra-scripts')
@@ -385,4 +442,12 @@
     <script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="/assets/js/pages/datatables.init.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#clientAssignmentWrapper').hide();
+            $("#clientAssignmentToggler").click(function(){
+                $("#clientAssignmentWrapper").toggle();
+            });
+        });
+    </script>
 @endsection

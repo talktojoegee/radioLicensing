@@ -81,8 +81,9 @@ class User extends Authenticatable
     }
 
     public function getUserOrganization(){
-        return $this->belongsTo(Organization::class, 'org_id');
+        return $this->belongsTo(Organization::class, 'org_id', 'id');
     }
+
 
     public function getUserHomepageSettings(){
         return $this->belongsTo(Homepage::class, 'org_id');

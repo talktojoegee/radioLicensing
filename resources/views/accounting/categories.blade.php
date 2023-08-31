@@ -203,7 +203,7 @@
                         </div>
                         <div class="form-group mt-3 remittanceWrapper">
                             <label for="">Remit-table?</label>
-                            <select name="remittance" id="remittance" class="form-control" data-parsley-required-message="indicate whether this category should pay remittance or not" required>
+                            <select name="remittance" id="remittance" class="form-control" data-parsley-required-message="indicate whether this category should pay remittance or not" >
                                 <option selected disabled>-- Remit-table? --</option>
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
@@ -246,7 +246,7 @@
     <script src="/js/parsley.js"></script>
     <script>
         $(document).ready(function(){
-            $('.remittanceWrapper').hide();
+            //$('.remittanceWrapper').hide();
             $('#categoryType').on('change', function(){
                 let selectedOption = $(this).val();
                 if(parseInt(selectedOption) === 1){

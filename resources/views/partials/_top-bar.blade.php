@@ -17,7 +17,7 @@
                         <img src="/assets/images/logo-light.svg" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('assets/images/logos/dc-logo.png')}}" alt="" height="64" width="90">
+                        <img src="{{asset('assets/images/'.Auth::user()->getUserOrganization->logo)}}" alt="" height="64" width="90">
                     </span>
                 </a>
             </div>

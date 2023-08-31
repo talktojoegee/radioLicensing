@@ -23,9 +23,11 @@
         <div class="row">
             <div class="col-xl-12 col-md-12">
                 <div class="card">
+                    @can('record-income')
                     <div class="card-header">
                         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addNewProduct" class="btn btn-primary  mb-3">Record Income <i class="bx bx bx-highlight"></i> </a>
                     </div>
+                    @endcan
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
@@ -72,7 +74,7 @@
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row mb-1">
-                                                            <div class="col"> <p class="mb-2">Income</p><h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format($yesterdays->sum('cashbook_credit'),2)}}</h5> </div>
+                                                            <div class="col"> <p class="mb-2">Income</p><h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format($lastMonth->sum('cashbook_credit'),2)}}</h5> </div>
                                                             <div class="col-auto mb-0">
                                                                 <div class="dash-icon text-secondary1"> <i class="bx bxs-receipt text-warning fs-22"></i> </div>
                                                             </div>
@@ -87,7 +89,7 @@
                                                     <div class="card-body">
                                                         <div class="row mb-1">
                                                             <div class="col"> <p class="mb-2">Income</p>
-                                                                <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format($todays->sum('cashbook_credit'),2)}}</h5>
+                                                                <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format($thisMonth->sum('cashbook_credit'),2)}}</h5>
                                                             </div>
                                                             <div class="col-auto mb-0">
                                                                 <div class="dash-icon text-secondary"> <i class="bx bxs-receipt text-primary fs-22"></i>
