@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\portal;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\OkraOpenBankingTrait;
+use App\Imports\BulkCashbookImportDetailImport;
 use App\Models\ActivityLog;
 use App\Models\Automation;
+use App\Models\BulkCashbookImportDetail;
+use App\Models\BulkCashbookImportMaster;
 use App\Models\CashBook;
 use App\Models\CashBookAccount;
 use App\Models\CashBookAttachment;
@@ -24,9 +28,12 @@ use App\Models\SaleItem;
 use App\Models\TransactionCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Excel;
 
 class SalesnMarketingController extends Controller
 {
+    use OkraOpenBankingTrait;
+
     public function __construct(){
         $this->middleware('auth');
         $this->productcategory = new ProductCategory();
@@ -47,6 +54,8 @@ class SalesnMarketingController extends Controller
         $this->currency = new Currency();
         $this->casbookattachment = new CashBookAttachment();
         $this->remittance = new Remittance();
+        $this->bulkcashbookimportmaster = new BulkCashbookImportMaster();
+        $this->bulkcashbookimportdetails = new BulkCashbookImportDetail();
     }
 
     public function showAllProducts()
@@ -118,6 +127,8 @@ class SalesnMarketingController extends Controller
     }
 
     public function showIncome(){
+        //$r = $this->okraAuth();
+        //return dd($r);
         $branchId = Auth::user()->branch;
         return view('income.index',[
             'accounts'=>$this->cashbookaccount->getBranchAccounts($branchId),
@@ -158,9 +169,10 @@ class SalesnMarketingController extends Controller
             $debit = $request->transactionType == 1 ? 0 : $request->amount;
             $credit = $request->transactionType == 1 ? $request->amount : 0;
             $refCode = $this->cashbook->generateReferenceCode();
-            //addCashBook($branchId, $categoryId, $accountId, $currency, $paymentMethod, $level, $transactionType, $transactionDate, $description, $narration = null, $debit = 0, $credit = 0, $refCode)
+
            $cashbook =  $this->cashbook->addCashBook($branchId, $request->category, $request->account, $request->currency,
-            $request->paymentMethod, 0, $request->transactionType, $request->date, $request->narration,$request->narration, $debit, $credit, $refCode);
+            $request->paymentMethod, 0, $request->transactionType, $request->date,
+               $request->narration,$request->narration, $debit, $credit, $refCode,date('m', strtotime($request->date)), date('Y', strtotime($request->date)));
 
             if ($request->hasFile('attachments')) {
                 $this->casbookattachment->storeAttachment($request, $cashbook->cashbook_id);
@@ -219,9 +231,9 @@ class SalesnMarketingController extends Controller
             $debit = $request->transactionType == 1 ? 0 : $request->amount;
             $credit = $request->transactionType == 1 ? $request->amount : 0;
             $refCode = $this->cashbook->generateReferenceCode();
-            //addCashBook($branchId, $categoryId, $accountId, $currency, $paymentMethod, $level, $transactionType, $transactionDate, $description, $narration = null, $debit = 0, $credit = 0, $refCode)
             $cashbook =  $this->cashbook->addCashBook($branchId, $request->category, $request->account, $request->currency,
-                $request->paymentMethod, 0, $request->transactionType, $request->date, $request->narration,$request->narration, $debit, $credit, $refCode);
+                $request->paymentMethod, 0, $request->transactionType,
+                $request->date, $request->narration,$request->narration, $debit, $credit, $refCode,date('m', strtotime($request->date)),date('Y', strtotime($request->date)));
 
             if ($request->hasFile('attachments')) {
                 $this->casbookattachment->storeAttachment($request, $cashbook->cashbook_id);
@@ -536,5 +548,127 @@ class SalesnMarketingController extends Controller
     private function generateRefCode()
     {
         return substr(sha1(time()),31,40);
+    }
+
+    public function showBulkImport(){
+        $branchId = Auth::user()->branch;
+        return view('bulk-import.index',[
+            'defaultCurrency'=>$this->cashbook->getDefaultCurrency(),
+            'accounts'=>$this->cashbookaccount->getBranchAccounts($branchId),
+            'search'=>0,
+
+        ]);
+    }
+    public function processBulkImport(Request $request){
+        $this->validate($request, [
+            'attachment'=>'required'
+        ],[
+            'attachment.required'=>'Choose a file to upload',
+        ]);
+        $file = $request->attachment;
+
+        $this->validate($request,[
+            'account'=>'required',
+            'monthYear'=>'required',
+            'batchCode'=>'required',
+            'attachment'=>'required|max:2048',
+        ],[
+            'account.required'=>'Select an account for this operation',
+            'monthYear.required'=>'Select month & year',
+            'batchCode.required'=>'Enter a unique batch code',
+            'attachment.required'=>'Choose a file to upload',
+            //'attachment.mimes'=>'Invalid file format. Upload either xlsx or xls file',
+            'attachment.max'=>'Maximum file upload size exceeded. Your file should not exceed 2MB'
+        ]);
+        $bulkimport = $this->bulkcashbookimportmaster->publishBulkImport($request, Auth::user()->id);
+
+        //\Maatwebsite\Excel\Facades\Excel::
+        Excel::import(new BulkCashbookImportDetailImport($request->firstRowHeader, Auth::user()->branch,Auth::user()->id,
+            $bulkimport->bcim_id,$request->account,date("m", strtotime($request->monthYear)),
+            date("Y", strtotime($request->monthYear)),
+            $request->batchCode), public_path("assets/drive/import/{$bulkimport->bcim_attachment}"));
+
+        session()->flash("success", "Success! Bulk import done.");
+        return back();
+    }
+
+
+    public function approveBulkImport(){
+        return view("bulk-import.approve-bulk-import",[
+            "records"=>$this->bulkcashbookimportmaster->getAllBulkImport()
+        ]);
+    }
+
+    public function viewBulkImport($batchCode){
+        $record = $this->bulkcashbookimportmaster->getOneBulkImportByBatchCode($batchCode);
+        if(empty($record)){
+            session()->flash("error", "Whoops! Record does not exist");
+            return back();
+        }
+        return view("bulk-import.view-bulk-import",[
+            "record"=>$record
+        ]);
+    }
+
+    public function deleteRecord($recordId){
+        $record = $this->bulkcashbookimportdetails->getRecordById($recordId);
+        if(empty($record)){
+            session()->flash("error", "Whoops! Record does not exist");
+            return back();
+        }
+        $record->delete();
+        session()->flash("success", "Success! Record deleted");
+        return back();
+    }
+
+
+    public function discardRecord($batchCode){
+        $record = $this->bulkcashbookimportmaster->getOneBulkImportByBatchCode($batchCode);
+        if(empty($record)){
+            session()->flash("error", "Whoops! Record does not exist");
+            return back();
+        }
+        $record->bcim_status = 2;
+        $record->save();
+        $items = $this->bulkcashbookimportdetails->getRecordByBatchCode($record->bcim_batch_code);
+        if(count($items) > 0){
+            foreach($items as $item){
+                $item->bcid_status = 2; //discarded
+                $item->save();
+            }
+        }
+        session()->flash("success", "Success! Record discarded");
+        return back();
+    }
+
+    public function postRecord($batchCode){
+        $record = $this->bulkcashbookimportmaster->getOneBulkImportByBatchCode($batchCode);
+        if(empty($record)){
+            session()->flash("error", "Whoops! Record does not exist");
+            return back();
+        }
+        $account = CashBookAccount::find($record->bcim_cba_id);
+        if(empty($account)){
+            abort(404);
+        }
+        $record->bcim_status = 1;
+        $record->save();
+
+        $items = $this->bulkcashbookimportdetails->getRecordByBatchCode($record->bcim_batch_code);
+        if(count($items) > 0){
+            foreach($items as $item){
+                $item->bcid_status = 1; //posted
+                $item->save();
+                //push to cashbook
+                $this->cashbook->addCashBook($item->bcid_branch_id, $item->bcid_category_id,
+                    $item->bcid_account_id, $account->cba_currency ?? 76, 1,
+                    1, $item->bcid_transaction_type, date("Y-m-d", strtotime($item->bcid_transaction_date)),
+                    $item->bcid_description, $item->bcid_narration ?? null,
+                    $item->bcid_debit, $item->bcid_credit, $item->bcid_ref_code,
+                    $item->bcid_month, $item->bcid_year);
+            }
+        }
+        session()->flash("success", "Success! Record posted");
+        return back();
     }
 }

@@ -130,6 +130,14 @@ Route::group(['prefix'=>'/financials', 'middleware'=>'auth'],function(){
     Route::get('/income', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'showIncome'])->name('income');
     Route::post('/record-income', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'recordIncome'])->name('record-income');
     Route::get('/expense', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'showExpense'])->name('expense');
+    Route::get('/bulk-import', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'showBulkImport'])->name('bulk-import');
+    Route::post('/process-bulk-import', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'processBulkImport'])->name('process-bulk-import');
+    Route::get('/approve-bulk-import', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'approveBulkImport'])->name('approve-bulk-import');
+    Route::get('/view-bulk-import/{batchCode}', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'viewBulkImport'])->name('view-bulk-import');
+    Route::get('/delete-record/{recordId}', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'deleteRecord'])->name('delete-record');
+    Route::get('/discard-record/{batchCode}', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'discardRecord'])->name('discard-record');
+    Route::get('/post-record/{batchCode}', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'postRecord'])->name('post-record');
+
     Route::post('/record-expense', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'recordExpense'])->name('record-expense');
     Route::get('/remittance', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'showRemittance'])->name('remittance');
     Route::get('/show-remittance-collection', [App\Http\Controllers\Portal\SalesnMarketingController::class, 'showRemittanceCollections'])->name('show-remittance-collections');
@@ -182,6 +190,7 @@ Route::group(['prefix'=>'workflow', 'middleware'=>'auth'], function(){
 Route::group(['prefix'=>'newsfeed', 'middleware'=>'auth'], function(){
    Route::get('/', [App\Http\Controllers\Portal\TimelineController::class, 'showTimeline'])->name('timeline');
    Route::post('/publish-timeline-post', [App\Http\Controllers\Portal\TimelineController::class, 'storeTimelinePost'])->name('publish-timeline-post');
+   Route::get('/post/{slug}', [App\Http\Controllers\Portal\TimelineController::class, 'readTimelinePost'])->name('read-timeline-post');
 });
 
 Route::group(['prefix'=>'/bulk-sms', 'middleware'=>'auth'],function(){

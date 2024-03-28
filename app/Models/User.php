@@ -163,6 +163,10 @@ class User extends Authenticatable
         return User::find( $id);
     }
 
+    public function getUserByIds($ids){
+        return User::whereIn('id', $ids)->get();
+    }
+
     public function uploadProfilePicture($avatarHandler){
         $filename = $avatarHandler->store('avatars', 'public');
         $avatar = User::find(Auth::user()->id);
@@ -296,3 +300,6 @@ class User extends Authenticatable
     }*/
 
 }
+
+
+
