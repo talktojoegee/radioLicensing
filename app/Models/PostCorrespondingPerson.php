@@ -23,8 +23,8 @@ class PostCorrespondingPerson extends Model
     public function getCorrespondingPostsForEveryOne(){
         return PostCorrespondingPerson::pluck('pcp_post_id')->get();
     }
-    public function getCorrespondingPostsByBranch($type, $branchId){
+    public function getCorrespondingPosts($type, $targetId){
         return PostCorrespondingPerson::where('pcp_type', $type)
-            ->whereJsonContains('pcp_target', $branchId)->get();
+            ->whereJsonContains('pcp_target', $targetId)->get();
     }
 }

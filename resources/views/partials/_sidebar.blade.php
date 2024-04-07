@@ -18,12 +18,11 @@
                 <span key="t-bulksms"> Bulk SMS </span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                @can('access-bulksms-wallet')<li><a href="{{route('top-up-transactions')}}" key="t-bulksms">Wallet</a></li>@endcan
-                @can('send-bulksms')<li><a href="{{route('compose-sms')}}" key="t-bulksms">Compose</a></li>@endcan
-                <li><a href="{{route('schedule-sms')}}" key="t-bulksms">Schedule</a></li>
                 @can('topup-bulksms')<li><a href="{{route('top-up')}}" key="t-bulksms">Top-up</a></li>@endcan
+            @can('access-bulksms-wallet')<li><a href="{{route('top-up-transactions')}}" key="t-bulksms">Wallet</a></li>@endcan
+                @can('send-bulksms')<li><a href="{{route('compose-sms')}}" key="t-bulksms">Compose</a></li>@endcan
+                    <li><a href="{{route('schedule-sms')}}" key="t-bulksms">Schedule</a></li>
                @can('bulksms-phonegroup') <li><a href="{{route('phone-groups')}}" key="t-bulksms">Phone Group</a></li> @endcan
-                <li><a href="{{route('batch-report')}}" key="t-bulksms">Delivery Report</a></li>
             </ul>
         </li>
         @endcan
@@ -34,9 +33,12 @@
                 <span key="t-crypto"> Follow-up </span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                @can('add-client')<li><a href="{{route('clients')}}" key="t-wallet">New Schedule</a></li>@endcan
-                    <li><a href="{{route('remittance')}}" key="t-wallet">Automation</a></li>
-                @can('contact-client')<li><a href="{{route('clients')}}" key="t-wallet">Log</a></li>@endcan
+                <li><a href="{{route('leads')}}" key="t-wallet">Leads</a></li>
+                @can('add-client')<li><a href="{{route('marketing-dashboard')}}" key="t-wallet">Dashboard</a></li>@endcan
+                <li><a href="{{route('marketing-messaging')}}" key="t-wallet">Messaging</a></li>
+            @can('add-client')<li><a href="{{route('schedule-follow-up')}}" key="t-wallet">New Schedule</a></li>@endcan
+            @can('add-client')<li><a href="{{route('manage-schedule')}}" key="t-wallet">Manage Schedule</a></li>@endcan
+
             </ul>
         </li>
         @endcan
@@ -52,7 +54,7 @@
         <li>
             <a href="{{route('show-appointments')}}" class="waves-effect">
                 <i class="bx bx-timer"></i>
-                <span key="t-chat">Appointments</span>
+                <span key="t-chat">Events</span>
             </a>
         </li>
         @can('access-workflow')

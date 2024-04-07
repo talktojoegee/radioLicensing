@@ -62,6 +62,13 @@ class Post extends Model
         return Post::where('p_posted_by', $authorId)->orderBy('p_id', 'DESC')->get();
     }
 
+    public function getAllPersonalWorkflow($authorId){
+        return Post::where('p_posted_by', $authorId)
+            ->where('p_type', 6)
+            ->orWhere('p_type',7)
+            ->orderBy('p_id', 'DESC')->get();
+    }
+
     public function getAllBranchPosts($branchId){
         return Post::where('p_branch_id', $branchId)->orderBy('p_id', 'DESC')->get();
     }

@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Traits;
 
+use Carbon\Carbon;
+
 trait UtilityTrait{
 
     public function getIntegerArray($arr){
@@ -43,6 +45,50 @@ trait UtilityTrait{
                 break;
         }
         return $type;
+    }
+
+    public function getRecurringNextWeek($frequency){
+        $date = Carbon::parse(date("Y-m-d"));
+         switch($frequency->value){
+             case 0: //Sunday
+                 $result = $date->is('Sunday') ? $date : $date->next('Sunday');
+                 break;
+             case 1: //Monday
+                 $result = $date->is('Monday') ? $date : $date->next('Monday');
+                 break;
+             case 2: //Tuesday
+                 $result = $date->is('Tuesday') ? $date : $date->next('Tuesday');
+                 break;
+             case 3: //Wednesday
+                 $result = $date->is('Wednesday') ? $date : $date->next('Wednesday');
+                 break;
+             case 4: //Thursday
+                 $result = $date->is('Thursday') ? $date : $date->next('Thursday');
+                 break;
+             case 5: //Friday
+                 $result = $date->is('Friday') ? $date : $date->next('Friday');
+                 break;
+             case 6: //Saturday
+                 $result = $date->is('Saturday') ? $date : $date->next('Saturday');
+                 break;
+         }
+         return $result;
+    }
+
+    public function getRecurringNextMonth($frequency, $timeLot){
+        $currentDate = new \DateTime(date('Y-m-d'));
+        $nextMonth = $currentDate->modify('+1 Month');
+        return $nextMonth->modify($frequency->value)->format("Y-m-d $timeLot");
+
+    }
+
+    public function redirectSuccess(){
+        session()->flash("success", "Action successful!");
+        return back();
+    }
+    public function redirectError(){
+        session()->flash("error", "Whoops! Something went wrong.");
+        return back();
     }
 }
 ?>

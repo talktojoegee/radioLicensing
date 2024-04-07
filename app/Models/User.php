@@ -210,6 +210,11 @@ class User extends Authenticatable
         return User::where('branch', $branchId)->orderBy('first_name', 'ASC')->get();
     }
 
+    public function getCurrentNextBirthdays(){
+        $currentMonth = date('m');
+        return User::where('birth_month', '>=', $currentMonth)->whereNotNull('birth_month')->orderBy('birth_month', 'ASC')->take(5)->get();
+    }
+
 
 /*
     public function getUserAccount(){ //git test
