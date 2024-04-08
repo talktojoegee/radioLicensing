@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
             ->everyMinute()
             //->withoutOverlapping()
             ->runInBackground();
-        //Artisan::call ('bulksms:send');
+        Artisan::call ('bulksms:send');
     }
 
     /**
