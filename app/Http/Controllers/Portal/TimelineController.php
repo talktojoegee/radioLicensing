@@ -8,7 +8,9 @@ use App\Models\AuthorizingPerson;
 use App\Models\ChurchBranch;
 use App\Models\Post;
 use App\Models\PostAttachment;
+use App\Models\PostComment;
 use App\Models\PostCorrespondingPerson;
+use App\Models\PostView;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -128,8 +130,13 @@ class TimelineController extends Controller
 
     public function readTimelinePost($slug){
         $post = $this->post->getPostBySlug($slug);
+
         if(empty($post)){
             abort(404);
+        }
+        $view = PostView::getPostViewByUserPostId(Auth::user()->id, $post->p_id);
+        if(empty($view)){
+            PostView::registerPostView(Auth::user()->id, $post->p_id);
         }
         $postType = $this->getPostType($post->p_type);
         $branches = null;
@@ -154,6 +161,18 @@ class TimelineController extends Controller
             'users'=>$users,
             'regions'=>$regions
         ]);
+    }
+
+    public function postComment(Request $request){
+        $this->validate($request,[
+            'post'=>'required',
+            'comment'=>'required'
+        ],[
+            "comment.required"=>"Type your comment in the field provided."
+        ]);
+        PostComment::leaveComment($request->post, Auth::user()->id,$request->comment);
+        session()->flash("success", "Action successful!");
+        return back();
     }
 
 

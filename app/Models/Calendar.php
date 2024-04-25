@@ -115,7 +115,7 @@ class Calendar extends Model
             return Calendar::where('org_id', $orgId)->where('created_by', $userId)->whereBetween('event_date', [$from, $to])->orderBy('id', 'DESC')->get();
         }
 
-    public function getUserYesterdaysAppointments($userId, $orgId){
+   /* public function getUserYesterdaysAppointments($userId, $orgId){
         $yesterday = date("Y-m-d", strtotime( '-1 days' ) );
         return Calendar::where('org_id', $orgId)->where('created_by', $userId)->whereDate('event_date', $yesterday)->orderBy('id', 'DESC')->get();
     }
@@ -129,6 +129,21 @@ class Calendar extends Model
     }
     public function getUserThisWeekAppointments($userId, $orgId){
         return Calendar::where('org_id', $orgId)->where('created_by', $userId)->whereBetween('event_date', [Carbon::now()->startOfWeek(Carbon::SUNDAY), Carbon::now()->endOfWeek(Carbon::SATURDAY) ])->orderBy('id', 'DESC')->get();
+    }*/
+    public function getUserYesterdaysAppointments(){
+        $yesterday = date("Y-m-d", strtotime( '-1 days' ) );
+        return Calendar::whereDate('event_date', $yesterday)->orderBy('id', 'DESC')->get();
+    }
+
+    public function getUserThisYearsAppointments(){
+        return Calendar::whereYear('event_date', date('Y'))->orderBy('id', 'DESC')->get();
+    }
+
+    public function getUserTodaysAppointments(){
+        return Calendar::whereDate('event_date', DB::raw('CURDATE()'))->orderBy('id', 'DESC')->get();
+    }
+    public function getUserThisWeekAppointments(){
+        return Calendar::whereBetween('event_date', [Carbon::now()->startOfWeek(Carbon::SUNDAY), Carbon::now()->endOfWeek(Carbon::SATURDAY) ])->orderBy('id', 'DESC')->get();
     }
      public function getUserAppointmentsByStatus($userId, $orgId, $status){
             return Calendar::where('org_id', $orgId)->where('created_by', $userId)->where('status', $status)->orderBy('id', 'DESC')->get();
