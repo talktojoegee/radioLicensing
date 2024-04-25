@@ -135,6 +135,31 @@
                         <div class="card rounded">
                             <div class="">
                                 <div class="modal-header">
+                                    <h6 class="tx-11 fw-bolder text-uppercase">Upcoming Events</h6>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                @foreach($events->take(6) as $event)
+                                    <div class="row ms-0 me-0 mb-3" style="border-bottom: 1px solid #cccdd1;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <h6 class="fs-14"><a href="{{ route('show-appointment-details', $event->slug) }}">{{$event->note ?? null }}</a></h6>
+                                                <p class="mb-0"><span style="color: #34c38f">{{date('d M, Y', strtotime($event->event_date))}}</span> - <span style="color: #ff0000;">{{date('d M, Y', strtotime($event->end_date))}}</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                                    <div class="d-flex justify-content-center">
+                                        <a href="{{ route("show-appointments") }}" class="btn btn-light border-0">Show all</a>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 grid-margin">
+                        <div class="card rounded">
+                            <div class="">
+                                <div class="modal-header">
                                     <h6 class="tx-11 fw-bolder text-uppercase">Upcoming Birthdays</h6>
                                 </div>
                             </div>
@@ -154,46 +179,12 @@
                                     </div>
                                 @endforeach
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route("birthdays") }}" class="btn btn-light border-0">View more</a>
+                                        <a href="{{ route("birthdays") }}" class="btn btn-light border-0">Show all</a>
                                     </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 grid-margin">
-                        <div class="card rounded">
-                            <div class="">
-                                <div class="modal-header">
-                                    <h6 class="tx-11 fw-bolder text-uppercase">Upcoming Events</h6>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="row ms-0 me-0 mb-3" style="border-bottom: 1px solid #cccdd1;">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
-                                            <img class="rounded avatar-sm" src="assets/images/users/avatar-5.jpg"
-                                                 alt="Generic placeholder image">
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="fs-14">Pastor Chukwuemeka Oluwaleseun Yusuf Adams</h6>
-                                            <p class="mb-0">15th December</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row ms-0 me-0">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
-                                            <img class="rounded avatar-sm" src="assets/images/users/avatar-5.jpg"
-                                                 alt="Generic placeholder image">
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="fs-14">Pastor Chukwuemeka Oluwaleseun Yusuf Adams</h6>
-                                            <p class="mb-0">15th December</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>

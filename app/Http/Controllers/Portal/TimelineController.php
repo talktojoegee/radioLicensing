@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Portal;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\UtilityTrait;
 use App\Models\AuthorizingPerson;
+use App\Models\Calendar;
 use App\Models\ChurchBranch;
 use App\Models\Post;
 use App\Models\PostAttachment;
@@ -27,6 +28,7 @@ class TimelineController extends Controller
         $this->region = new Region();
         $this->post = new Post();
         $this->postcorrespondingpersons = new PostCorrespondingPerson();
+        $this->calendar = new Calendar();
     }
 
     public function showTimeline(){
@@ -56,6 +58,7 @@ class TimelineController extends Controller
             'users'=>$this->user->getAllBranchUsers($branchId),
             'birthdays'=>$this->user->getCurrentNextBirthdays(),
             'posts'=>$this->post->getPostsByIds($postIds),
+            'events'=>$this->calendar->getThisMonthsAppointments(),
         ]);
     }
 

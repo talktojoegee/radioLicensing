@@ -101,9 +101,10 @@ class Calendar extends Model
         return Calendar::all();
     }
 
-    public function getUserAppointments($userId, $orgId){
-        return Calendar::where('org_id', $orgId)->where('created_by', $userId)->orderBy('id', 'DESC')->get();
+    public function getUserAppointments(){
+        return Calendar::orderBy('id', 'DESC')->get();
     }
+
     public function getAllOrgsAppointments($orgId){
         return Calendar::where('org_id', $orgId)->orderBy('id', 'DESC')->get();
     }
@@ -111,11 +112,18 @@ class Calendar extends Model
      public function getAllPractitionerAppointments($orgId, $userId){
             return Calendar::where('org_id', $orgId)->where('created_by', $userId)->orderBy('id', 'DESC')->get();
         }
-     public function getAllPractitionerAppointmentsByDateRange($orgId, $userId, $from, $to){
-            return Calendar::where('org_id', $orgId)->where('created_by', $userId)->whereBetween('event_date', [$from, $to])->orderBy('id', 'DESC')->get();
+     public function getAllPractitionerAppointmentsByDateRange($userId, $from, $to){
+            return Calendar::/*where('org_id', $orgId)->*/where('created_by', $userId)
+                ->whereBetween('event_date', [$from, $to])
+                ->orderBy('id', 'DESC')->get();
         }
 
-   /* public function getUserYesterdaysAppointments($userId, $orgId){
+    /* public function getUserAppointments($userId, $orgId){
+    return Calendar::where('org_id', $orgId)->where('created_by', $userId)->orderBy('id', 'DESC')->get();
+
+   }
+
+    public function getUserYesterdaysAppointments($userId, $orgId){
         $yesterday = date("Y-m-d", strtotime( '-1 days' ) );
         return Calendar::where('org_id', $orgId)->where('created_by', $userId)->whereDate('event_date', $yesterday)->orderBy('id', 'DESC')->get();
     }
@@ -137,6 +145,12 @@ class Calendar extends Model
 
     public function getUserThisYearsAppointments(){
         return Calendar::whereYear('event_date', date('Y'))->orderBy('id', 'DESC')->get();
+    }
+
+    public function getThisMonthsAppointments(){
+        return Calendar::whereMonth('event_date', date('m'))
+            ->whereYear('event_date', date('Y'))
+            ->orderBy('event_date', 'DESC')->get();
     }
 
     public function getUserTodaysAppointments(){
