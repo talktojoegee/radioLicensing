@@ -1,9 +1,9 @@
 @extends('layouts.master-layout')
 @section('title')
-    Frequency Assignment
+ {{$title ?? null }}
 @endsection
 @section('current-page')
-    Frequency Assignment
+    {{$title ?? null }}
 @endsection
 @section('extra-styles')
 
@@ -28,11 +28,6 @@
         <div class="row">
             <div class="col-xl-12 col-md-12">
                 <div class="card">
-                    @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
-                        <div class="card-header">
-                            <a href="{{route('new-radio-application')}}"  class="btn btn-primary  mb-3">New Request <i class="bx bx bx-highlight"></i> </a>
-                        </div>
-                    @endif
                     <div class="card-body">
                         @if(session()->has('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -70,7 +65,7 @@
                                 @php
                                     $a = 1;
                                 @endphp
-                                @foreach($workflows as $key => $flow)
+                                @foreach($posts as $key => $flow)
                                     <tr role="row" class="odd">
                                         <td class="">{{$a++}}</td>
                                         <td class="sorting_1 text-left">{{ date('d M, Y', strtotime($flow->created_at)) }}</td>
@@ -127,8 +122,12 @@
                                                 <i class="bx bx-dots-vertical dropdown-toggle text-warning" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;"></i>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="{{route('show-application-details', $flow->p_slug)}}" > <i class="bx bxs-book-open"></i> View</a>
-                                                    @if((\Illuminate\Support\Facades\Auth::user()->type == 1)  && ($flow->p_status == 2) && (is_null($flow->p_invoice_id)) )
+
+                                                    @if((\Illuminate\Support\Facades\Auth::user()->type == 1)  && ($flow->p_status == 2)  && (is_null($flow->p_invoice_id)) )
                                                         <a class="dropdown-item" href="{{route('generate-invoice', $flow->p_slug)}}" > <i class="bx bx-purchase-tag"></i> Generate Invoice</a>
+                                                    @endif
+                                                    @if((\Illuminate\Support\Facades\Auth::user()->type == 1)  && ($flow->p_status == 5)  )
+                                                        <a class="dropdown-item" href="{{route('show-assign-license', $flow->p_slug)}}" > <i class="bx bx-certification"></i> Assign Frequency</a>
                                                     @endif
                                                 </div>
                                             </div>

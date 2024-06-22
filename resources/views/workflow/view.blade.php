@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="/assets/libs/owl.carousel/assets/owl.theme.default.min.css">
     <link href="/css/parsley.css" rel="stylesheet" type="text/css" />
 @endsection
-@section('breadcrumb-action-btn')
+@section('bread
+crumb-action-btn')
 
 @endsection
 
@@ -96,7 +97,7 @@
 
                                         @foreach($workflow->getAuthorizingPersons as $auth)
                                             <div class="owl-item " style="width: 293.5px;">
-                                                <div class="item event-list {{ $loop->last ? 'activ' : null }}">
+                                                <div class="item event-list {{ $loop->last ? 'active' : null }}">
                                                     <div>
                                                         <div class="event-date">
                                                             <div class="text-primary mb-1">{{date('d M, Y h:ia', strtotime($auth->created_at))}}</div>

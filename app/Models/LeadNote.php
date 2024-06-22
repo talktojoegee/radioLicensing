@@ -21,6 +21,9 @@ class LeadNote extends Model
         $note->added_by = Auth::user()->id;
         $note->lead_id = $request->leadId;
         $note->note = $request->addNote;
+        $note->rating = $request->rating;
+        $note->type = $request->type;
+        $note->followup_id = $request->followup ?? null;
         $note->save();
     }
 

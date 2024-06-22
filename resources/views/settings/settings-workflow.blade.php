@@ -1,9 +1,9 @@
 @extends('layouts.master-layout')
 @section('current-page')
-    SMS Settings
+    Workflow Settings
 @endsection
 @section('title')
-    SMS Settings
+    Workflow Settings
 @endsection
 @section('extra-styles')
     <link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -52,55 +52,70 @@
                     <div class="col-xl-12 col-md-12 col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="modal-header">SMS Settings</h5>
-                                <div class="pt-4">
-                                    <p><strong class="text-danger">Note: </strong> These messages will be sent automatically for the various scheduled operations.</p>
-                                    <form action="#" method="post">
-                                        @csrf
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="">SMS for <strong>New Licence Application</strong></label>
-                                                    <textarea name="new_licence_sms" id="new_licence_sms" maxlength="160" placeholder="Compose SMS message for new licence application (Acknowledgement)" style="resize: none;" rows="5"
-                                                              class="form-control">{{old('new_licence_sms', $app_sms_setting->new_licence_sms ?? '')}}</textarea>
-                                                    @error('new_licence_sms')
-                                                    <i class="text-danger mt-2">{{$message}}</i>
-                                                    @enderror
-                                                </div>
+                                <h5 class="modal-header">Workflow Settings</h5>
+
+                                <p class="p-4">
+                                <form action="{{route('workflow-settings')}}" method="post">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="">Which section/unit should first attend to <strong>New Licence Application</strong>?</label>
+                                                <select name="new_app_section" id="new_app_section" class="form-control js-example-theme-single">
+                                                    <option disabled selected>-- Select section/unit --</option>
+                                                    @foreach($departments as $department)
+                                                        <option value="{{$department->cb_id}}" {{ !empty($app_licence_setting->new_app_section_handler) ? ($department->cb_id == $app_licence_setting->new_app_section_handler ? "selected" : '')  : 'selected'}}>{{$department->cb_name ?? '' }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('new_app_section')
+                                                <i class="text-danger mt-2">{{$message}}</i>
+                                                @enderror
+                                                <p class="mt-1"> <span class="badge badge-soft-success">Current Selection: </span> <span>{{ !empty($app_licence_setting) ? $app_licence_setting->getDepartmentById($app_licence_setting->new_app_section_handler)->cb_name : '' }}</span></p>
                                             </div>
                                         </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="">SMS for Licence Renewal <strong>(Reminder)</strong></label>
-                                                    <textarea name="licence_renewal_sms" id="licence_renewal_sms" maxlength="160" placeholder="Compose SMS message for licence renewal (Reminder)" style="resize: none;" rows="5"
-                                                              class="form-control">{{old('licence_renewal_sms', $app_sms_setting->licence_renewal_reminder_sms ?? '')}}</textarea>
-                                                    @error('licence_renewal_sms')
-                                                    <i class="text-danger mt-2">{{$message}}</i>
-                                                    @enderror
-                                                </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="">Which section/unit should attend to <strong>Licence Renewal</strong>?</label>
+                                                <select name="licence_renewal" id="licence_renewal" class="form-control js-example-theme-single">
+                                                    <option disabled selected>-- Select section/unit --</option>
+                                                    @foreach($departments as $department)
+                                                        <option value="{{$department->cb_id}}" {{ !empty($app_licence_setting->licence_renewal_handler) ? ($department->cb_id == $app_licence_setting->licence_renewal_handler ? "selected" : '')  : 'selected'}} >{{$department->cb_name ?? '' }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('licence_renewal')
+                                                <i class="text-danger mt-2">{{$message}}</i>
+                                                @enderror
+                                                <p class="mt-1"> <span class="badge badge-soft-success">Current Selection: </span> <span>{{ !empty($app_licence_setting) ?  $app_licence_setting->getDepartmentById($app_licence_setting->licence_renewal_handler)->cb_name : '' }}</span></p>
                                             </div>
                                         </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="">SMS for Licence Renewal <strong>(Acknowledgment)</strong></label>
-                                                    <textarea name="licence_renewal_sms_ack" id="licence_renewal_sms_ack" maxlength="160" placeholder="Compose SMS message for licence renewal (Acknowledgement)" style="resize: none;" rows="5"
-                                                              class="form-control">{{old('licence_renewal_sms_ack', $app_sms_setting->licence_renewal_sms ?? '')}}</textarea>
-                                                    @error('licence_renewal_sms_ack')
-                                                    <i class="text-danger mt-2">{{$message}}</i>
-                                                    @enderror
-                                                </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="">Which section/unit can engage the <strong>Customer</strong>?</label>
+                                                <select name="engage_customer" id="engage_customer" class="form-control js-example-theme-single">
+                                                    <option disabled selected>-- Select section/unit --</option>
+                                                    @foreach($departments as $department)
+                                                        <option value="{{$department->cb_id}}" {{ !empty($app_licence_setting->engage_customer) ? ($department->cb_id == $app_licence_setting->engage_customer ? "selected" : '')  : 'selected'}}  >{{$department->cb_name ?? '' }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('engage_customer')
+                                                <i class="text-danger mt-2">{{$message}}</i>
+                                                @enderror
+                                                <p class="mt-1"> <span class="badge badge-soft-success">Current Selection: </span> <span>{{ !empty($app_licence_setting) ?  $app_licence_setting->getDepartmentById($app_licence_setting->engage_customer)->cb_name : '' }}</span></p>
                                             </div>
                                         </div>
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-md-12 d-flex justify-content-center">
-                                                <button class="btn btn-primary btn-sm" type="submit">Submit</button>
-                                            </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-12 d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>
+                                </p>
 
 
                             </div>

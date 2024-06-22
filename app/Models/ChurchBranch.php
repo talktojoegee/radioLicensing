@@ -75,6 +75,29 @@ class ChurchBranch extends Model
         return ChurchBranch::orderBy('cb_name', 'ASC')->get();
     }
 
+
+    public function setNewSectionHead(Request $request){
+        $head = ChurchBranch::find($request->department);
+        if(!empty($head)){
+            $head->cb_head_pastor = $request->supervisor ?? null;
+            $head->save();
+            //Update log
+            $this->updateChurchBranchLog($head->cb_id, $head->cb_head_pastor);
+        }
+
+    }
+
+    public function updateChurchBranchLog($branchId, $prevSupervisor){
+        $log = new ChurchBranchLog();
+        $log->cbl_branch_id = $branchId;
+        $log->cbl_user_id = $prevSupervisor;
+        $log->cbl_title = 'Section Head Changed';
+        $log->cbl_activity = "A new section head was assigned.";
+        $log->save();
+    }
+
+
+
     public function getChurchBranchByBranchId($branchId){
         return ChurchBranch::find($branchId);
     }
@@ -93,5 +116,9 @@ class ChurchBranch extends Model
 
 
 
+
+    public function getActiveSupervisorByDepartmentId($department_id){
+        return ChurchBranch::where('cb_id', $department_id)->first();
+    }
 
 }

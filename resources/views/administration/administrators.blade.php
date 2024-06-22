@@ -142,7 +142,7 @@
                                                 <td>{{$index++}}</td>
                                                 <td>
                                                     <img src="{{url('storage/'.$user->image)}}" style="width: 24px; height: 24px;" alt="{{$user->first_name ?? '' }} {{$user->last_name ?? '' }}" class="rounded-circle avatar-sm">
-                                                    <a href="{{route('user-profile', $user->slug)}}">{{$user->first_name ?? '' }} {{$user->last_name ?? '' }}</a> </td>
+                                                    <a href="{{route('user-profile', $user->slug)}}">{{$user->title ?? '' }} {{$user->first_name ?? '' }} {{$user->last_name ?? '' }}</a> </td>
                                                 <td>{{$user->cellphone_no ?? '' }} </td>
                                                 <td>{!! $user->pastor == 1 ? "<span class='badge rounded-pill bg-success'>Pastor</span>" : "<span class='badge rounded-pill bg-secondary'>User</span>" !!}</td>
                                                 <td>{{$user->email ?? '' }} </td>

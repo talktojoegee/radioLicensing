@@ -447,12 +447,22 @@ class SalesnMarketingController extends Controller
         $this->validate($request,[
             'addNote'=>'required',
             'leadId'=>'required',
+            'rating'=>'required'
         ],[
-            'addNote.required'=>'Type note in the box provided'
+            'addNote.required'=>'Type note in the box provided',
+            'rating.required'=>'Rate this conversation'
         ]);
         $this->leadnote->addNote($request);
         $log = Auth::user()->first_name.' '.Auth::user()->last_name.' left a note';
         ActivityLog::registerActivity(Auth::user()->org_id,null,null, $request->leadId, 'New Note', $log);
+        //Mark request as done {Follow-up schedule}
+        if(isset($request->markAsDone)){
+            $followupDetail = LeadFollowupScheduleDetail::find($request->followupDetail);
+            if(!empty($followupDetail)){
+                $followupDetail->status = 1; //done
+                $followupDetail->save();
+            }
+        }
         session()->flash("success", "Your note was added to the system!");
         return back();
     }

@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <title>{{config('app.name')}} | Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Health Desk login portal" name="description" />
+    <meta content="{{env('APP_NAME')}}" name="description" />
     <meta content="{{config('app.name')}}" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="shortcut icon" href="/assets/drive/logo/arm.png">
     <!-- Bootstrap Css -->
     <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -56,7 +56,7 @@
                             <a href="#" class="auth-logo-light">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="/assets/drive/logo/logo-dark.png" alt="" class="rounded-circle" height="74" width="74">
+                                        <img src="/assets/drive/logo/arm.png" alt="" class="rounded-circle" height="74" width="74">
                                     </span>
                                 </div>
                             </a>
@@ -64,7 +64,7 @@
                             <a href="{{route('login')}}" class="auth-logo-dark">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="/assets/drive/logo/logo-dark.png" alt="" class="rounded-circle" height="74" width="74">
+                                        <img src="/assets/drive/logo/arm.png" alt="" class="rounded-circle" height="74" width="74">
                                     </span>
                                 </div>
                             </a>
@@ -99,7 +99,7 @@
                                 </div>
 
                                 <div class="mt-3 d-grid">
-                                    <button class="btn btn-primary waves-effect waves-light" style="background: #CF1E2D; border: 1px solid #CF1E2D" type="submit">Log In</button>
+                                    <button class="btn btn-primary waves-effect waves-light" type="submit">Log In</button>
                                 </div>
 
                                 <div class="mt-4 text-center">

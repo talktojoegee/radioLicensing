@@ -4,6 +4,16 @@
 @endsection
 @section('extra-styles')
     <link href="/css/parsley.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/libs/bootstrap-rating/bootstrap-rating.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .text-danger{
+            color: #ff0000 !important;
+        }
+        .checked {
+            color: orange;
+        }
+    </style>
 @endsection
 @section('breadcrumb-action-btn')
 
@@ -152,9 +162,17 @@
                                 <form action="{{route('leave-lead-note')}}" id="leadNoteForm" method="post">
                                     @csrf
                                     <div class="form-group">
-                                        <label for="">Add Note</label>
+                                        <label for="">Rating <sup class="text-danger" style="color: #ff0000;">*</sup> </label>
+                                        <div class="rating-star">
+                                            <input type="hidden" name="rating" class="rating-tooltip" data-filled="mdi mdi-star text-primary" data-empty="mdi mdi-star-outline text-muted"/>
+                                        </div>
+                                        @error('rating') <i class="text-danger">{{$message}}</i> @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Add Note <sup class="text-danger" style="color: #ff0000;">*</sup></label>
                                         <textarea name="addNote" data-parsley-required-message="Leave a note in the box provided above" required style="resize: none;" cols="30" rows="4" placeholder="Type Note here..." class="form-control">{{old('addNote')}}</textarea>
                                         @error('addNote') <i class="text-danger">{{$message}}</i> @enderror
+                                        <input type="hidden" name="type" value="1">
                                     </div>
                                     <input type="hidden" value="{{$client->id}}" name="leadId">
                                     <div class="form-group mt-1 float-end">
@@ -175,6 +193,11 @@
                                                 <div class="flex-grow-1">
                                                     <h6 class="font-size-14 mb-1">{{$note->getAddedBy->first_name ?? '' }} {{$note->getAddedBy->last_name ?? '' }} <small class="text-muted float-end">{{date('d M, Y h:ia', strtotime($note->created_at))}}</small></h6>
                                                     <p class="text-muted">{{$note->note ?? '' }}</p>
+                                                    <div class="">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <span class="fa fa-star {{ $i <= $note->rating ? 'checked' : '' }}"></span>
+                                                        @endfor
+                                                    </div>
                                                     <div>
                                                         <a href="javascript: void(0);" data-bs-target="#deleteNote_{{$note->id}}" data-bs-toggle="modal" style="cursor:pointer;" class="text-danger"><i class="mdi mdi-trash-can"></i> Trash</a>
                                                         <a href="javascript: void(0);" data-bs-target="#editNote_{{$note->id}}" data-bs-toggle="modal"  style="cursor:pointer; margin-left: 15px;" class="text-warning ml-3"><i class="mdi mdi-lead-pencil"></i> Edit</a>
@@ -332,7 +355,7 @@
                                         <div class="form-group">
                                             <label class="form-label d-flex justify-content-between">Sender ID
                                             </label>
-                                            <input required data-parsley-required-message="Indicate the sender ID" type="text" id="senderId" value="PAGG Global" disabled class="form-control">
+                                            <input required data-parsley-required-message="Indicate the sender ID" type="text" id="senderId" value="{{env('SENDER_ID')}}" disabled class="form-control">
                                             @error('senderId') <i class="text-danger">{{$message}}</i>@enderror
                                         </div>
                                     </div>
@@ -373,6 +396,8 @@
 @endsection
 
 @section('extra-scripts')
+    <script src="/assets/libs/bootstrap-rating/bootstrap-rating.min.js"></script>
+    <script src="/assets/js/pages/rating-init.js"></script>
     <script src="/js/parsley.js"></script>
     <script src="/js/axios.min.js"></script>
     <script>

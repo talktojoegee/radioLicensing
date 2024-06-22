@@ -52,7 +52,7 @@
                     <div class="card-widget">
                         <h6 class="mb-2">Balance</h6>
                         <h2 class="text-right">
-                            <i class="ti-check icon-size float-left text-danger text-danger-shadow"></i><span>{{ '₦'.number_format($transactions->sum('credit') - $transactions->sum('debit'),2) }}</span></h2>
+                            <i class="ti-check icon-size float-left text-danger text-danger-shadow"></i><span>{{ '₦'.number_format($balance,2) }}</span></h2>
                     </div>
                 </div>
             </div>
@@ -78,12 +78,12 @@
                             <p>{!! session()->get('error') !!}</p>
                         </div>
                     @endif
-                    @if(($transactions->sum('credit') - $transactions->sum('debit')) < $cost)
+                    @if($balance < $cost)
                         <div class="alert alert-warning mb-4">
                             <strong>Whoops!</strong>
                             <hr class="message-inner-separator">
                             <p>Insufficient balance to perform this transaction. Quickly <strong><a href="{{route('top-up')}}" target="_blank">Top-up</a></strong>.
-                                You need an additional <strong>{{'₦'.number_format($cost - Auth::user()->getUserAccount->sum('credit') - Auth::user()->getUserAccount->sum('debit'),2)}}</strong> to do this.</p>
+                                You need an additional <strong>{{'₦'.number_format($cost - $balance,2)}}</strong> to do this.</p>
                         </div>
                     @endif
                     <div class="card-body">

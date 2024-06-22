@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('current-page')
-    Add New User
+    Add New Person
 @endsection
 @section('extra-styles')
     <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
@@ -39,21 +39,21 @@
             <div class="col-xl-12 col-md-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-end">
-                        <a href="{{ route('pastors') }}"  class="btn btn-secondary  mb-3"><i class="bx bx-arrow-back"></i> Go Back  </a>
+                        <a href="{{ route('persons') }}"  class="btn btn-secondary  mb-3"><i class="bx bx-arrow-back"></i> Go Back  </a>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 col-lx-12">
                                 <div class="modal-header mb-3" >
-                                    <h6 class="modal-title text-uppercase" id="myModalLabel2">Add New User</h6>
+                                    <h6 class="modal-title text-uppercase" id="myModalLabel2">Add New Person</h6>
                                 </div>
-                                <form autocomplete="off" action="{{route('add-new-user')}}" enctype="multipart/form-data" method="post" id="addNewUser" data-parsley-validate="">
+                                <form autocomplete="off" action="{{route('add-person')}}" enctype="multipart/form-data" method="post" id="addNewUser" data-parsley-validate="">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3 col-lg-3 align-content-center">
-                                            <img class="rounded me-2" alt="200x200" width="200" src="/assets/images/small/img-4.jpg" data-holder-rendered="true">
+                                            <img class="rounded me-2" id="avatarPlaceholder" alt="200x200" width="200" src="/assets/images/small/img-4.jpg"  data-holder-rendered="true">
                                             <p>Profile Picture</p>
-                                            <input type="file" name="avatar"  class="form-control-file mt-2">
+                                            <input type="file" name="avatar" id="avatarPlaceholderHandler"  class="form-control-file mt-2">
                                         </div>
                                          <div class="col-md-9 col-sm-9 col-lg-9">
 
@@ -144,8 +144,8 @@
                                                  </div>
                                                  <div class="col-md-6 col-sm-12 col-lg-6">
                                                      <div class="form-check form-switch mt-3">
-                                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="pastor" checked="">
-                                                         <label class="form-check-label" for="flexSwitchCheckChecked">Is this person a pastor?</label>
+                                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="type" checked="">
+                                                         <label class="form-check-label" for="flexSwitchCheckChecked">Is this person a director?</label>
                                                      </div>
                                                  </div>
                                                  <div class="col-md-6 col-sm-12 col-lg-6">
@@ -159,33 +159,6 @@
                                                          <label for="">Present Address <span class="text-danger">*</span></label>
                                                          <textarea name="presentAddress" id="presentAddress" style="resize: none;"
                                                                    class="form-control" placeholder="Type present address here...">{{old('presentAddress')}}</textarea>
-                                                     </div>
-                                                 </div>
-                                                 <div class="row mt-3">
-                                                     <div class="col-md-12">
-                                                         <h6 class="text-uppercase text-primary">Location</h6>
-                                                     </div>
-                                                 </div>
-                                                 <div class="col-md-6 col-sm-12 col-lg-6">
-                                                     <div class="form-group mt-1">
-                                                         <label for=""> Branch <span class="text-danger">*</span></label>
-                                                         <select name="branch" id="" data-parsley-required-message="Select branch" class="form-control select2">
-                                                             @foreach($branches as $branch)
-                                                                 <option value="{{$branch->cb_id}}">{{$branch->cb_name ?? '' }}</option>
-                                                             @endforeach
-                                                         </select>
-                                                         @error('branch') <i class="text-danger">{{$message}}</i>@enderror
-                                                     </div>
-                                                 </div>
-                                                 <div class="col-md-6 col-sm-12 col-lg-6">
-                                                     <div class="form-group mt-1">
-                                                         <label for="">Assign Role <span class="text-danger">*</span></label>
-                                                         <select name="role" data-parsley-required-message="Select role" id="role" class="form-control select2">
-                                                             @foreach($roles as $role)
-                                                                 <option value="{{$role->id}}">{{$role->name ?? '' }}</option>
-                                                             @endforeach
-                                                         </select>
-                                                         @error('role') <i class="text-danger">{{$message}}</i>@enderror
                                                      </div>
                                                  </div>
                                                  <div class="col-md-12 col-sm-12 col-lg-12">
@@ -231,14 +204,19 @@
     <script src="/assets/js/pages/form-advanced.init.js"></script>
     <script>
         $(document).ready(function(){
-            $('#addNewUser').parsley().on('field:validated', function() {
-                var ok = $('.parsley-error').length === 0;
-                $('.bs-callout-info').toggleClass('hidden', !ok);
-                $('.bs-callout-warning').toggleClass('hidden', ok);
-            })
-                .on('form:submit', function() {
-                    return true;
-                });
+
+            $("#avatarPlaceholderHandler").on("change", function(e){
+                e.preventDefault();
+                let file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function (event) {
+                        $("#avatarPlaceholder")
+                            .attr("src", event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         });
     </script>
 @endsection

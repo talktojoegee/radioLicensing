@@ -55,6 +55,7 @@ class LoginController extends Controller
         $user = $this->user->getUserByEmail($request->email);
         if(!empty($user)){
             if(Auth::attempt(['email'=>$request->email, 'password'=>$request->password], $request->remember)){
+                //return dd($user);
                 if($user->status == 2){
                     $log = $user->first_name." ".$user->last_name." tried logging in.";
                     ActivityLog::registerActivity($user->org_id, null, $user->id, null, 'Login attempt', $log);
@@ -62,7 +63,7 @@ class LoginController extends Controller
                     session()->flash("error", " Your account is no longer active. Kindly contact admin.");
                     return back();
                 }
-                if(Auth::user()->is_admin == 2){
+                if($user->type == 1){ //admin
                     $log = $user->first_name." ".$user->last_name." logged in successfully.";
                     ActivityLog::registerActivity($user->org_id, null, $user->id, null, 'New login', $log);
                     return redirect()->route('user-profile', $user->slug);

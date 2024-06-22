@@ -41,17 +41,18 @@ Route::get("/test-report", [App\Http\Controllers\Portal\ReportsController::class
 
 Route::group(['middleware'=>'auth'], function(){
     Route::get('/dashboard', [App\Http\Controllers\Portal\DashboardController::class, 'showDashboard'])->name('dashboard');
-    Route::get('/church-branches', [App\Http\Controllers\Portal\BranchController::class, 'showChurchBranches'])->name('church-branches');
-    Route::get('/church-branches/{slug}', [App\Http\Controllers\Portal\BranchController::class, 'showChurchBranchDetails'])->name('church-branch-details');
+    Route::get('/sections', [App\Http\Controllers\Portal\BranchController::class, 'showChurchBranches'])->name('church-branches');
+    Route::post('/assign-section-head', [App\Http\Controllers\Portal\BranchController::class, 'assignSectionHead'])->name('assign-section-head');
+    Route::get('/sections/{slug}', [App\Http\Controllers\Portal\BranchController::class, 'showChurchBranchDetails'])->name('church-branch-details');
 });
 
 Route::get('/attendance-medication-chart', [App\Http\Controllers\Portal\DashboardController::class, 'getAttendanceMedicationChart'])->name('attendance-medication-chart');
 Route::group(['prefix'=>'/settings', 'middleware'=>'auth'], function(){
     Route::get('/', [App\Http\Controllers\Portal\SettingsController::class, 'showSettingsView'])->name('settings');
     Route::get('/cells', [App\Http\Controllers\Portal\SettingsController::class, 'showCellsSettingsView'])->name('cells-settings');
-    Route::get('/branches', [App\Http\Controllers\Portal\SettingsController::class, 'showBranchesSettingsView'])->name('branches-settings');
-    Route::post('/branches', [App\Http\Controllers\Portal\SettingsController::class, 'storeChurchBranch']);
-    Route::post('/edit-branches', [App\Http\Controllers\Portal\SettingsController::class, 'editChurchBranch'])->name('edit-branch-settings');
+    Route::get('/sections', [App\Http\Controllers\Portal\SettingsController::class, 'showBranchesSettingsView'])->name('branches-settings');
+    Route::post('/sections', [App\Http\Controllers\Portal\SettingsController::class, 'storeChurchBranch']);
+    Route::post('/edit-section', [App\Http\Controllers\Portal\SettingsController::class, 'editChurchBranch'])->name('edit-branch-settings');
     Route::get('/form', [App\Http\Controllers\Portal\SettingsController::class, 'editApptLocations'])->name('edit-appt-locations');
     Route::post('/save-account-settings', [App\Http\Controllers\Portal\SettingsController::class, 'saveAccountSettings'])->name('save-account-settings');
     Route::post('/save-notification-settings', [App\Http\Controllers\Portal\SettingsController::class, 'saveNotificationSettings'])->name('save-notification-settings');
@@ -59,6 +60,7 @@ Route::group(['prefix'=>'/settings', 'middleware'=>'auth'], function(){
     Route::get('/appointments', [App\Http\Controllers\Portal\SettingsController::class, 'showAppointmentSettings'])->name('appointment-settings');
     Route::get('/change-password', [App\Http\Controllers\Portal\SettingsController::class, 'showChangePasswordForm'])->name('change-password');
     Route::post('/change-password', [App\Http\Controllers\Portal\SettingsController::class, 'changePassword']);
+    Route::post('/digital-signature', [App\Http\Controllers\Portal\SettingsController::class, 'storeDigitalSignature'])->name('digital-signature');
     Route::get('/appointment-types', [App\Http\Controllers\Portal\SettingsController::class, 'showAppointmentTypeSettings'])->name('appointment-types-settings');
     Route::post('/appointment-types', [App\Http\Controllers\Portal\SettingsController::class, 'storeAppointmentType']);
     Route::post('/edit-appointment-types', [App\Http\Controllers\Portal\SettingsController::class, 'editAppointmentType'])->name('edit-appointment-types');
@@ -286,6 +288,53 @@ Route::group(['prefix'=>'/website', 'middleware'=>'auth'], function(){
     Route::post('/web-pages/edit-service', [App\Http\Controllers\Portal\WebsiteController::class, 'editService'])->name('edit-website-service');
 });
 
+//Radio License activities
+
+Route::group(['prefix'=>'/license', 'middleware'=>'auth'], function(){
+    Route::get('/workstations', [App\Http\Controllers\Portal\RadioController::class, 'showWorkstations'])->name('show-workstations');
+    Route::get('/new-workstation', [App\Http\Controllers\Portal\RadioController::class, 'showCreateWorkstationForm'])->name('show-create-workstation');
+    Route::post('/new-workstation', [App\Http\Controllers\Portal\RadioController::class, 'storeWorkstation']);
+    Route::post('/edit-workstation', [App\Http\Controllers\Portal\RadioController::class, 'editWorkstation'])->name('edit-workstation');
+    Route::get('/station/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showWorkstation'])->name('show-workstation-details');
+    #User New application
+    Route::get('/new', [App\Http\Controllers\Portal\RadioController::class, 'showNewApplicationForm'])->name('new-radio-application');
+    Route::post('/new-license-application', [App\Http\Controllers\Portal\RadioController::class, 'storeNewRadioApplication'])->name('new-license-application');
+    Route::get('/applications', [App\Http\Controllers\Portal\RadioController::class, 'showManageApplications'])->name('manage-applications');
+    Route::get('/applications/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showManageApplicationDetails'])->name('show-application-details');
+    Route::get('/generate-invoice/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showGenerateInvoice'])->name('generate-invoice');
+    Route::post('/generate-invoice', [App\Http\Controllers\Portal\RadioController::class, 'generateInvoice'])->name('new-invoice');
+
+    #Invoice
+    Route::get('/invoices', [App\Http\Controllers\Portal\RadioController::class,'showManageInvoices'])->name('manage-invoices');
+    Route::get('/invoices/{slug}', [App\Http\Controllers\Portal\RadioController::class,'showInvoiceDetails'])->name('show-invoice-detail');
+    Route::post('/submit-proof-of-payment', [App\Http\Controllers\Portal\RadioController::class,'submitProofOfPayment'])->name('submit-proof-of-payment');
+    Route::post('/action-payment', [App\Http\Controllers\Portal\RadioController::class,'actionPayment'])->name('action-payment');
+
+    #Show application by status
+    Route::get('/category/{type}', [App\Http\Controllers\Portal\RadioController::class, 'showApplicationCategory'])->name('show-application-status');
+    Route::get('/assign-license/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showAssignLicense'])->name('show-assign-license');
+    Route::post('assign-frequency', [App\Http\Controllers\Portal\RadioController::class, 'assignFrequency'])->name('assign-frequency');
+
+    #Certificates
+    Route::get('/certificates', [App\Http\Controllers\Portal\RadioController::class, 'showCertificates'])->name('certificates');
+    Route::get('/certificates/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showCertificateDetails'])->name('certificate-details');
+});
+
+Route::group(['prefix'=>'persons', 'middleware'=>'auth'], function(){
+    Route::get('/', [App\Http\Controllers\Portal\PersonsController::class, 'showPersons'])->name("persons");
+    Route::get('/add', [App\Http\Controllers\Portal\PersonsController::class, 'showAddPersonForm'])->name("add-person");
+    Route::post('/add', [App\Http\Controllers\Portal\PersonsController::class, 'addNewPerson']);
+    Route::get('/view/{slug}', [App\Http\Controllers\Portal\PersonsController::class, 'showPersonProfile'])->name('person-profile');
+    Route::post('/update-person-profile', [App\Http\Controllers\Portal\PersonsController::class, 'updatePersonProfile'])->name('update-person-profile');
+});
+
+Route::group(['prefix'=>'company', 'middleware'=>'auth'], function(){
+    Route::get('/profile', [App\Http\Controllers\Portal\CompanyController::class, 'showCompanyProfile'])->name('company-profile');
+    Route::post('/upload-document', [App\Http\Controllers\Portal\CompanyController::class, 'uploadDocument'])->name('upload-document');
+    Route::post('/update-company-profile', [App\Http\Controllers\Portal\CompanyController::class, 'updateCompanyProfile'])->name('update-company-profile');
+});
+
+
 Route::group(['prefix'=>'/newsfeed', 'middleware'=>'auth'], function(){
 
 });
@@ -324,6 +373,14 @@ Route::group(['prefix'=>'app', 'middleware'=>'auth'],function(){
         Route::get('/church', \App\Http\Livewire\Portal\Settings\Organization::class)->name('organization');
         Route::get('/account', \App\Http\Livewire\Portal\Settings\Account::class)->name('account-settings');
         Route::get('/module-manager', \App\Http\Livewire\Portal\Settings\ModuleManager::class)->name('module-manager');
+
+
+        Route::get('/sms-settings', [App\Http\Controllers\Portal\SettingsController::class, 'showSMSSettingsForm'])->name('sms-settings');
+        Route::post('/sms-settings', [App\Http\Controllers\Portal\SettingsController::class, 'appDefaultSmsSettings']);
+        Route::get('/workflow-settings', [App\Http\Controllers\Portal\SettingsController::class, 'showWorkflowSettingsForm'])->name('workflow-settings');
+        Route::post('/workflow-settings', [App\Http\Controllers\Portal\SettingsController::class, 'appDefaultSettings']);
+
+
         Route::get('/manage-roles', [App\Http\Controllers\Portal\SettingsController::class, 'manageRoles'])->name('manage-roles');
         Route::post('/add-role', [App\Http\Controllers\Portal\SettingsController::class, 'storeRole'])->name('add-role');
         Route::post('/update-role-permissions', [App\Http\Controllers\Portal\SettingsController::class, 'updateRolePermissions'])->name('update-role-permissions');

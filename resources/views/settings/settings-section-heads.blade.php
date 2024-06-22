@@ -19,6 +19,32 @@
 @endsection
 
 @section('main-content')
+    @if(session()->has('success'))
+        <div class="row" role="alert">
+            <div class="col-md-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="mdi mdi-check-all me-2"></i>
+
+                    {!! session()->get('success') !!}
+
+                    <button type="button"  class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    @endif
+    @if($errors->any())
+        <div class="row" role="alert">
+            <div class="col-md-12">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="mdi mdi-alert-outline me-2"></i>
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-sm-12 mt-4">
@@ -29,15 +55,51 @@
 
                 <div class="card">
                     <div class="card-body">
+                        <form action="{{route('assign-section-head')}}" method="post" class="form-inline bg-light p-3" autocomplete="off">
+                            @csrf
+                            <div class="row w-100">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="">Section</label>
+                                        <select name="department"  id="department" class="form-control js-example-theme-single">
+                                            <option disabled selected>--Select section--</option>
+                                            @foreach($branches as $depart)
+                                                <option value="{{$depart->cb_id}}">{{$depart->cb_name ?? '' }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('department')
+                                        <i class="text-danger mt-2">{{$message}}</i>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="">Employee</label>
+                                        <select name="supervisor"  id="supervisor" class="form-control js-example-theme-single">
+                                            <option disabled selected>--Select user--</option>
+                                            @foreach($users as $emp)
+                                                <option value="{{$emp->id}}">{{$emp->title ?? '' }} {{$emp->first_name ?? '' }} {{$emp->last_name ?? '' }} {{$emp->other_names ?? '' }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('supervisor')
+                                        <i class="text-danger mt-2">{{$message}}</i>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mt-4">
+                                        <button class="btn btn-primary ">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="table-responsive mt-3">
                             <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
                                 <thead>
                                 <tr>
                                     <th class="">#</th>
-                                    <th class="wd-15p">Unit Head</th>
                                     <th class="wd-15p">Section</th>
-                                    <th class="wd-15p">Status</th>
-                                    <th class="wd-15p">Action</th>
+                                    <th class="wd-15p">Head</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -45,11 +107,7 @@
                                     <tr>
                                         <td>{{$key+1}}</td>
                                         <td>{{$branch->cb_name ?? '' }}</td>
-                                        <td>{!! $branch->getLeadPastor->first_name  ?? "<span class='badge badge-pill badge-soft-danger font-size-11'>Not assigned yet</span>" !!} {!! $branch->getLeadPastor->last_name  ?? "<span class='badge badge-pill badge-soft-danger font-size-11'>Not assigned yet</span>" !!}</td>
-                                        <td>{!! $branch->getAssistantPastor->first_name  ?? "<span class='badge badge-pill badge-soft-danger font-size-11'>Not assigned yet</span>" !!} {!! $branch->getAssistantPastor->last_name  ?? "<span class='badge badge-pill badge-soft-danger font-size-11'>Not assigned yet</span>" !!}</td>
-                                        <td>
-                                            <a href="{{route('church-branch-details', ['slug'=>$branch->cb_slug])}}" class="btn btn-light">View</a>
-                                        </td>
+                                        <td>{{ $branch->getLeadPastor->title ?? ''}} {{ $branch->getLeadPastor->first_name ?? ''}}  {{ $branch->getLeadPastor->last_name  ??  null }}</td>
                                     </tr>
                                 @endforeach
 

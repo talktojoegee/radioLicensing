@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Portal;
 
+use App\Models\ActivityLog;
+use App\Models\AppDefaultSetting;
+use App\Models\AppSmsSetting;
+use Illuminate\Session\Store;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role as SRole;
 //use Spatie\Permission\Models\Permission as SPermission;
 
@@ -40,6 +45,8 @@ class SettingsController extends Controller
         $this->modulemanager = new ModuleManager();
         $this->permission = new Permission();
         $this->role = new Role();
+        $this->appdefaultsettings = new AppDefaultSetting();
+        $this->appsmsdefaultsettings = new AppSmsSetting();
     }
 
     public function showSettingsView(){
@@ -107,12 +114,30 @@ class SettingsController extends Controller
         if (Hash::check($request->currentPassword, $user->password)) {
             $user->password = bcrypt($request->password);
             $user->save();
+            $authUser = Auth::user();
+            $log = "You - $authUser->first_name $authUser->last_name ($authUser->email) recently changed your password.";
+            ActivityLog::registerActivity($authUser->org_id, null, $user->id, null, 'Password Change', $log);
             session()->flash("success", "Your password was successfully changed.");
             return back();
         }else{
             session()->flash("error", "Current password does not match our record. Try again.");
             return back();
         }
+    }
+    public function storeDigitalSignature(Request $request){
+        $this->validate($request,[
+            "image"=>"required"
+        ]);
+        $data_uri = $request->image;
+        $encoded_image = explode(",", $data_uri)[1];
+        $decoded_image = base64_decode($encoded_image);
+        $filename = uniqid().'.png';
+        $path = 'signatures/'.$filename;
+        Storage::disk('public')->put($path, $decoded_image);
+        $authUser = Auth::user();
+        $authUser->signature = $path;
+        $authUser->save();
+        return response()->json(["message"=>"Action successful"], 201);
     }
 
     public function updateAppointmentSettings(Request $request){
@@ -273,16 +298,16 @@ class SettingsController extends Controller
     public function storeChurchBranch(Request $request){
         $this->validate($request,[
             "branchName"=>"required",
-            "country"=>"required",
-            "state"=>"required",
-            "address"=>"required",
-            "region"=>"required",
+            //"country"=>"required",
+            //"state"=>"required",
+            //"address"=>"required",
+            //"region"=>"required",
         ],[
             "branchName.required"=>"What will you call this branch?",
-            "country.required"=>"Which country is this branch situated?",
-            "state.required"=>"Select the state",
-            "address.required"=>"Enter address",
-            "region.required"=>"Select region",
+            //"country.required"=>"Which country is this branch situated?",
+            //"state.required"=>"Select the state",
+            //"address.required"=>"Enter address",
+            //"region.required"=>"Select region",
         ]);
         try{
             $this->churchbranch->addBranch($request);
@@ -299,17 +324,17 @@ class SettingsController extends Controller
     public function editChurchBranch(Request $request){
         $this->validate($request,[
             "branchName"=>"required",
-            "country"=>"required",
-            "state"=>"required",
-            "address"=>"required",
+            //"country"=>"required",
+            //"state"=>"required",
+            //"address"=>"required",
             "branchId"=>'required',
-            "region"=>'required',
+            //"region"=>'required',
         ],[
             "branchName.required"=>"What will you call this branch?",
-            "country.required"=>"Which country is this branch situated?",
-            "state.required"=>"Select the state",
-            "address.required"=>"Enter address",
-            "region.required"=>"Select region",
+            //"country.required"=>"Which country is this branch situated?",
+            //"state.required"=>"Select the state",
+            //"address.required"=>"Enter address",
+            //"region.required"=>"Select region",
         ]);
         try{
             $this->churchbranch->editBranch($request);
@@ -331,6 +356,58 @@ class SettingsController extends Controller
         ]);
     }
 
+
+    public function showSMSSettingsForm(){
+        return view('settings.settings-sms',[
+            'app_sms_setting'=>$this->appsmsdefaultsettings->getAppSmsDefaultSettings()
+        ]);
+    }
+
+    public function showWorkflowSettingsForm(){
+        return view('settings.settings-workflow',[
+            'departments'=>$this->churchbranch->getAllChurchBranches(),
+            'app_licence_setting'=>$this->appdefaultsettings->getAppDefaultSettings(),
+        ]);
+    }
+
+    public function appDefaultSettings(Request $request){
+        $this->validate($request,[
+            'new_app_section'=>'required',
+            'licence_renewal'=>'required',
+            'engage_customer'=>'required'
+        ],[
+            'new_app_section.required'=>'Kindly choose which section/unit should initiate new licence workflow process ',
+            'licence_renewal.required'=>'Choose the section/unit that should initiate licence renewal process',
+            'engage_customer.required'=>'Which section or unit interacts with customers?'
+        ]);
+        $authUser = Auth::user();
+        $this->appdefaultsettings->addAppDefaultSetting($request);
+        $log = "$authUser->first_name($authUser->email) updated application default settings for: new licence application, renewal and customer engagement";
+        $title = "Application default settings(licence & customer engagement)";
+        ActivityLog::registerActivity($authUser->org_id, null, $authUser->id, null, $title, $log);
+        session()->flash("success",  "Your settings were saved successfully.");
+        return back();
+    }
+
+    public function appDefaultSmsSettings(Request $request){
+        $this->validate($request,[
+            'new_licence_sms'=>'required',
+            'licence_renewal_sms'=>'required',
+            'licence_renewal_sms_ack'=>'required'
+        ],[
+            'new_licence_sms.required'=>'Compose an SMS for new licence acknowledgement',
+            'licence_renewal_sms_ack.required'=>'Compose an SMS for licence renewal reminder',
+            'licence_renewal_sms.required'=>'Compose an SMS for licence renewal acknowledgement',
+        ]);
+        $this->appsmsdefaultsettings->addAppSmsDefaultSetting($request);
+        $authUser = Auth::user();
+
+        $log = "$authUser->first_name($authUser->email) added new SMS message for new licence, renewal reminder";
+        $title = "Default SMS settings";
+        ActivityLog::registerActivity($authUser->org_id, null, $authUser->id, null, $title, $log);
+        session()->flash("success",  "Your settings were saved successfully.");
+        return back();
+    }
 
     public function manageRoles(){
         return view('settings.settings-roles',[

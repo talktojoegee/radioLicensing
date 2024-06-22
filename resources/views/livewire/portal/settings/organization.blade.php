@@ -30,7 +30,7 @@
                             @csrf
                             <div class="row mt-3">
                                 <div class="form-group col-md-12 mb-3">
-                                    <label for="">Church Name <span class="text-danger">*</span></label>
+                                    <label for=""> Name <span class="text-danger">*</span></label>
                                     <input type="text" wire:model.defer="organizationName" value="{{$organizationName}}" placeholder="Church Name" class="form-control">
                                     @error('organizationName') <i class="text-danger mt-2">{{$message}}</i> @enderror
                                 </div>

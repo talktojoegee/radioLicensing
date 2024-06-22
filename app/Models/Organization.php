@@ -21,6 +21,15 @@ class Organization extends Model
         return $this->belongsTo(State::class, 'state');
     }
 
+    public function getOrganizationUsers(){
+        return $this->hasMany(User::class, 'org_id');
+    }
+
+
+    public function getCompanyDocuments(){
+        return $this->hasMany(OrganizationDocument::class, 'org_id');
+    }
+
     public function getOrgServices(){
         return $this->hasMany(Service::class, 'org_id')->orderBy('title', 'ASC');
     }
@@ -59,25 +68,12 @@ class Organization extends Model
         $org->save();
     }
     public function updateOrganizationSettings(Request $request){
-        $org =  Organization::find($request->orgId);
-        $org->organization_name = $request->organizationName ?? null;
-        $org->organization_code = $request->organizationCod ?? null;
-        //$org->tax_id_type = $request->taxIDType ?? null;
-        //$org->tax_id_no = $request->organizationTaxIDNumber ?? null;
-        $org->phone_no = $request->organizationPhoneNumber ?? null;
-        $org->address = $request->addressLine ?? null;
-        $org->city = $request->city ?? null;
-        $org->state = $request->state ?? null;
-        $org->zip_code = $request->zipCode ?? null;
-        $org->country = $request->country ?? null;
-        $org->facebook_handle = $request->facebookPage ?? null;
-        $org->twitter_handle = $request->twitterAccount ?? null;
-        $org->instagram_handle = $request->instagram ?? null;
-        $org->youtube_handle = $request->youtubeChannel ?? null;
-        $org->theme_choice = $request->themeChoice ?? 1;
-        $org->ui_color = $request->uiColor ?? '#2A3041';
-        $org->btn_text_color = $request->btnTextColor ?? '#FFFFFF';
-        $org->publish_site = isset($request->publishSite) ? 1 : 0;
+        $org =  Organization::find($request->companyId);
+        $org->organization_name = $request->companyName ?? null;
+        $org->organization_code = $request->rcNo ?? null;
+        $org->phone_no = $request->mobileNo ?? null;
+        $org->address = $request->presentAddress ?? null;
+        $org->start_date = $request->yoi ?? null;
         $org->save();
     }
  public function editOrganization($organizationId, $data){
@@ -123,6 +119,16 @@ class Organization extends Model
 
     public function getUserOrganization($orgId){
         return Organization::find($orgId);
+    }
+
+    public function uploadCompanyLogo($logo, $companyId){
+        $filename = $logo->store('logos', 'public');
+        $company = Organization::find($companyId);
+        if($company->logo != 'logos/logo.png'){
+            $this->deleteFile($company->logo); //delete file first
+        }
+        $company->logo = $filename;
+        $company->save();
     }
 
     public function getSubDomain(Request $request){

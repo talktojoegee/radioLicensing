@@ -2,22 +2,22 @@
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->
-            <div class="navbar-brand-box" style="">
+            <div class="navbar-brand-box pt-5 pb-3" style="">
                 <a href="{{route('dashboard')}}" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="/assets/drive/logo/logo-dark.png" alt="{{ env("APP_NAME") }}" height="44" width="44">
+                        <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->getUserOrganization->logo) }}" alt="{{ env("APP_NAME") }}" height="44" width="44">
                     </span>
                     <span class="logo-lg">
-                       <img src="/assets/drive/logo/logo-dark.png" alt="{{ env("APP_NAME") }}" height="74" width="74">
+                       <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->getUserOrganization->logo) }}" alt="{{ env("APP_NAME") }}" height="74" width="74">
                     </span>
                 </a>
 
                 <a href="{{route('dashboard')}}" class="logo logo-light">
                     <span class="logo-sm">
-                       <img src="/assets/drive/logo/logo.png" alt="{{ env("APP_NAME") }}" height="44" width="44">
+                       <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->getUserOrganization->logo) }}" alt="{{ env("APP_NAME") }}" height="44" width="44">
                     </span>
                     <span class="logo-lg">
-                       <img src="/assets/drive/logo/logo.png" alt="{{ env("APP_NAME") }}" height="74" width="74">
+                       <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->getUserOrganization->logo) }}" alt="{{ env("APP_NAME") }}" height="74" width="74">
                     </span>
                 </a>
             </div>

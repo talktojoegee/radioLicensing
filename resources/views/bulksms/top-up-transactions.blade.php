@@ -37,7 +37,7 @@
                     <div class="card-body text-center">
                         <h6 class="mb-0">Current Balance</h6>
                         <h5 class="mb-1 mt-2 number-font">
-                            <span class="counter text-success">₦{{ number_format(Auth::user()->getUserAccount->sum('credit') - Auth::user()->getUserAccount->sum('debit'),2)  }}</span>
+                            <span class="counter text-success">₦{{ number_format($balance,2)  }}</span>
                         </h5>
                     </div>
                 </div>

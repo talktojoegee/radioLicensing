@@ -32,7 +32,7 @@
             <div class="card bg-primary text-white text-center p-3">
                 <div class="card-body">
                     <blockquote class="blockquote font-size-14 mb-0">
-                        <h2 class="text-white"><sup>₦</sup> {{ number_format((Auth::user()->getUserAccount->sum('credit') - Auth::user()->getUserAccount->sum('debit')), 2)  }}</h2>
+                        <h2 class="text-white"><sup>₦</sup> {{ number_format($balance, 2)  }}</h2>
                         <p>Current Balance</p>
                         <footer class="blockquote-footer mt-0 font-size-12 text-white">
                             <a href="{{route('top-up-transactions')}}" class="text-white">View Transactions</a>

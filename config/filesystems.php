@@ -50,6 +50,13 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'signature' => [
+            'driver' => 'local',
+            'root' => storage_path('public'),
+            'url' => env('APP_URL').'/storage/signatures',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
 
         's3' => [
             'driver' => 's3',

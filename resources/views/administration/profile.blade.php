@@ -232,7 +232,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#personalDetails" aria-expanded="true" aria-controls="multiCollapseExample2">Personal Profile <i class="bx bx-user"></i> </button>
-                                   @if(Auth::user()->id == $user->id) <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#security" aria-expanded="true" aria-controls="multiCollapseExample2">Security <i class="bx bx-lock"></i></button> @endif
+                                   @if(Auth::user()->id == $user->id)
+                                        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#security" aria-expanded="true" aria-controls="multiCollapseExample2">Security <i class="bx bx-lock"></i></button>
+                                        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#signature" aria-expanded="true" aria-controls="multiCollapseExample2">Digital Signature <i class="bx bx-biome"></i></button>
+                                    @endif
                                 </div>
                             </div>
 
@@ -414,6 +417,51 @@
                                     </div>
                                 </form>
                             </div>
+
+                                <div class="multi-collapse collapse" id="signature">
+                                <div class="modal-header text-uppercase mt-3">Digital Signature</div>
+                                    <div class="row">
+                                        <div class="col-md-4 col-lg-4 col-sm-4">
+                                            <div class="form-group">
+                                                <h6 class="mt-3" style="color: #ff0000;">Important Notice</h6>
+                                                <p>By using this to create your digital signature, you agree to the following:</p>
+                                                <ol>
+                                                    <li>Legally Binding: Your digital signature is legally equivalent to your handwritten signature.</li>
+                                                    <li>Authorization: You authorize its use for all relevant transactions and documents within this application.</li>
+                                                    <li>Confidentiality: Your signature will be securely stored; protect your account to prevent unauthorized use.</li>
+                                                    <li>Verification: Actions signed with your digital signature are presumed authorized by you.</li>
+                                                    <li>Irrevocability: Digital signatures cannot be easily revoked or altered; review carefully before signing.</li>
+                                                    <li>Compliance: Ensure your use complies with all applicable laws.</li>
+                                                </ol>
+                                                <p>By proceeding, you accept these terms and conditions.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8 col-sm-8">
+                                            @if(!empty(\Illuminate\Support\Facades\Auth::user()->signature))
+                                            <h6 class="mt-3">Previously signed</h6>
+                                            <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->signature) }}" alt="signature">
+                                            @endif
+
+                                            <p class="mt-3 ml-4">Kindly use the blank space surrounded by the dotted lines to draw your signature.</p>
+
+                                            <form action="#" method="post" enctype="multipart/form-data" class="mt-4">
+                                                @csrf
+                                                <div class="form-group mt-3">
+                                                    <div class="d-flex justify-content-center ">
+                                                        <canvas style="border: 1px dotted #000000; padding: 5px;"></canvas>
+                                                        <input type="hidden" name="image" id="image">
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group mt-3 d-flex justify-content-center">
+                                                    <button type="button" id="saveSignature" class="btn btn-primary">Submit Signature <i class="bx bx-edit-alt"></i> </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+
                             @endif
 
 
@@ -537,8 +585,36 @@
     <script src="/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
     <script src="/assets/js/pages/datatables.init.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <script src="/assets/js/axios.min.js"></script>
     <script>
         $(document).ready(function(){
+
+            let canvas = document.querySelector("canvas");
+            let signaturePad = new SignaturePad(canvas);
+            let url = "{{route('digital-signature')}}";
+
+            $('#saveSignature').on('click',function(e){
+                e.preventDefault();
+
+                const base64String = signaturePad.toDataURL();//.split(',')[1];
+                if (!base64String) {
+                    alert('Canvas is empty or invalid image data.');
+                    return;
+                }
+
+                axios.post(url, { image: base64String })
+                    .then(response => {
+                       alert("Action successful")
+                        location.reload();
+                    })
+                    .catch(error => {
+                        alert("Whoops! Something went wrong.");
+                        location.reload();
+                    });
+
+            });
+
             let currentImagePath = "{{url('storage/'.$user->image)}}";
             $('#clientAssignmentWrapper').hide();
             $("#clientAssignmentToggler").click(function(){
@@ -557,5 +633,22 @@
                 }
             });
         });
+
+        function uploadCanvasImage() {
+            const base64String = canvas.toDataURL('image/png').split(',')[1];
+
+            if (!base64String) {
+                alert('Canvas is empty or invalid image data.');
+                return;
+            }
+
+            axios.post(url, { image: signaturePad })
+                .then(response => {
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     </script>
 @endsection

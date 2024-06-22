@@ -216,7 +216,7 @@
 
             $('.memoTo').on('change', function () {
                 let selection = $(this).val();
-                console.log(selection)
+                //console.log(selection)
                 switch (parseInt(selection)) {
                     case 1:
                         $('.from-branch').hide();

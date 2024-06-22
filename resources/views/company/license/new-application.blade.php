@@ -1,10 +1,12 @@
 
 @extends('layouts.master-layout')
+@section('title')
+    New Application
+@endsection
 @section('current-page')
     New Application
 @endsection
 @section('extra-styles')
-    <link href="/css/parsley.css" rel="stylesheet" type="text/css" />
     <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 @endsection
@@ -38,7 +40,7 @@
                             <h5 class="modal-header ">New License Application</h5>
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-lg-12">
-                                    <form action="{{ route('publish-timeline-post') }}" method="post" enctype="multipart/form-data" autocomplete="off">
+                                    <form action="{{ route('new-license-application') }}" method="post" enctype="multipart/form-data" autocomplete="off">
                                         @csrf
                                         <div class="card">
                                             <div class="card-body">
@@ -57,7 +59,7 @@
                                                         <div class="form-group">
                                                             <label class="form-label"> Attachment(s) <small>(Optional)</small>
                                                             </label> <br>
-                                                            <input type="file" name="attachments[]" multiple class="form-control-file">
+                                                            <input type="file" name="attachments[]" accept="application/pdf"  multiple class="form-control-file">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -75,11 +77,10 @@
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
                                                                             <label for="">Radio Station</label>
-                                                                            <select name="workstation[]" id="workstationa" class="form-control js-example-theme-single select-workstation">
-                                                                                <option selected disabled>Select workstation</option>
-                                                                                {{--foreach($work_stations as $station)
-                                                                                    <option value="{{$station->id}}">{{$station->work_station_name ?? '' }}</option>
-                                                                                endforeach--}}
+                                                                            <select name="workstation[]" class="form-control select">
+                                                                                @foreach($stations as $station)
+                                                                                    <option value="{{$station->id}}">{{$station->name ?? '' }}</option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -88,11 +89,11 @@
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
                                                                             <label for="">Category</label>
-                                                                            <select name="licence_category[]" id="licence_category1" class="form-control js-example-theme-single select-license-category">
-                                                                                <option selected disabled>Select Licence Category</option>
-                                                                                {{--foreach($licence_categories as $cat)
+                                                                            <select name="licence_category[]" id="licence_category1" class="form-control ">
+                                                                                <option selected disabled>Select License Category</option>
+                                                                                @foreach($categories as $cat)
                                                                                     <option value="{{$cat->id}}">{{$cat->category_name ?? '' }}</option>
-                                                                                endforeach--}}
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -153,6 +154,24 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="row mt-3">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label for="">Call Sign<sup style="color: #ff0000;">*</sup> </label>
+                                                                            <input type="text" placeholder="Call Sign" name="callSign[]" class="form-control">
+                                                                            @error('callSign') <i class="text">{{$message}}</i> @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row mt-3">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label for="">Make<sup style="color: #ff0000;">*</sup> </label>
+                                                                            <input type="text" placeholder="Make" name="make[]" class="form-control">
+                                                                            @error('make') <i class="text">{{$message}}</i> @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -184,13 +203,9 @@
 @section('extra-scripts')
     <script src="/js/parsley.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"></script>
     <script src="/assets/libs/select2/js/select2.min.js"></script>
     <script src="/assets/js/pages/form-advanced.init.js"></script>
@@ -202,14 +217,15 @@
                 let new_selection = $('.item').first().clone();
                 $('#products').append(new_selection);
 
-                $(".js-example-theme-single").select2({
-                    placeholder: "Select product or service"
+                $(this).select2({
+                    placeholder: "Select station"
                 });
-                $(".select-workstation").last().next().next().remove();
+
+                /*$(".select-workstation").last().next().next().remove();
                 $(".select-device-type").last().next().next().remove();
                 $(".select-license-category").last().next().next().remove();
                 $(".select-operation-mode").last().next().next().remove();
-                $(".select-frequency-band").last().next().next().remove();
+                $(".select-frequency-band").last().next().next().remove();*/
             });
 
             $(document).on('click', '.remove-line', function(e){

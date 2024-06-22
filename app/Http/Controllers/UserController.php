@@ -107,16 +107,29 @@ class UserController extends Controller
                 $log = Auth::user()->first_name." ".Auth::user()->last_name." viewed your profile";
                 ActivityLog::registerActivity(Auth::user()->org_id, null, $user->id, null, 'Profile View', $log);
             }
+            if($user->type == 1){ //admin
+                return view('administration.profile',[
+                    'user'=>$user,
+                    'modules'=>$this->modulemanager->getModules(),
+                    'roles'=>$this->role->getRoles(),
+                    'posts'=>$this->post->getPostsByIds($postIds),
+                    'countries'=>$this->country->getCountries(),
+                    'branches'=>$this->churchbranch->getAllChurchBranches(),
+                    'maritalstatus'=>$this->maritalstatus->getMaritalStatuses(),
+                ]);
+            }else{
+                return view('company.persons.profile',[
+                    'user'=>$user,
+                    //'modules'=>$this->modulemanager->getModules(),
+                    //'roles'=>$this->role->getRoles(),
+                    //'posts'=>$this->post->getPostsByIds($postIds),
+                    'countries'=>$this->country->getCountries(),
+                    //'branches'=>$this->churchbranch->getAllChurchBranches(),
+                    'maritalstatus'=>$this->maritalstatus->getMaritalStatuses(),
+                ]);
+            }
 
-            return view('administration.profile',[
-                'user'=>$user,
-                'modules'=>$this->modulemanager->getModules(),
-                'roles'=>$this->role->getRoles(),
-                'posts'=>$this->post->getPostsByIds($postIds),
-                'countries'=>$this->country->getCountries(),
-                'branches'=>$this->churchbranch->getAllChurchBranches(),
-                'maritalstatus'=>$this->maritalstatus->getMaritalStatuses(),
-            ]);
+
         }else{
             return back();
         }
@@ -192,7 +205,7 @@ class UserController extends Controller
             "nationality"=>'required',
             "maritalStatus"=>'required',
             "presentAddress"=>'required',
-            "branch"=>'required',
+            //"branch"=>'required',
             "userId"=>'required',
         ],[
             "firstName.required"=>"What's the person's first name?",
@@ -253,9 +266,13 @@ class UserController extends Controller
         ]);
         $user = $this->user->getUserById($request->userId);
         if(!empty($user)){
-            #$this->user->archiveUser($request->userId, $request->status);
-            #session()->flash("success", "Account deactivated!");
-            session()->flash("success", "This function is disabled for a testing purpose.");
+            $status = $request->status == 1 ? 'activated' : 'deactivated';
+            $authUser = Auth::user();
+            $log = "$authUser->first_name($authUser->email) $status this account";
+            ActivityLog::registerActivity(Auth::user()->org_id, null, $user->id, null, "Account $status", $log);
+            $this->user->archiveUser($request->userId, $request->status);
+            session()->flash("success", "Account $status!");
+            //session()->flash("success", "This function is disabled for a testing purpose.");
             return back();
         }else{
             return back();

@@ -1,6 +1,9 @@
 @extends('layouts.master-layout')
+@section('title')
+{{$user->title ?? ''}} {{$user->first_name ?? '' }}'s Profile
+@endsection
 @section('current-page')
-
+    {{$user->title ?? ''}} {{$user->first_name ?? '' }}'s Profile
 @endsection
 @section('extra-styles')
     <link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -19,8 +22,7 @@
                     <div class="d-flex justify-content-between align-items-center position-absolute top-90 w-100 px-2 px-md-4 mt-n4">
                         <div>
                             <img class="wd-70 rounded-circle img-thumbnail avatar-xl" src="{{url('storage/'.$user->image)}}" alt="profile">
-                            <span class="h4 ms-3 text-dark">{{$user->title ?? '' }} {{$user->first_name ?? '' }}</span> ||
-                            <span class="badge badge-soft-info p-1">{{$user->getUserChurchBranch->cb_name ?? '' }}</span>
+                            <span class="h4 ms-3 text-dark">{{$user->title ?? '' }} {{$user->first_name ?? '' }}</span>
                         </div>
                         <div class="d-none d-md-block">
                             <div class="btn-group">
@@ -33,10 +35,6 @@
                                         <i class="bx bx-check-circle"></i>  Activate Account
                                     </a>
                                 @endif
-
-                                <a href="javascript:void(0);" data-bs-target="#permissionModal" data-bs-toggle="modal" class="btn btn-secondary btn-sm btn-icon-text">
-                                  <i class="bx bx-lock-alt"></i>  Access Level
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -111,44 +109,12 @@
                         <p class="text-muted">{{$user->getUserCountry->name ?? '-'}}</p>
                     </div>
                     <div class="mt-1">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">State</label>
-                        <p class="text-muted">{{$user->getUserState->name ?? '-'}}</p>
-                    </div>
-                    <div class="mt-1">
                         <label class="tx-11 fw-bolder mb-0 text-uppercase">Occupation</label>
                         <p class="text-muted">{{$user->occupation ?? '-'}}</p>
                     </div>
                     <div class="mt-1">
                         <label class="tx-11 fw-bolder mb-0 text-uppercase">Address</label>
                         <p class="text-muted">{{$user->address_1 ?? '' }}</p>
-                    </div>
-                    <div class="mt-1">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Branch</label>
-                        <p class="text-muted">{{$user->getUserChurchBranch->cb_name ?? '' }}</p>
-                    </div>
-                    <div class="mt-1">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Role <span style="cursor: pointer;" id="clientAssignmentToggler"><i class="bx bxs-pencil text-warning"></i></span></label>
-                        <p class="text-muted">{{$user->roles->first()->name ?? '' }}</p>
-                    </div>
-                    <div class="mt-1 bg-light p-4" id="clientAssignmentWrapper">
-                        <form action="{{route('assign-revoke-role')}}" method="post">
-                            @csrf
-                            <h6 class="card-header bg-custom text-white mb-3">Assign Role</h6>
-                            <div class="form-group">
-                                <label for="">Role Assignment</label>
-                                <select name="role" id="role" class="form-control">
-                                    <option disabled selected>--Choose someone--</option>
-                                    @foreach($roles as $role)
-                                        <option value="{{$role->id}}"> {{$role->name ?? '' }}</option>
-                                    @endforeach
-                                </select>
-                                <input type="hidden" name="userId" value="{{$user->id}}">
-                                <input type="hidden" name="action" value="1">
-                            </div>
-                            <div class="form-group mt-3 d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary btn-sm">Save changes <i class="bx bxs-right-arrow"></i> </button>
-                            </div>
-                        </form>
                     </div>
 
                 </div>
@@ -161,20 +127,16 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#home1" role="tab" aria-selected="true">
-                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                <span class="d-none d-sm-block">Timeline</span>
-                            </a>
-                        </li>
+                        @if(\Illuminate\Support\Facades\Auth::user()->id == $user->id)
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-bs-toggle="tab" href="#settings1" role="tab" aria-selected="false" tabindex="-1">
                                 <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
                                 <span class="d-none d-sm-block">Settings</span>
                             </a>
                         </li>
+                        @endif
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" href="#log" role="tab" aria-selected="false" tabindex="-1">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#log" role="tab" aria-selected="false" tabindex="-1">
                                 <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
                                 <span class="d-none d-sm-block">Activity Log</span>
                             </a>
@@ -183,51 +145,7 @@
 
                     <!-- Tab panes -->
                     <div class="tab-content p-3 text-muted">
-                        <div class="tab-pane active" id="home1" role="tabpanel">
-                            <div class="col-md-12 grid-margin mt-4">
-                                @foreach($posts as $post)
-                                    <div class="card rounded" style="border-top:1px dotted #293140;">
-                                        <div class="card-header">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <img class="avatar-xs rounded-circle"
-                                                         src="{{url('storage/'.$post->getAuthor->image ?? 'avatar.png')}}"
-                                                         alt="{{$post->getAuthor->first_name ?? '' }}"  class="avatar-sm" >
-                                                    <div class="ms-2">
-                                                        <a href="{{ route('read-timeline-post', $post->p_slug) }}">{{$post->p_title ?? '' }}</a>
-                                                        <p class="tx-11 text-muted">{{$post->getAuthor->title ?? '' }} {{$post->getAuthor->first_name ?? '' }} {{$post->getAuthor->last_name ?? '' }} | <span><small>{{ date('d M, Y h:ia', strtotime($post->created_at)) }}</small></span></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            {!! strlen(strip_tags($post->p_content)) > 150 ? substr(strip_tags($post->p_content), 0,150).'...<a href='.$post->p_slug.'>Read more</a>' : strip_tags($post->p_content) !!}
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="d-flex post-actions">
-                                                <a href="javascript:;" class="d-flex align-items-center text-muted me-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                                    <span class="d-none d-md-block ms-2"> {{ number_format($post->getPostViews->count()) }} View{{$post->getPostViews->count() > 1 ? 's' : null}}</span>
-                                                </a>
-                                                <a href="javascript:;" class="d-flex align-items-center text-muted me-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="feather feather-message-square icon-md">
-                                                        <path
-                                                            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                                                    </svg>
-                                                    <span class="d-none d-md-block ms-2">{{ number_format($post->getPostComments->count()) }} Comment{{$post->getPostComments->count() > 1 ? 's' : null}}</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div class="col-md-12 d-flex justify-content-center">
-                                {{$posts->links()}}
-                            </div>
-                        </div>
+                        @if(\Illuminate\Support\Facades\Auth::user()->id == $user->id)
                         <div class="tab-pane" id="settings1" role="tabpanel" >
                             <div class="row">
                                 <div class="col-md-12">
@@ -238,7 +156,7 @@
 
                             <div class="multi-collapse collapse " id="personalDetails">
                                 <div class="modal-header text-uppercase mt-3">Personal Details</div>
-                                <form class="mt-5" autocomplete="off" action="{{route('update-user-account')}}" enctype="multipart/form-data" method="post" id="addNewUser" data-parsley-validate="">
+                                <form class="mt-5" autocomplete="off" action="{{route('update-person-profile')}}" enctype="multipart/form-data" method="post" id="addNewUser" data-parsley-validate="">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-3 col-sm-3 col-lg-3 align-content-center">
@@ -331,9 +249,9 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-12 col-lg-6">
                                                     <div class="form-check form-switch mt-3">
-                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="pastor"
-                                                            {{$user->pastor == 1 ? 'checked' : null  }}>
-                                                        <label class="form-check-label" for="flexSwitchCheckChecked">Is this person a pastor?</label>
+                                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="type"
+                                                            {{$user->type == 2 ? 'checked' : null  }}>
+                                                        <label class="form-check-label" for="flexSwitchCheckChecked">Is this person a director?</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-sm-12 col-lg-6">
@@ -347,33 +265,6 @@
                                                         <label for="">Present Address <span class="text-danger">*</span></label>
                                                         <textarea name="presentAddress" id="presentAddress" style="resize: none;"
                                                                   class="form-control" placeholder="Type present address here...">{{old( 'presentAddress',$user->address_1)}}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-3">
-                                                    <div class="col-md-12">
-                                                        <h6 class="text-uppercase text-primary">Location</h6>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12 col-lg-6">
-                                                    <div class="form-group mt-1">
-                                                        <label for=""> Branch <span class="text-danger">*</span></label>
-                                                        <select name="branch" id="" data-parsley-required-message="Select branch" class="form-control select2">
-                                                            @foreach($branches as $branch)
-                                                                <option {{$user->branch == $branch->id ? 'selected' : null  }} value="{{$branch->cb_id}}">{{$branch->cb_name ?? '' }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('branch') <i class="text-danger">{{$message}}</i>@enderror
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12 col-lg-6">
-                                                    <div class="form-group mt-1">
-                                                        <label for="">Assign Role <span class="text-danger">*</span></label>
-                                                        <select disabled name="role" data-parsley-required-message="Select role" id="role" class="form-control select2">
-                                                            @foreach($roles as $role)
-                                                                <option {{$user->role == $role->id ? 'selected' : null  }} value="{{$role->id}}">{{$role->name ?? '' }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('role') <i class="text-danger">{{$message}}</i>@enderror
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 col-sm-12 col-lg-12">
@@ -418,7 +309,8 @@
 
 
                         </div>
-                        <div class="tab-pane" id="log" role="tabpanel" >
+                        @endif
+                        <div class="tab-pane active" id="log" role="tabpanel" >
                             <p>Here's a record of @if(Auth::user()->id != $user->id )  <code>{{$user->title ?? '' }} {{$user->first_name ?? '' }} {{$user->last_name ?? '' }} {{$user->other_names ?? '' }}'s</code> @else <code>your</code> @endif activities across board.</p>
                             <div class="mt-4" style="height: 660px; overflow-y: scroll;">
                                 <ul class="verti-timeline list-unstyled">
@@ -445,55 +337,6 @@
                             </div>
                         </div>
                     </div>
-
-                </div>
-            </div>
-        </div>
-
-
-
-
-    </div>
-    <div class="modal fade" id="permissionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header" >
-                    <h6 class="modal-title text-uppercase" id="myModalLabel2">Access Level</h6>
-                    <button type="button" style="margin: 0px; padding: 0px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form autocomplete="off" autcomplete="off" action="{{route('add-permission')}}" method="post" id="addBranch" data-parsley-validate="">
-                        @csrf
-                            <div class="accordion-item mb-2">
-                                <h2 class="accordion-header" id="flush-heading_">
-                                    <button class="accordion-button fw-medium " type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse_" aria-expanded="false" aria-controls="flush-collapse_">
-                                        {{$user->roles->first()->name ?? '' }}
-                                    </button>
-                                </h2>
-                                <div id="flush-collapse_" class="accordion-collapse collapse show" aria-labelledby="flush-heading_" data-bs-parent="#accordionFlushExample_" style="">
-                                    <div class="accordion-body text-muted">
-                                        <form action="">
-                                            <div class="row">
-                                                @if(count($user->roles) > 0)
-                                                    @foreach($user->roles->first()->permissions as $p)
-                                                        <div class="col-md-3 col-lg-3">
-                                                            <div class="form-check form-checkbox-outline form-check-primary mb-3">
-                                                                <input class="form-check-input" type="checkbox"  checked="">
-                                                                <label class="form-check-label" >
-                                                                    {{$p->name ?? ''}}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        <hr>
-                    </form>
 
                 </div>
             </div>

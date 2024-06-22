@@ -1,9 +1,9 @@
 @extends('layouts.master-layout')
 @section('title')
-     Applications
+     Invoices
 @endsection
 @section('current-page')
-     Applications
+     Invoices
 @endsection
 @section('extra-styles')
     <link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
@@ -34,15 +34,15 @@
                                 <div class="col">
                                     <p class="mb-1">Total</p>
 
-                                    <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{ number_format($workflows->where('p_type',6)->sum('p_amount')) }}</h5>
+                                    <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{ number_format($invoices->sum('total')) }}</h5>
                                 </div>
                                 <div class="col-auto mb-0">
                                     <div class="dash-icon text-secondary1">
-                                        <i class="bx bxs-briefcase-alt-2"></i>
+                                        <i class="bx bxs-wallet"></i>
                                     </div>
                                 </div>
                             </div>
-                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Overall Requests<code>({{ number_format($workflows->where('p_type',6)->count()) }})</code></span></span>
+                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Overall <code>({{ number_format($invoices->count()) }})</code></span></span>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                             <div class="row mb-1" >
                                 <div class="col" >
                                     <p class="mb-1">Declined</p>
-                                    <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format( $workflows->where('p_status',3)->where('p_type',6)->sum('p_amount') )}}</h5>
+                                    <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format( $invoices->where('status',3)->sum('total') )}}</h5>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-orange" >
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Total Declined<code>({{number_format($workflows->where('p_status',3)->where('p_type',6)->count())}})</code></span></span>
+                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Total Declined<code>({{number_format($invoices->where('status',3)->count())}})</code></span></span>
                         </div>
                     </div>
                 </div>
@@ -70,8 +70,8 @@
                         <div class="card-body" >
                             <div class="row mb-1" >
                                 <div class="col" >
-                                    <p class="mb-1">Approved</p>
-                                    <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format( $workflows->where('p_status',2)->where('p_type',6)->sum('p_amount') )}}</h5>
+                                    <p class="mb-1">Verified</p>
+                                    <h5 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format( $invoices->where('status',2)->sum('amount_paid') )}}</h5>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-secondary" >
@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Total Approved<code>({{number_format( $workflows->where('p_status',2)->where('p_type',6)->count() )}})</code></span></span>
+                            <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Total Verified<code>({{number_format( $invoices->where('status',2)->count() )}})</code></span></span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                             <div class="row mb-1" >
                                 <div class="col" >
                                     <p class="mb-1">Pending</p>
-                                    <h3 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format( $workflows->where('p_status',0)->where('p_type',6)->sum('p_amount') )}}</h3>
+                                    <h3 class="mb-0 number-font">{{env('APP_CURRENCY')}}{{number_format( $invoices->where('status',0)->sum('total') )}}</h3>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-warning" >
@@ -97,7 +97,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Total Pending<code>({{number_format( $workflows->where('p_status',0)->where('p_type',6)->count() )}})</code> </span></span>
+                            <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Total Pending<code>({{number_format( $invoices->where('status',0)->count() )}})</code> </span></span>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                                 <div class="row mb-1">
                                     <div class="col">
                                         <p class="mb-1">Total</p>
-                                        <h5 class="mb-0 number-font">{{ number_format($workflows->where('p_type',6)->count()) }}</h5>
+                                        <h5 class="mb-0 number-font">{{ number_format($invoices->count()) }}</h5>
                                     </div>
                                     <div class="col-auto mb-0">
                                         <div class="dash-icon text-secondary1">
@@ -131,7 +131,7 @@
                                 <div class="row mb-1" >
                                     <div class="col" >
                                         <p class="mb-1">Declined</p>
-                                        <h5 class="mb-0 number-font">{{number_format($workflows->where('p_status',3)->where('p_type',6)->count())}}</h5>
+                                        <h5 class="mb-0 number-font">{{number_format($invoices->where('status',3)->count())}}</h5>
                                     </div>
                                     <div class="col-auto mb-0" >
                                         <div class="dash-icon text-orange" >
@@ -148,8 +148,8 @@
                             <div class="card-body" >
                                 <div class="row mb-1" >
                                     <div class="col" >
-                                        <p class="mb-1">Approved</p>
-                                        <h5 class="mb-0 number-font">{{number_format( $workflows->where('p_status',2)->where('p_type',6)->count() )}}</h5>
+                                        <p class="mb-1">Verified</p>
+                                        <h5 class="mb-0 number-font">{{number_format( $invoices->where('status',2)->count() )}}</h5>
                                     </div>
                                     <div class="col-auto mb-0" >
                                         <div class="dash-icon text-secondary" >
@@ -157,7 +157,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Total Approved</span></span>
+                                <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Total Verified</span></span>
                             </div>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                                 <div class="row mb-1" >
                                     <div class="col" >
                                         <p class="mb-1">Pending</p>
-                                        <h3 class="mb-0 number-font">{{number_format( $workflows->where('p_status',0)->where('p_type',6)->count() )}}</h3>
+                                        <h3 class="mb-0 number-font">{{number_format( $invoices->where('status',0)->count() )}}</h3>
                                     </div>
                                     <div class="col-auto mb-0" >
                                         <div class="dash-icon text-warning" >
@@ -186,11 +186,6 @@
         <div class="row">
             <div class="col-xl-12 col-md-12">
                 <div class="card">
-                    @if(\Illuminate\Support\Facades\Auth::user()->type != 1)
-                    <div class="card-header">
-                        <a href="{{route('new-radio-application')}}"  class="btn btn-primary  mb-3">New Request <i class="bx bx bx-highlight"></i> </a>
-                    </div>
-                    @endif
                     <div class="card-body">
                         @if(session()->has('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -217,7 +212,9 @@
                                 <tr role="row">
                                     <th class="sorting_asc text-left text-uppercase header" tabindex="0" >S/No.</th>
                                     <th class="sorting_asc text-left text-uppercase header" tabindex="0" >Date</th>
-                                    <th class="sorting_asc text-left text-uppercase header" tabindex="0" >Applied By</th>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
+                                    <th class="sorting_asc text-left text-uppercase header" tabindex="0" >Generated By</th>
+                                    @endif
                                     <th class="sorting_asc text-left text-uppercase header" tabindex="0" >Ref. Code</th>
                                     <th class="sorting_asc text-left text-uppercase header" tabindex="0" >Amount({{env('APP_CURRENCY')}})</th>
                                     <th class="sorting_asc text-left text-uppercase header" tabindex="0" >Status</th>
@@ -228,44 +225,30 @@
                                 @php
                                     $a = 1;
                                 @endphp
-                                @foreach($workflows as $key => $flow)
+                                @foreach($invoices as $key => $flow)
                                     <tr role="row" class="odd">
                                         <td class="">{{$a++}}</td>
                                         <td class="sorting_1 text-left">{{ date('d M, Y', strtotime($flow->created_at)) }}</td>
-                                        @if(\Illuminate\Support\Facades\Auth::user()->type != 1)
+                                        @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
                                         <td class="">
                                             {{$flow->getAuthor->title ?? '' }} {{$flow->getAuthor->first_name ?? '' }} {{$flow->getAuthor->last_name ?? '' }} {{$flow->getAuthor->other_names ?? '' }}
                                         </td>
-                                        @else
-                                            <td class="">
-                                                {{$flow->getCompany->organization_name ?? '' }}
-                                            </td>
                                         @endif
-                                        <td class="">{{$flow->p_title ?? ''}}</td>
-                                        <td class="" style="text-align: right">
-                                            @if(($flow->p_status == 0) || ($flow->p_status == 1) || ($flow->p_status == 2))
-                                                <span class="text-warning">Awaiting Charge</span>
-                                            @elseif(($flow->p_status == 1) && (!empty($flow->p_amount)))
-                                                {{$flow->getCurrency->symbol ?? '' }}{{ number_format($flow->p_amount ?? 0, 2) }}
-
-                                            @elseif($flow->p_status == 3)
-                                                <span class="text-danger">Not charged</span>
-                                            @endif
-
-                                        </td>
+                                        <td class="">{{$flow->ref_no ?? ''}}</td>
+                                        <td class="" style="text-align: right">{{number_format($flow->total,2)}}</td>
                                         <td class="">
-                                            @switch($flow->p_status)
+                                            @switch($flow->status)
                                                 @case(0)
                                                 <span class="text-info">Pending</span>
                                                 @break
                                                 @case(1)
-                                                <span class="text-info">Processing</span>
+                                                <span class="text-info">Paid</span>
                                                 @break
                                                 @case(2)
-                                                <span class="text-success">Approved</span>
+                                                <span class="text-success">Verified</span>
                                                 @break
                                                 @case(3)
-                                                <span class="text-danger">Declined</span>
+                                                <span class="text-danger" style="color: #ff0000;">Declined</span>
                                                 @break
                                             @endswitch
                                         </td>
@@ -273,10 +256,7 @@
                                             <div class="btn-group">
                                                 <i class="bx bx-dots-vertical dropdown-toggle text-warning" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;"></i>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{route('show-application-details', $flow->p_slug)}}" > <i class="bx bxs-book-open"></i> View</a>
-                                                    @if((\Illuminate\Support\Facades\Auth::user()->type == 1)  && ($flow->p_status == 2) && (is_null($flow->p_invoice_id)) )
-                                                        <a class="dropdown-item" href="{{route('generate-invoice', $flow->p_slug)}}" > <i class="bx bx-purchase-tag"></i> Generate Invoice</a>
-                                                    @endif
+                                                    <a class="dropdown-item" href="{{route('show-invoice-detail', $flow->ref_no)}}" > <i class="bx bxs-book-open"></i> View</a>
                                                 </div>
                                             </div>
                                         </td>

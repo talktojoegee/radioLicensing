@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('current-page')
-    Church Branches
+    Section Heads
 @endsection
 @section('extra-styles')
     <link rel="stylesheet" href="/css/nprogress.css">
@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 mt-4">
                 <div class="d-flex justify-content-between modal-header">
-                    <div class="h6 text-left pl-5 text-uppercase text-primary"> Church Branches</div>
+                    <div class="h6 text-left pl-5 text-uppercase text-primary"> Section Heads</div>
                     <a href="{{url()->previous()}}" class="btn btn-secondary mr-3" > <i class="bx bx-arrow-back"></i>  Go back</a>
                 </div>
 
@@ -34,11 +34,9 @@
                                 <thead>
                                 <tr>
                                     <th class="">#</th>
-                                    <th class="wd-15p">Name</th>
-                                    <th class="wd-15p">Lead Pastor</th>
-                                    <th class="wd-15p">Assistant</th>
-                                    <th class="wd-15p">Email</th>
-                                    <th class="wd-15p">Mobile No.</th>
+                                    <th class="wd-15p">Unit Head</th>
+                                    <th class="wd-15p">Section</th>
+                                    <th class="wd-15p">Status</th>
                                     <th class="wd-15p">Action</th>
                                 </tr>
                                 </thead>
@@ -49,8 +47,6 @@
                                         <td>{{$branch->cb_name ?? '' }}</td>
                                         <td>{!! $branch->getLeadPastor->first_name  ?? "<span class='badge badge-pill badge-soft-danger font-size-11'>Not assigned yet</span>" !!} {!! $branch->getLeadPastor->last_name  ?? "<span class='badge badge-pill badge-soft-danger font-size-11'>Not assigned yet</span>" !!}</td>
                                         <td>{!! $branch->getAssistantPastor->first_name  ?? "<span class='badge badge-pill badge-soft-danger font-size-11'>Not assigned yet</span>" !!} {!! $branch->getAssistantPastor->last_name  ?? "<span class='badge badge-pill badge-soft-danger font-size-11'>Not assigned yet</span>" !!}</td>
-                                        <td>{{$branch->cb_email ?? '' }}</td>
-                                        <td>{{$branch->cb_mobile_no ?? '' }}</td>
                                         <td>
                                             <a href="{{route('church-branch-details', ['slug'=>$branch->cb_slug])}}" class="btn btn-light">View</a>
                                         </td>

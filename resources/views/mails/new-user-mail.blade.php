@@ -103,16 +103,8 @@
                         <td class="wrapper" style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; box-sizing: border-box; padding: 24px;" valign="top">
                             <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">Hi
                                 {{$user->first_name ?? '' }},</p>
-                            <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">You're now part of a global community of doers. {{env('APP_NAME')}} is a platform designed to help you administer your responsibilities more efficiently and timely. </p>
-                            <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">The essence of the platform is to help you:</p>
-                            <ul>
-                                <li>Streamline administrative tasks and improve efficiency.</li>
-                                <li>Enhance communication and engagement with members.</li>
-                                <li>Centralize data and resources for easy access and management.</li>
-                                <li>Improve decision-making with insightful analytics and reports.</li>
-                                <li>Foster growth and ministry impact through effective tools and workflows.</li>
-                            </ul>
-                            <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">An account with the following credentials were created for you as shown below:</p>
+                            <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">You're now part of a global community of doers. {{env('APP_NAME')}} is a platform designed to help you interact with us swiftly and efficiently. </p>
+                            <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">An account with the following credentials was created for you as shown below:</p>
                             <ul>
                                 <li><strong>Username: </strong>{{$user->email ?? '' }}</li>
                                 <li><strong>Password: </strong>{{$password ?? ''}}</li>

@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('current-page')
-    Manage Pastors
+    Persons
 @endsection
 @section('extra-styles')
     <link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -44,7 +44,7 @@
                             <div class="row mb-1" >
                                 <div class="col" >
                                     <p class="mb-1">Total</p>
-                                    <h3 class="mb-0 number-font">{{ number_format($users->where("pastor",1)->where("status",1)->count())  }}</h3>
+                                    <h3 class="mb-0 number-font">{{ number_format($users->where("type",2)->where("status",1)->count())  }}</h3>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-secondary1" >
@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Pastors<code>(Active)</code></span></span>
+                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Directors<code>(Active)</code></span></span>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                             <div class="row mb-1" >
                                 <div class="col" >
                                     <p class="mb-1">Total</p>
-                                    <h3 class="mb-0 number-font">{{ number_format($users->where("pastor",1)->where("status",2)->count())  }}</h3>
+                                    <h3 class="mb-0 number-font">{{ number_format($users->where("type",2)->where("status",2)->count())  }}</h3>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-orange" >
@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Pastors<code>(Inactive)</code></span></span>
+                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Directors<code>(Inactive)</code></span></span>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             <div class="row mb-1" >
                                 <div class="col" >
                                     <p class="mb-1">Total</p>
-                                    <h3 class="mb-0 number-font">{{ number_format($users->where("pastor",'=',0)->where("status",'=',1)->count())  }}</h3>
+                                    <h3 class="mb-0 number-font">{{ number_format($users->where("type",'=',3)->where("status",'=',1)->count())  }}</h3>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-secondary" >
@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Users<code>(Active)</code></span></span>
+                            <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Contact Persons<code>(Active)</code></span></span>
                         </div>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                             <div class="row mb-1" >
                                 <div class="col" >
                                     <p class="mb-1">Total</p>
-                                    <h3 class="mb-0 number-font">{{ number_format($users->where("pastor",0)->where("status",2)->count())  }}</h3>
+                                    <h3 class="mb-0 number-font">{{ number_format($users->where("type",3)->where("status",2)->count())  }}</h3>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-warning" >
@@ -106,7 +106,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Users<code>(Inactive)</code> </span></span>
+                            <span class="fs-12 text-muted">  <span class="text-muted fs-12 ml-0 mt-1">Contact Persons<code>(Inactive)</code> </span></span>
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
             <div class="col-xl-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a href="{{route('add-new-pastor')}}"  class="btn btn-primary  mb-3">Add New Pastor <i class="bx bxs-plus-circle"></i> </a>
+                        <a href="{{route('add-person')}}"  class="btn btn-primary  mb-3">Add New Person <i class="bx bxs-plus-circle"></i> </a>
                     </div>
                     <div class="card-body">
                         <p><strong class="text-danger">Note:</strong> Your account currently has a total of <code>{{ number_format($users->count() ) }} </code>users</p>
@@ -142,19 +142,19 @@
                                                 <td>{{$index++}}</td>
                                                 <td>
                                                     <img src="{{url('storage/'.$user->image)}}" style="width: 24px; height: 24px;" alt="{{$user->first_name ?? '' }} {{$user->last_name ?? '' }}" class="rounded-circle avatar-sm">
-                                                    <a href="{{route('user-profile', $user->slug)}}">{{$user->title ?? '' }} {{$user->first_name ?? '' }} {{$user->last_name ?? '' }}</a> </td>
+                                                    <a href="{{route('person-profile', $user->slug)}}">{{$user->title ?? '' }} {{$user->first_name ?? '' }} {{$user->last_name ?? '' }} {{$user->other_names ?? '' }}</a> </td>
                                                 <td>{{$user->cellphone_no ?? '' }} </td>
-                                                <td>{!! $user->pastor == 1 ? "<span class='badge rounded-pill bg-success'>Pastor</span>" : "<span class='badge rounded-pill bg-secondary'>User</span>" !!}</td>
+                                                <td>{!! $user->type == 2 ? "<span class='badge rounded-pill bg-success'>Director</span>" : "<span class='badge rounded-pill bg-secondary'>Contact Person</span>" !!}</td>
                                                 <td>{{$user->email ?? '' }} </td>
                                                 <td>{{$user->getUserCountry->name ?? '' }}</td>
                                                 <td>
-                                                    {!! $user->status == 1 ? "<i class='bx bxs-check-circle text-success'></i>" : "<i class='bx bxs-x-circle text-danger'></i>" !!}
+                                                    {!! $user->status == 1 ? "<i class='bx bxs-check-circle text-success'></i>" : "<i class='bx bxs-x-circle text-danger' style='color:#ff0000 !important;'></i>" !!}
                                                 </td>
                                                 <td>
                                                     <div class="btn-group">
                                                         <i class="bx bx-dots-vertical dropdown-toggle text-warning" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;"></i>
                                                         <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="{{route('user-profile', $user->slug)}}"> <i class="bx bxs-user"></i> View Profile</a>
+                                                            <a class="dropdown-item" href="{{route('person-profile', $user->slug)}}"> <i class="bx bxs-user"></i> View Profile</a>
                                                             @if($user->status == 1)
                                                             <a class="dropdown-item" href="javascript:void(0);" data-bs-target="#deletePractitionerModal_{{$user->id}}" data-bs-toggle="modal"> <i class="bx bx-stop text-danger"></i> Deactivate</a>
                                                             @else
@@ -207,49 +207,7 @@
         </div>
     </div>
 
-    <div class="modal right fade" id="client" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header" >
-                    <h6 class="modal-title text-uppercase" id="myModalLabel2">Add New Administrators</h6>
-                    <button type="button" style="margin: 0px; padding: 0px;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
 
-                <div class="modal-body">
-                    <form autocomplete="off" action="{{route('add-new-user')}}" method="post" id="addNewUser" data-parsley-validate="">
-                        @csrf
-                        <div class="form-group mt-1">
-                            <label for="">First Name <span class="text-danger">*</span></label>
-                            <input type="text" name="firstName" data-parsley-required-message="What's the practitioner's first name?" placeholder="First Name" class="form-control" required="">
-                            @error('firstName') <i class="text-danger">{{$message}}</i>@enderror
-                        </div>
-                        <div class="form-group mt-1">
-                            <label for="">Last Name <span class="text-danger">*</span></label>
-                            <input type="text" name="lastName" required placeholder="Last Name" data-parsley-required-message="Not forgetting last name. What's the practitioner's last name?" class="form-control">
-                            @error('lastName') <i class="text-danger">{{$message}}</i>@enderror
-                        </div>
-                        <div class="form-group mt-1">
-                            <label for=""> Phone Number <span class="text-danger">*</span></label>
-                            <input type="text" name="mobileNo" required placeholder="Mobile Phone Number" data-parsley-required-message="Enter phone number" class="form-control">
-                            <input type="hidden" name="userType" value="1">
-                            @error('mobileNo') <i class="text-danger">{{$message}}</i>@enderror
-                        </div>
-                        <div class="form-group mt-1">
-                            <label for="">Email Address <span class="text-danger">*</span></label>
-                            <input type="email" data-parsley-trigger="change" data-parsley-required-message="Enter a valid email address" required="" name="email" placeholder="Email Address" class="form-control">
-                            @error('email') <i class="text-danger">{{$message}}</i>@enderror
-                        </div>
-                        <div class="form-group d-flex justify-content-center mt-3">
-                            <div class="btn-group">
-                                <button type="submit" class="btn btn-primary  waves-effect waves-light">Add New Administrator <i class="bx bxs-plus-circle"></i> </button>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('extra-scripts')

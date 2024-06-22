@@ -39,7 +39,7 @@
             <div class="col-xl-12 col-md-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-end">
-                        <a href="{{ url()->previous() }}"  class="btn btn-secondary  mb-3"><i class="bx bx-arrow-back"></i> Go Back  </a>
+                        <a href="{{ route('pastors') }}"  class="btn btn-secondary  mb-3"><i class="bx bx-arrow-back"></i> Go Back  </a>
                     </div>
                     <div class="card-body">
                         <div class="row">

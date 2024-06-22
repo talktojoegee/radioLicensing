@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <title>{{config('app.name')}} | Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="SMS Channel login portal" name="description" />
+    <meta content="{{env('APP_NAME')}}" name="description" />
     <meta content="{{config('app.name')}}" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="shortcut icon" href="/assets/drive/logo/arm.png">
     <!-- Bootstrap Css -->
     <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->

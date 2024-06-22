@@ -11,9 +11,8 @@ class ActivityLog extends Model
     use HasFactory;
     public static function registerActivity($orgId, $clientId, $userId, $leadId, $title, $log){
         //$ipAddress = $_SERVER['REMOTE_ADDR'];
-        $orgId = Auth::user()->branch;
         $activity = new ActivityLog();
-        $activity->org_id =  $orgId;// is now Branch ID;
+        $activity->org_id =  $orgId;//
         $activity->client_id = $clientId;
         $activity->user_id = $userId;
         $activity->lead_id = $leadId;
@@ -21,5 +20,9 @@ class ActivityLog extends Model
         $activity->log = $log;
         //$activity->ip_address = $ipAddress;
         $activity->save();
+    }
+
+    public function getAllCompanyActivityLog($orgId){
+        return ActivityLog::where('org_id', $orgId)->orderBy('id', 'DESC')->get();
     }
 }

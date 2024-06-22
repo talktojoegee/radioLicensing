@@ -19,6 +19,8 @@ class AuthorizingPerson extends Model
         $auth = new AuthorizingPerson();
         $auth->ap_post_id = $postId;
         $auth->ap_user_id = $userId;
+        $auth->ap_comment = 'Notified of new application';
+
         $auth->save();
     }
 

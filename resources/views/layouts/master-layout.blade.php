@@ -1,10 +1,19 @@
 @include('partials._header')
 <body data-sidebar="dark">
 <div id="layout-wrapper">
-    @include('partials._top-bar')
+    @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
+        @include('partials._admin-top-bar')
+    @else
+        @include('partials._top-bar')
+    @endif
+
     <div class="vertical-menu">
         <div data-simplebar class="h-100">
-            @include('partials._sidebar')
+            @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
+                @include('partials._admin-sidebar')
+            @else
+                @include('partials._sidebar')
+            @endif
         </div>
     </div>
   <!--  #1916FC-->

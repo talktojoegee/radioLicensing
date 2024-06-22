@@ -16,10 +16,25 @@ class BranchController extends Controller
     }
 
     public function showChurchBranches(){
-        return view('common.church-branches',[
-            'branches'=>$this->churchbranch->getAllChurchBranches()
+        return view('settings.settings-section-heads',[
+            'branches'=>$this->churchbranch->getAllChurchBranches(),
+            'users'=>$this->user->getAllAdminUsers()
         ]);
     }
+
+    public function assignSectionHead(Request $request){
+        $this->validate($request, [
+            'department'=>'required',
+            'supervisor'=>'required'
+        ],[
+            'department.required'=>'Select department',
+            'supervisor.required'=>'Select supervisor'
+        ]);
+        $this->churchbranch->setNewSectionHead($request);
+        session()->flash("success", "New section head assigned successfully!");
+        return back();
+    }
+
     public function showChurchBranchDetails($slug){
         try{
             $branch = $this->churchbranch->getChurchBranchBySlug($slug);

@@ -118,6 +118,7 @@ class SMSController extends Controller
         $branchId = Auth::user()->branch;
         return view('bulksms.top-up',[
             'transactions'=>$this->bulksmsaccount->getBulkSmsTransactions(),
+            'balance'=>$this->getWalletBalance(),
             'accounts'=>$this->cashbookaccounts->getBranchAccounts($branchId),
             'categories'=>$this->transactioncategory->getBranchCategoriesByType($branchId, 2),
         ]);
@@ -188,7 +189,9 @@ class SMSController extends Controller
     }
 
     public function showTopUpTransactions(){
-        return view('bulksms.top-up-transactions');
+        return view('bulksms.top-up-transactions',[
+            'balance'=>$this->getWalletBalance()
+        ]);
     }
 
     public function showComposeMessageForm(){

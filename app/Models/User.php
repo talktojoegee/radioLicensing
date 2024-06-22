@@ -91,6 +91,7 @@ class User extends Authenticatable
     }
 
 
+
     public function getUserHomepageSettings(){
         return $this->belongsTo(Homepage::class, 'org_id');
     }
@@ -142,6 +143,37 @@ class User extends Authenticatable
         return $user;
     }
 
+    public function createCompanyUser(Request $request, $password){
+        //$password = Str::random(8);
+        $user = new User();
+        $user->title = $request->title ?? null;
+        $user->first_name = $request->firstName;
+        $user->org_id = Auth::user()->org_id;
+        $user->last_name = $request->lastName;
+        $user->other_names = $request->otherNames;
+        $user->cellphone_no = $request->mobileNo;
+        $user->marital_status = $request->maritalStatus;
+        //$user->role = $request->role ?? null;
+        $user->type = isset($request->type) ? 2 : 3;
+        $user->gender = isset($request->gender) ? 1 : 0;
+        $user->email = $request->email;
+        $user->occupation = $request->occupation ?? null;
+        //$user->branch = $request->branch ?? null;
+        $user->country_id = $request->nationality ?? null;
+        $user->birth_date = $request->dob ?? null;
+        $user->birth_year = date('Y', strtotime($request->dob)) ?? null;
+        $user->birth_month = date('m', strtotime($request->dob)) ?? null;
+        $user->birth_day = date('d', strtotime($request->dob)) ?? null;
+        $user->password = bcrypt($password);
+        $user->is_admin = isset($request->type) ? 2 : 3;
+        $user->address_1 = $request->presentAddress ?? null;
+        $user->uuid = Str::uuid();
+        $user->api_token = Str::random(60);
+        $user->slug = Str::slug($request->firstName).'-'.Str::random(8);
+        $user->save();
+        return $user;
+    }
+
     public function archiveUser($userId, $status){
         $user = User::find($userId);
         $user->status = $status; //Deactivated || supposed to be deleted | we're archiving instead |
@@ -149,12 +181,13 @@ class User extends Authenticatable
     }
 
     public function updateUserAccount(Request $request):User{
+        //$type = Auth::user()->type > 1 ? 2 : 3;
         $user = User::find($request->userId);
         $user->title = $request->title;
         $user->first_name = $request->firstName;
         $user->last_name = $request->lastName;
         $user->cellphone_no = $request->mobileNo;
-        $user->pastor = isset($request->pastor) ? 1 : 0;
+        $user->type = isset($request->type) ? 2 : 3;
         $user->gender = isset($request->gender) ? 1 : 0;
         $user->country_id = $request->nationality;
         $user->birth_date = $request->dob ?? null;
@@ -212,6 +245,9 @@ class User extends Authenticatable
     public function getAllOrganizationUsers(){
         return User::where('org_id', Auth::user()->org_id)->/*where('status', '!=', 3)->*/orderBy('first_name', 'ASC')->get();
     }
+    public function getAllOrganizationUsersByType(){ //exclude admin users
+        return User::where('org_id', Auth::user()->org_id)->where('type', '!=', 1)->orderBy('first_name', 'ASC')->get();
+    }
 
     public function getUserBySlug($slug){
         return User::where('slug', $slug)->first();
@@ -223,6 +259,9 @@ class User extends Authenticatable
 
     public function getAllBranchUsers($branchId){
         return User::where('branch', $branchId)->orderBy('first_name', 'ASC')->get();
+    }
+    public function getAllAdminUsers(){
+        return User::where('type', 1)->where('status', 1)->orderBy('first_name', 'ASC')->get();
     }
 
     public function getCurrentNextBirthdays(){

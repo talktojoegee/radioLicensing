@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class Post extends Model
@@ -14,6 +15,19 @@ class Post extends Model
     public function getCurrency(){
         return $this->belongsTo(Currency::class, 'p_currency');
     }
+
+
+    public function getCompany(){
+        return $this->belongsTo(Organization::class, 'p_org_id');
+    }
+
+
+    public function getRadioLicenseDetails(){
+        return $this->hasMany(PostRadioDetail::class, 'post_id');
+    }
+
+
+
 
     public function getAuthor(){
         return $this->belongsTo(User::class, 'p_posted_by');
@@ -57,6 +71,7 @@ class Post extends Model
         $post->p_scope = $scope;
         $post->p_category_id = $cat;
         $post->p_slug = Str::slug($title).'-'.substr(sha1(time()),31,40);
+        $post->p_org_id = Auth::user()->org_id;
         $post->save();
         return $post;
     }
@@ -69,6 +84,17 @@ class Post extends Model
         return Post::where('p_posted_by', $authorId)
             ->where('p_type', 6)
             ->orWhere('p_type',7)
+            ->orderBy('p_id', 'DESC')->get();
+    }
+    public function getAllCompanyApplications($companyId){
+        return Post::where('p_org_id', $companyId)
+            ->where('p_type', 6)
+            //->orWhere('p_type',7)
+            ->orderBy('p_id', 'DESC')->get();
+    }
+
+    public function getAllApplications(){
+        return Post::where('p_type', 6)
             ->orderBy('p_id', 'DESC')->get();
     }
 
@@ -87,6 +113,13 @@ class Post extends Model
         $post = Post::find($postId);
         $post->p_status = $status;
         $post->save();
+    }
+
+    public function getAllOrgPostByStatus($status, $orgId){
+        return Post::where('p_status', $status)->where('p_org_id', $orgId)->where('p_type',6)->orderBy('p_id', 'DESC')->get();
+    }
+    public function getAllPostByStatus($status){
+        return Post::where('p_status', $status)->where('p_type',6)->orderBy('p_id', 'DESC')->get();
     }
 
 

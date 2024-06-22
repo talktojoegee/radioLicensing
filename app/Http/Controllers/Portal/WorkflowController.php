@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\AuthorizingPerson;
 use App\Models\CashBook;
 use App\Models\CashBookAccount;
 use App\Models\Currency;
+use App\Models\Notification;
 use App\Models\Post;
 use App\Models\PostAttachment;
 use App\Models\PostComment;
@@ -141,26 +143,54 @@ class WorkflowController extends Controller
                 'authId.required'=>''
             ]);
         }
-        $userId = Auth::user()->id;
+        $authUser = Auth::user();
+        $userId = $authUser->id;
         $postId = $request->workflowId;
         $final = isset($request->final) ? 1 : 0;
         $status = $request->status;
         $authId = $request->authId;
+        $post = $this->post->getPostById($postId);
+        if(empty($post)){
+            session()->flash("error", "Whoops! Something went wrong. Record not found.");
+            return back();
+        }
         AuthorizingPerson::updateStatus($postId, $authId, $userId, $status, $request->comment, $final);
         if($final == 1){
             Post::updatePostStatus($postId, $status);
+            #User notification
+            $subject = "Update: License Application";
+            $body = "There was an update on your license application.";
+            ActivityLog::registerActivity($post->p_org_id, null, $post->p_posted_by, null, $subject, $body);
+            Notification::setNewNotification($subject, $body,
+                'show-application-details', $post->p_slug, 1, $post->p_posted_by, $post->p_org_id);
+
             #Push to cashbook
-            $workflow = $this->post->getPostById($postId);
-            if(!empty($workflow) && ($workflow->p_type == 6)){
+            //$workflow = $this->post->getPostById($postId);
+            /*if(!empty($workflow) && ($workflow->p_type == 6)){
                 $note = $workflow->p_title.' '.$workflow->p_content;
                 $cashbookAccount = $this->cashbookaccount->getBranchFirstAccount($workflow->p_branch_id);
                 $this->cashbook->addCashBook($workflow->p_branch_id, $workflow->p_category_id, $cashbookAccount->cba_id,
                     $workflow->p_currency, 1, 0, 2, now(),
                     $note, $note,
                     $workflow->p_amount,  0, substr(sha1(time()),31,40), date('m'), date('Y'));
-            }
+            }*/
         }else{
+            #User notification
+            $subject = $final != 1 ? "Update: License Application" : "Congratulations! Application Approved.";
+            $body = $final != 1 ? "There was an update on your license application." : "We're glad to inform you that your radio license application was approved. Await further actions.";
+            ActivityLog::registerActivity($post->p_org_id, null, $post->p_posted_by, null, $subject, $body);
+            Notification::setNewNotification($subject, $body,
+                'show-application-details', $post->p_slug, 1, $post->p_posted_by, $post->p_org_id);
+
             AuthorizingPerson::publishAuthorizingPerson($postId, $request->nextAuth);
+            #Next person notification
+            //send a notification to the authorizing officer
+            $title = "Update: License Application";
+            $user_title = $authUser->title ?? null;
+            $log = "$user_title $authUser->first_name($authUser->email) forwarded an application to your desk.";
+            ActivityLog::registerActivity($post->p_org_id, null, $request->nextAuth, null, $title, $log);
+            Notification::setNewNotification($title, $log,
+                'show-application-details', $post->p_slug, 1, $request->nextAuth, $post->p_org_id);
         }
 
         session()->flash("success", "Action successful!");

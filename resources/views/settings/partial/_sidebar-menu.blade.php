@@ -8,42 +8,24 @@
                 <h6>Features</h6>
             </div>
         </div>
-        <a href="{{route('organization')}}" class="{{  Request::routeIs('organization') ? 'is-active-setting' : ''}}">
+        <a href="{{route('sms-settings')}}" class="{{  Request::routeIs('sms-settings') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span class="">Basic Settings</span>
-            </div>
-        </a>
-        <a href="{{route('settings')}}" class="{{  Request::routeIs('organization') ? 'is-active-setting' : ''}}">
-            <div class="sidebar-item">
-                <span class="">General Settings</span>
+                <span class="">SMS Settings</span>
             </div>
         </a>
         <a href="{{route('branches-settings')}}" class="{{  Request::routeIs('branches-settings') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span class="">Branch Settings</span>
+                <span class="">Section Settings</span>
             </div>
         </a>
-    </div>
-    <div class="sidebar-section">
-        <div class="settings-section-header">
-            <div class="section-icon">
-                <i class="bx bx-calendar"></i>
-            </div>
-            <div class="section-title">Calendar</div>
-        </div>
-        <a href="{{route('appointment-settings')}}" class=" {{  request()->routeIs('appointment-settings') ? 'is-active-setting' : ''}}">
+        <a href="{{route('workflow-settings')}}" class="{{  Request::routeIs('workflow-settings') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span>Appointments</span>
+                <span class="">Workflow Settings</span>
             </div>
         </a>
-        <a href="{{route('appointment-types-settings')}}" class=" {{  request()->routeIs('appointment-types-settings') ? 'is-active-setting' : ''}}">
+        <a href="{{route('church-branches')}}" class="{{  Request::routeIs('church-branches') ? 'is-active-setting' : ''}}">
             <div class="sidebar-item">
-                <span>Appointment Types</span>
-            </div>
-        </a>
-        <a href="{{route('change-password')}}" class=" {{  request()->routeIs('change-password') ? 'is-active-setting' : ''}}">
-            <div class="sidebar-item">
-                <span>Change Password</span>
+                <span class="">Section Heads Settings</span>
             </div>
         </a>
     </div>
