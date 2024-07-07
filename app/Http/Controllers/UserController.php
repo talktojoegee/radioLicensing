@@ -136,6 +136,7 @@ class UserController extends Controller
     }
 
     public function addNewUser(Request $request){
+        //return dd($request->all());
         $this->validate($request,[
             "firstName"=>"required",
             "lastName"=>"required",
@@ -165,13 +166,22 @@ class UserController extends Controller
             "branch.required"=>"Assign this person to a branch",
             "role.required"=>"What role best fits this person?",
         ]);
+
         try {
+
             $password = Str::random(8);
             $user = $this->user->createUser($request, $password);
-            $role = $this->role->getRoleById($request->role);
-            if(!empty($role)){
-                $user->assignRole($role->name);
+            if($user){
+                $role = $this->role->getRoleById($request->role);
+                if(!empty($role)){
+                    $user->assignRole($role->name);
+                }
+            }else{
+                session()->flash("error", "Whoops! Something went wrong. Try again later.");
+                return back();
             }
+
+
 
             if(isset($request->avatar)){
                 $this->user->uploadProfilePicture($request->avatar, $user->id);

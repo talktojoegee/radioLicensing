@@ -35,7 +35,7 @@ class NewUserMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            from: new Address('no-reply@churchtrac.online', env('APP_NAME')),
+            from: new Address('no-reply@commtech.gov.ng', env('APP_NAME')),
             subject: "We're Glad to have you",
         );
     }

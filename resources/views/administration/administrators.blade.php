@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
 @section('current-page')
-    Manage Pastors
+    Manage Team
 @endsection
 @section('extra-styles')
     <link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -38,49 +38,14 @@
             </div>
         @endif
             <div class="row" >
-                <div class="col-xl-3 col-sm-6" >
+
+                <div class="col-xl-6 col-sm-6" >
                     <div class="card" >
                         <div class="card-body" >
                             <div class="row mb-1" >
                                 <div class="col" >
                                     <p class="mb-1">Total</p>
-                                    <h3 class="mb-0 number-font">{{ number_format($users->where("pastor",1)->where("status",1)->count())  }}</h3>
-                                </div>
-                                <div class="col-auto mb-0" >
-                                    <div class="dash-icon text-secondary1" >
-                                        <i class="bx bxs-user-badge"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Pastors<code>(Active)</code></span></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6" >
-                    <div class="card" >
-                        <div class="card-body" >
-                            <div class="row mb-1" >
-                                <div class="col" >
-                                    <p class="mb-1">Total</p>
-                                    <h3 class="mb-0 number-font">{{ number_format($users->where("pastor",1)->where("status",2)->count())  }}</h3>
-                                </div>
-                                <div class="col-auto mb-0" >
-                                    <div class="dash-icon text-orange" >
-                                        <i class="bx bxs-user-badge"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="fs-12 text-muted"> <span class="text-muted fs-12 ml-0 mt-1">Pastors<code>(Inactive)</code></span></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6" >
-                    <div class="card" >
-                        <div class="card-body" >
-                            <div class="row mb-1" >
-                                <div class="col" >
-                                    <p class="mb-1">Total</p>
-                                    <h3 class="mb-0 number-font">{{ number_format($users->where("pastor",'=',0)->where("status",'=',1)->count())  }}</h3>
+                                    <h3 class="mb-0 number-font">{{ number_format($users->where("type",1)->where("status",'=',1)->count())  }}</h3>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-secondary" >
@@ -92,13 +57,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6" >
+                <div class="col-xl-6 col-sm-6" >
                     <div class="card" >
                         <div class="card-body" >
                             <div class="row mb-1" >
                                 <div class="col" >
                                     <p class="mb-1">Total</p>
-                                    <h3 class="mb-0 number-font">{{ number_format($users->where("pastor",0)->where("status",2)->count())  }}</h3>
+                                    <h3 class="mb-0 number-font">{{ number_format($users->where("type",1)->where("status",2)->count())  }}</h3>
                                 </div>
                                 <div class="col-auto mb-0" >
                                     <div class="dash-icon text-warning" >
@@ -115,7 +80,7 @@
             <div class="col-xl-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a href="{{route('add-new-pastor')}}"  class="btn btn-primary  mb-3">Add New Pastor <i class="bx bxs-plus-circle"></i> </a>
+                        <a href="{{route('add-new-pastor')}}"  class="btn btn-primary  mb-3">Add New Member <i class="bx bxs-plus-circle"></i> </a>
                     </div>
                     <div class="card-body">
                         <p><strong class="text-danger">Note:</strong> Your account currently has a total of <code>{{ number_format($users->count() ) }} </code>users</p>
@@ -128,7 +93,7 @@
                                             <th class="">#</th>
                                             <th class="wd-15p">Name</th>
                                             <th class="wd-15p">Mobile No.</th>
-                                            <th class="wd-15p">Type</th>
+                                            <th class="wd-15p">Role</th>
                                             <th class="wd-15p">Email</th>
                                             <th class="wd-15p">Country</th>
                                             <th class="wd-5p">Status</th>
@@ -144,7 +109,9 @@
                                                     <img src="{{url('storage/'.$user->image)}}" style="width: 24px; height: 24px;" alt="{{$user->first_name ?? '' }} {{$user->last_name ?? '' }}" class="rounded-circle avatar-sm">
                                                     <a href="{{route('user-profile', $user->slug)}}">{{$user->title ?? '' }} {{$user->first_name ?? '' }} {{$user->last_name ?? '' }}</a> </td>
                                                 <td>{{$user->cellphone_no ?? '' }} </td>
-                                                <td>{!! $user->pastor == 1 ? "<span class='badge rounded-pill bg-success'>Pastor</span>" : "<span class='badge rounded-pill bg-secondary'>User</span>" !!}</td>
+                                                <td>
+                                                    {{ $user->getUserRole->name ?? '' }}
+                                                </td>
                                                 <td>{{$user->email ?? '' }} </td>
                                                 <td>{{$user->getUserCountry->name ?? '' }}</td>
                                                 <td>

@@ -15,6 +15,11 @@
     <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <style>
+        .error{
+            color: #ff0000 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -42,8 +47,8 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="text-primary p-4">
-                                    <h5 class="text-primary">Welcome Back !</h5>
-                                    <p>Create {{env('APP_NAME')}} Account Today!</p>
+                                    <h5 class="text-primary">Welcome Back!</h5>
+                                    <p>Start Your {{env('APP_NAME')}} Registration Today!</p>
                                 </div>
                             </div>
                             <div class="col-5 align-self-end">
@@ -56,7 +61,7 @@
                             <a href="#" class="auth-logo-light">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="/assets/images/logo-light.svg" alt="" class="rounded-circle" height="34">
+                                        <img src="/assets/drive/logo/arm.png" alt="" class="rounded-circle" height="64">
                                     </span>
                                 </div>
                             </a>
@@ -64,81 +69,37 @@
                             <a href="{{route('login')}}" class="auth-logo-dark">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="/assets/images/logo.svg" alt="" class="rounded-circle" height="34">
+                                        <img src="/assets/drive/logo/arm.png" alt="" class="rounded-circle" height="64">
                                     </span>
                                 </div>
                             </a>
                         </div>
                         <div class="p-2">
-                            <form autocomplete="off" method="post" class="form-horizontal" action="{{route('register')}}">
+                            <form action="{{ route('e-registration') }}" method="post" autocomplete="off">
+                                @php $securityCode = substr(sha1(time()),34,40) @endphp
+                                <input type="hidden" name="validScode" value="{{$securityCode ?? '' }}">
                                 @csrf
-                                <div class="mb-3">
-                                    <label for="organizationName" class="form-label">Organization Name</label>
-                                    <input type="text" class="form-control" name="organizationName" value="{{old('organizationName')}}" id="organizationName" placeholder="organization Name">
-                                    @error('organizationName')
-                                    <i class="text-danger">{{$message}}</i>
-                                    @enderror
+                                <p><strong class="text-danger" style="color: #ff0000 !important;">Note: </strong>Use a valid email address for this registration. We'll send a link to the email address for you to complete this registration.</p>
+                                <div class="form-group">
+                                    <label class=" "><strong>Email Address</strong></label>
+                                    <input type="email" name="email" value="{{old('email')}}" class="form-control" placeholder="Email Address">
+                                    @error('email') <i class="text-danger error">{{$message}}</i> @enderror
                                 </div>
-                                <div class="mb-3">
-                                    <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" name="firstName" value="{{old('firstName')}}" id="firstName" placeholder="First Name">
-                                    @error('firstName')
-                                    <i class="text-danger">{{$message}}</i>
-                                    @enderror
+                                <div class="form-group p-3 text-center">
+                                    <h3 class="text-danger text-center" style="font-weight: 700"><code>Security Code:</code> {{$securityCode ?? '' }}</h3>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" name="phoneNumber" value="{{old('phoneNumber')}}" id="phoneNumber" placeholder="Phone Number">
-                                    @error('phoneNumber')
-                                    <i class="text-danger">{{$message}}</i>
-                                    @enderror
+                                <div class="form-group">
+                                    <label class=""><strong>Enter Security Code</strong></label>
+                                    <input type="text" name="security_code" class="form-control" placeholder="Enter the Security Code shown above here...">
+                                    @error('security_code') <i class="text-danger error">{{$message}}</i> @enderror
                                 </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email Address</label>
-                                    <input type="text" class="form-control" name="email" value="{{old('email')}}" id="email" placeholder="Email Address">
-                                    @error('email')
-                                    <i class="text-danger">{{$message}}</i>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <div class="input-group auth-pass-inputgroup">
-                                        <input type="password" class="form-control" name="password" placeholder="Enter Password" aria-label="Password" aria-describedby="password-addon">
-                                        <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
+                                <div class="form-row d-flex justify-content-between mt-4 mb-2">
+                                    <div class="form-group">
+                                        <a class="text-white" href="{{route('login')}}">Already Have An Account? Login here</a>
                                     </div>
-                                    @error('password')
-                                    <i class="text-danger">{{$message}}</i>
-                                    @enderror
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Re-type Password</label>
-                                    <div class="input-group auth-pass-inputgroup">
-                                        <input type="password" class="form-control" name="password_confirmation" placeholder="Re-type Password" aria-label="Re-type Password" aria-describedby="password-addon">
-                                        <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
-                                    </div>
-                                    @error('password_confirmation')
-                                    <i class="text-danger">{{$message}}</i>
-                                    @enderror
-                                </div>
-
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="terms" id="remember-check">
-                                    <p>
-                                        By submitting this form, you agree to our Terms of Service and that you have read our Privacy Policy.
-                                        Checking the checkbox is equivalent to a handwritten signature
-                                    </p>
-                                    @error('terms')
-                                    <i class="text-danger">{{$message}}</i>
-                                    @enderror
-                                </div>
-
-                                <div class="mt-3 d-grid">
-                                    <button class="btn btn-primary waves-effect waves-light" type="submit">Register</button>
-                                </div>
-
-                                <div class="mt-4 text-center">
-                                    Already have an account ?  <a href="{{ route('login') }}" class="text-muted"><i class="mdi mdi-lock me-1"></i> Login Here</a>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary  btn-block">Verify Email <i class="bx bx-check-double"></i> </button>
                                 </div>
                             </form>
                         </div>

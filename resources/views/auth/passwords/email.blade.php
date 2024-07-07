@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Reset Password" name="description" />
     <meta content="{{env('APP_NAME')}}" name="author" />
-    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="shortcut icon" href="/assets/drive/logo/arm.png">
     <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="//assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
@@ -19,7 +19,7 @@
             <div class="col-lg-12">
                 <div class="text-center mb-5 text-muted">
                     <a href="{{route("login")}}" class="d-block auth-logo">
-                        <img src="/assets/drive/logo/logo-dark.png" alt="" height="74" width="74" class="auth-logo-dark mx-auto">
+                        <img src="/assets/drive/logo/logo-dark.png" alt="" height="74" width="250" class="auth-logo-dark mx-auto">
                     </a>
                     <p class="mt-3">Forgotten password? No need to worry.</p>
                 </div>

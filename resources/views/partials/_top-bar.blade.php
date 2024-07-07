@@ -2,25 +2,26 @@
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->
-            <div class="navbar-brand-box pt-5 pb-3" style="">
+            <div class="navbar-brand-box" style="">
                 <a href="{{route('dashboard')}}" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->getUserOrganization->logo) }}" alt="{{ env("APP_NAME") }}" height="44" width="44">
+                        <img src="/assets/drive/logo/arm.png" alt="{{ env("APP_NAME") }}" height="44" width="44">
                     </span>
                     <span class="logo-lg">
-                       <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->getUserOrganization->logo) }}" alt="{{ env("APP_NAME") }}" height="74" width="74">
+                       <img src="/assets/drive/logo/logo.png" alt="{{ env("APP_NAME") }}" height="74" width="74">
                     </span>
                 </a>
 
                 <a href="{{route('dashboard')}}" class="logo logo-light">
                     <span class="logo-sm">
-                       <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->getUserOrganization->logo) }}" alt="{{ env("APP_NAME") }}" height="44" width="44">
+                       <img src="/assets/drive/logo/arm.png" alt="{{ env("APP_NAME") }}" height="44" width="44">
                     </span>
                     <span class="logo-lg">
-                       <img src="{{url('storage/'.\Illuminate\Support\Facades\Auth::user()->getUserOrganization->logo) }}" alt="{{ env("APP_NAME") }}" height="74" width="74">
+                       <img src="/assets/drive/logo/logo.png" alt="{{ env("APP_NAME") }}" height="54" width="200">
                     </span>
                 </a>
             </div>
+
 
             <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
                 <i class="fa fa-fw fa-bars"></i>
@@ -112,7 +113,6 @@
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="{{route('user-profile', \Illuminate\Support\Facades\Auth::user()->slug)}}"><i class="bx bx-home-alt font-size-16 align-middle me-1"></i> <span key="t-profile">My Profile</span></a>
                     <a class="dropdown-item" href="{{route('settings')}}"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Account Settings</span></a>
-                    <a class="dropdown-item" href="{{route('change-password')}}"><i class="bx bx-lock-alt font-size-16 align-middle me-1"></i> <span key="t-lock-screen">Change Password</span></a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="{{route('logout')}}">
                         <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>

@@ -22,6 +22,17 @@
                 </div>
             </div>
         @endif
+            @if(session()->has('error'))
+                <div class="row" role="alert">
+                    <div class="col-md-12">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <i class="mdi mdi-check-all me-2"></i>
+                            {!! session()->get('error') !!}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            @endif
         @if($errors->any())
             <div class="row" role="alert">
                 <div class="col-md-12">
@@ -142,9 +153,9 @@
                                                          @error('maritalStatus') <i class="text-danger">{{$message}}</i>@enderror
                                                      </div>
                                                  </div>
-                                                 <div class="col-md-6 col-sm-12 col-lg-6">
+                                                 <div class="col-md-6 col-sm-12 col-lg-6" style="visibility: hidden;">
                                                      <div class="form-check form-switch mt-3">
-                                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="pastor" checked="">
+                                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="pastor" checked >
                                                          <label class="form-check-label" for="flexSwitchCheckChecked">Is this person a pastor?</label>
                                                      </div>
                                                  </div>
@@ -168,7 +179,7 @@
                                                  </div>
                                                  <div class="col-md-6 col-sm-12 col-lg-6">
                                                      <div class="form-group mt-1">
-                                                         <label for=""> Branch <span class="text-danger">*</span></label>
+                                                         <label for=""> Section/Unit <span class="text-danger">*</span></label>
                                                          <select name="branch" id="" data-parsley-required-message="Select branch" class="form-control select2">
                                                              @foreach($branches as $branch)
                                                                  <option value="{{$branch->cb_id}}">{{$branch->cb_name ?? '' }}</option>

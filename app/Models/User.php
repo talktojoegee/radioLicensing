@@ -102,10 +102,11 @@ class User extends Authenticatable
         $user->first_name = $request->firstName;
         $user->org_id = $orgId;
         $user->last_name = $request->lastName;
-        $user->cellphone_no = $request->mobileNo;
+        $user->cellphone_no = $request->phoneNumber ;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->is_admin = 2; //$request->userType;
+        $user->type = 3;//contact person
         $user->uuid = Str::uuid();
         $user->api_token = Str::random(60);
         $user->slug = Str::slug($request->firstName).'-'.Str::random(8);
@@ -123,11 +124,12 @@ class User extends Authenticatable
         $user->cellphone_no = $request->mobileNo;
         $user->marital_status = $request->maritalStatus;
         $user->role = $request->role ?? null;
-        $user->pastor = isset($request->pastor) ? 1 : 0;
+        $user->type = 1 ?? null;
         $user->gender = isset($request->gender) ? 1 : 0;
         $user->email = $request->email;
         $user->occupation = $request->occupation ?? null;
         $user->branch = $request->branch ?? null;
+
         $user->country_id = $request->nationality ?? null;
         $user->birth_date = $request->dob ?? null;
         $user->birth_year = date('Y', strtotime($request->dob)) ?? null;
@@ -137,9 +139,11 @@ class User extends Authenticatable
         $user->is_admin = $request->userType;
         $user->address_1 = $request->presentAddress ?? null;
         $user->uuid = Str::uuid();
+
         $user->api_token = Str::random(60);
         $user->slug = Str::slug($request->firstName).'-'.Str::random(8);
         $user->save();
+
         return $user;
     }
 

@@ -52,15 +52,22 @@ class InvoiceMaster extends Model
         return InvoiceMaster::where('ref_no',$refNo)->first();
     }
 
-    public function getAllInvoices(){
-        return InvoiceMaster::orderBy('id', 'DESC')->get();
+    public function getAllInvoices($status){
+        return InvoiceMaster::whereIn('status', $status)->orderBy('id', 'DESC')->get();
     }
 
-    public function getAllCompanyInoices($orgId){
-        return InvoiceMaster::where('org_id', $orgId)->orderBy('id', 'DESC')->get();
+    public function getAllCompanyInoices($orgId, $status){
+        return InvoiceMaster::where('org_id', $orgId)->where('status', $status)->orderBy('id', 'DESC')->get();
     }
 
     public function getInoviceById($id){
         return InvoiceMaster::find($id);
+    }
+
+
+    public function getInvoiceTransactionsByDateRange($from, $to){
+        return InvoiceMaster::whereBetween('created_at', [$from, $to])
+            ->orderBy('id', 'ASC')
+            ->get();
     }
 }

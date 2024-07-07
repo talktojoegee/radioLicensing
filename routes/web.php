@@ -27,6 +27,8 @@ Route::prefix('/settings')->group(function(){
 Auth::routes();
 Route::get('logout', [App\Http\Controllers\Auth\LoginController::class,'logout'])->name('logout');
 Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'register']);
+Route::post('/e-registration', [App\Http\Controllers\Auth\RegisterController::class, 'eRegistration'])->name('e-registration');
+Route::get('/e-registration/{token}', [App\Http\Controllers\Auth\RegisterController::class, 'verifyERegistration'])->name('verify-e-registration');
 //Route::get('/process/payment',[App\Http\Controllers\OnlinePaymentController::class, 'processOnlinePayment']);
 
 Route::get('/home', function(){
@@ -288,6 +290,12 @@ Route::group(['prefix'=>'/website', 'middleware'=>'auth'], function(){
     Route::post('/web-pages/edit-service', [App\Http\Controllers\Portal\WebsiteController::class, 'editService'])->name('edit-website-service');
 });
 
+#License Report
+Route::group(['prefix'=>'general/report', 'middleware'=>'auth'],function(){
+    Route::get('/admin/{slug}', [App\Http\Controllers\Portal\RadioLicenseReportController::class, 'showReportByType'])->name('report-handler');
+    Route::get('generate-system-report', [App\Http\Controllers\Portal\RadioLicenseReportController::class, 'generateSystemReport'])->name('generate-system-report');
+});
+
 //Radio License activities
 
 Route::group(['prefix'=>'/license', 'middleware'=>'auth'], function(){
@@ -305,7 +313,7 @@ Route::group(['prefix'=>'/license', 'middleware'=>'auth'], function(){
     Route::post('/generate-invoice', [App\Http\Controllers\Portal\RadioController::class, 'generateInvoice'])->name('new-invoice');
 
     #Invoice
-    Route::get('/invoices', [App\Http\Controllers\Portal\RadioController::class,'showManageInvoices'])->name('manage-invoices');
+    Route::get('/list/{invoices}', [App\Http\Controllers\Portal\RadioController::class,'showManageInvoices'])->name('manage-invoices');
     Route::get('/invoices/{slug}', [App\Http\Controllers\Portal\RadioController::class,'showInvoiceDetails'])->name('show-invoice-detail');
     Route::post('/submit-proof-of-payment', [App\Http\Controllers\Portal\RadioController::class,'submitProofOfPayment'])->name('submit-proof-of-payment');
     Route::post('/action-payment', [App\Http\Controllers\Portal\RadioController::class,'actionPayment'])->name('action-payment');
@@ -314,11 +322,27 @@ Route::group(['prefix'=>'/license', 'middleware'=>'auth'], function(){
     Route::get('/category/{type}', [App\Http\Controllers\Portal\RadioController::class, 'showApplicationCategory'])->name('show-application-status');
     Route::get('/assign-license/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showAssignLicense'])->name('show-assign-license');
     Route::post('assign-frequency', [App\Http\Controllers\Portal\RadioController::class, 'assignFrequency'])->name('assign-frequency');
+    Route::get('review/assignment/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showReviewFrequencyAssignment'])->name('review-assignment');
+    Route::post('update-frequency-assignment', [App\Http\Controllers\Portal\RadioController::class, 'updateFrequencyAssignment'])->name('update-frequency-assignment');
 
     #Certificates
-    Route::get('/certificates', [App\Http\Controllers\Portal\RadioController::class, 'showCertificates'])->name('certificates');
+    Route::get('/license/certificate/{type}', [App\Http\Controllers\Portal\RadioController::class, 'showCertificates'])->name('certificates');
     Route::get('/certificates/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showCertificateDetails'])->name('certificate-details');
+
+
+
 });
+
+Route::group(['prefix'=>'tickets', 'middleware'=>'auth'],function(){
+    Route::get('/', [App\Http\Controllers\Portal\TicketController::class, 'showTickets'] )->name('tickets');
+    Route::post('/', [App\Http\Controllers\Portal\TicketController::class, 'newTicket'] );
+    Route::get('/{slug}', [App\Http\Controllers\Portal\TicketController::class, 'showTicketDetails'] )->name('view-ticket');
+    Route::post('/reply-ticket', [App\Http\Controllers\Portal\TicketController::class, 'submitTicketReply'] )->name('ticket-reply');
+    Route::post('/close-ticket', [App\Http\Controllers\Portal\TicketController::class, 'closeTicket'] )->name('close-ticket');
+});
+Route::get('/faqs', [App\Http\Controllers\Portal\TicketController::class, 'showFaqs'])->name('faqs');
+Route::post('/faqs', [App\Http\Controllers\Portal\TicketController::class, 'postFaq']);
+Route::post('/edit-faq', [App\Http\Controllers\Portal\TicketController::class, 'editFaq'])->name('edit-faq');
 
 Route::group(['prefix'=>'persons', 'middleware'=>'auth'], function(){
     Route::get('/', [App\Http\Controllers\Portal\PersonsController::class, 'showPersons'])->name("persons");
@@ -329,9 +353,13 @@ Route::group(['prefix'=>'persons', 'middleware'=>'auth'], function(){
 });
 
 Route::group(['prefix'=>'company', 'middleware'=>'auth'], function(){
+    Route::get('/list/{slug}', [App\Http\Controllers\Portal\CompanyController::class, 'showCompanies'])->name('list-companies');
+    Route::get('/company/{tag}', [App\Http\Controllers\Portal\CompanyController::class, 'showCompanyProfileByURL'])->name('show-company-profile');
+    //Route::get('/profile/{slug}', [App\Http\Controllers\Portal\CompanyController::class, 'showCompanyProfileByTag'])->name('show-company-profile');
     Route::get('/profile', [App\Http\Controllers\Portal\CompanyController::class, 'showCompanyProfile'])->name('company-profile');
     Route::post('/upload-document', [App\Http\Controllers\Portal\CompanyController::class, 'uploadDocument'])->name('upload-document');
     Route::post('/update-company-profile', [App\Http\Controllers\Portal\CompanyController::class, 'updateCompanyProfile'])->name('update-company-profile');
+    Route::post('/manage', [App\Http\Controllers\Portal\CompanyController::class, 'showManageCompanies'])->name('manage-companies');
 });
 
 
@@ -341,8 +369,8 @@ Route::group(['prefix'=>'/newsfeed', 'middleware'=>'auth'], function(){
 
 Route::group(['prefix'=>'/users', 'middleware'=>'auth'], function(){
     Route::get('/practitioners', [App\Http\Controllers\UserController::class, 'showPractitioners'])->name('practitioners');
-    Route::get('/pastors', [App\Http\Controllers\UserController::class, 'showAdministrators'])->name('pastors');
-    Route::get('/pastors/add-new', [App\Http\Controllers\UserController::class, 'showAddNewPastorForm'])->name('add-new-pastor');
+    Route::get('/members', [App\Http\Controllers\UserController::class, 'showAdministrators'])->name('pastors');
+    Route::get('/members/add-new', [App\Http\Controllers\UserController::class, 'showAddNewPastorForm'])->name('add-new-pastor');
     Route::get('/{slug}', [App\Http\Controllers\UserController::class, 'showUserProfile'])->name('user-profile');
     Route::post('/assign-revoke-role', [App\Http\Controllers\UserController::class, 'assignRevokeRole'])->name('assign-revoke-role');
     Route::post('/add-new-user', [App\Http\Controllers\UserController::class, 'addNewUser'])->name('add-new-user');

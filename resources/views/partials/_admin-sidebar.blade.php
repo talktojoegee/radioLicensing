@@ -9,53 +9,74 @@
             </li>
         @endcan
         <li class="menu-title" key="t-menu">Radio Licensing</li>
-        @can('access-bulksms')
+
             <li>
                 <a href="javascript: void(0);" class="has-arrow waves-effect">
                     <i class="bx bx-rss"></i>
-                    <span key="t-bulksms"> License </span>
+                    <span key="t-bulksms"> License Application </span>
                 </a>
                 <ul class="sub-menu" aria-expanded="false">
                     <li><a href="{{route('manage-applications')}}" key="t-bulksms">Manage Applications</a></li>
-                    <li><a href="{{route('show-application-status', 'verified')}}" key="t-bulksms">Frequency Assignment</a></li>
                     <li><a href="{{route('show-application-status', 'pending')}}" key="t-bulksms">Pending</a></li>
                     <li><a href="{{route('show-application-status', 'approved')}}" key="t-bulksms">Approved</a></li>
                     <li><a href="{{route('show-application-status', 'declined')}}" key="t-bulksms">Declined</a></li>
                 </ul>
             </li>
-        @endcan
+
             <li>
-                <a href="{{route('certificates')}}" class="waves-effect">
-                    <i class="bx bx-certification"></i>
-                    <span key="t-chat">Certificates</span>
+                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                    <i class="bx bx-check-double"></i>
+                    <span key="t-bulksms"> Frequency Assignment </span>
                 </a>
+                <ul class="sub-menu" aria-expanded="false">
+                    <li><a href="{{route('show-application-status', 'verified')}}" key="t-bulksms">New Assignment</a></li>
+                    <li><a href="{{route('show-application-status', 'assigned')}}" key="t-bulksms">Assigned Frequencies</a></li>
+                </ul>
             </li>
             <li>
-                <a href="{{route('timeline')}}" class="waves-effect">
-                    <i class="bx bx-briefcase"></i>
-                    <span key="t-chat">Companies</span>
+                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                    <i class="bx bx-certification"></i>
+                    <span key="t-bulksms"> Certificates </span>
                 </a>
+                <ul class="sub-menu" aria-expanded="false">
+                    <li><a href="{{route('certificates', 'all')}}" key="t-bulksms">All</a></li>
+                    <li><a href="{{route('certificates', 'valid')}}" key="t-bulksms">Valid</a></li>
+                    <li><a href="{{route('certificates', 'expired')}}" key="t-bulksms">Expired</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                    <i class="bx bx-briefcase"></i>
+                    <span key="t-bulksms"> Companies </span>
+                </a>
+                <ul class="sub-menu" aria-expanded="false">
+                    <li><a href="{{ route('list-companies', 'all') }}" key="t-bulksms">All</a></li>
+                    <li><a href="{{ route('list-companies', 'valid') }}" key="t-bulksms">Valid License</a></li>
+                    <li><a href="{{ route('list-companies', 'expired') }}" key="t-bulksms">Expired License</a></li>
+                </ul>
             </li>
         <li class="menu-title" key="t-menu">Invoicing</li>
         <li>
             <a href="javascript: void(0);" class="has-arrow waves-effect">
-                <i class="bx bx-briefcase"></i>
+                <i class="bx bx-wallet-alt"></i>
                 <span key="t-bulksms"> Invoice </span>
             </a>
             <ul class="sub-menu" aria-expanded="false">
-                @can('topup-bulksms')<li><a href="{{route('manage-invoices')}}" key="t-bulksms">Manage Invoices</a></li>@endcan
-                @can('access-bulksms-wallet')<li><a href="{{route('top-up-transactions')}}" key="t-bulksms">Payments</a></li>@endcan
-                @can('send-bulksms')<li><a href="{{route('compose-sms')}}" key="t-bulksms">Report</a></li>@endcan
+                <li><a href="{{route('manage-invoices', 'invoices')}}" key="t-bulksms">All</a></li>
+                <li><a href="{{route('manage-invoices', 'paid')}}" key="t-bulksms">Paid</a></li>
+                <li><a href="{{route('manage-invoices', 'pending')}}" key="t-bulksms">Pending</a></li>
+                <li><a href="{{route('manage-invoices', 'verified')}}" key="t-bulksms">Verified</a></li>
+                <li><a href="{{route('manage-invoices', 'declined')}}" key="t-bulksms">Declined</a></li>
             </ul>
         </li>
         <li>
-            <a href="{{route('timeline')}}" class="waves-effect">
+            <a href="{{route('tickets')}}" class="waves-effect">
                 <i class="bx bx-support"></i>
                 <span key="t-chat">Support Ticket</span>
             </a>
         </li>
         <li>
-            <a href="{{route('timeline')}}" class="waves-effect">
+            <a href="{{route('faqs')}}" class="waves-effect">
                 <i class="bx bx-question-mark"></i>
                 <span key="t-chat">FAQs</span>
             </a>
@@ -102,6 +123,19 @@
                 </a>
             </li>
         @endcan
+        <li class="menu-title">Reports</li>
+            <li>
+                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                    <i class="bx bx-chart"></i>
+                    <span key="t-bulksms"> Reports </span>
+                </a>
+                <ul class="sub-menu" aria-expanded="false">
+                    <li><a href="{{route('top-up')}}" key="t-bulksms">Application</a></li>
+                    <li><a href="{{route('report-handler', 'inflow')}}" key="t-bulksms">Inflow</a></li>
+                    <li><a href="{{route('bulksms-messages')}}" key="t-bulksms">Certificate</a></li>
+                    <li><a href="{{route('phone-groups')}}" key="t-bulksms">Company</a></li>
+                </ul>
+            </li>
         <li class="menu-title">Extras</li>
         @can('access-documents')
             <li>
@@ -117,48 +151,6 @@
                 <span key="t-chat">Notifications</span>
             </a>
         </li>
-        <li class="menu-title">Financial Accounts</li>
-        @can('access-finance')
-            <li>
-                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                    <i class="bx bxs-landmark"></i>
-                    <span key="t-crypto"> Financials </span>
-                </a>
-                <ul class="sub-menu" aria-expanded="false">
-                    @can('access-income') <li><a href="{{route('income')}}" key="t-wallet">Income</a></li> @endcan
-                    @can('access-expenses')<li><a href="{{route('expense')}}" key="t-wallet">Expenses</a></li> @endcan
-                    @can('access-accounts')<li><a href="{{route('accounting.accounts')}}" key="t-wallet">Account Summary</a></li> @endcan
-                    @can('access-categories')<li><a href="{{route('accounting.categories')}}" key="t-wallet">Account Categories</a></li> @endcan
-                </ul>
-            </li>
-        @endcan
-        <li class="menu-title">Bulk Operations</li>
-        @can('access-finance')
-            <li>
-                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                    <i class="bx bx-spreadsheet"></i>
-                    <span key="t-crypto"> Bulk Import </span>
-                </a>
-                <ul class="sub-menu" aria-expanded="false">
-                    @can('access-remittance')<li><a href="{{route('bulk-import')}}" key="t-wallet">Bulk Import</a></li> @endcan
-                    @can('access-remittance')<li><a href="{{route('approve-bulk-import')}}" key="t-wallet">Approve Bulk Import</a></li> @endcan
-                </ul>
-            </li>
-        @endcan
-        @can('access-finance-report')
-            <li>
-                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                    <i class="bx bxs-report"></i>
-                    <span key="t-report"> Reports</span>
-                </a>
-                <ul class="sub-menu" aria-expanded="false">
-                    @can('access-income-report')<li><a href="{{route('cashbook', 'income')}}" key="t-report">Income</a></li> @endcan
-                    @can('access-expense-report')<li><a href="{{route('cashbook', 'expense')}}" key="t-report">Expense</a></li> @endcan
-                    @can('access-cashbook') <li><a href="{{route('cashbook', 'cashbook')}}" key="t-report">Cashbook</a></li> @endcan
-                    @can('access-audit-trail') <li><a href="{{route('appointment-reports')}}" key="t-report">Audit Trail</a></li> @endcan
-                </ul>
-            </li>
-        @endcan
         @can('access-settings')
             <li class="menu-title">Administration</li>
             <li>
