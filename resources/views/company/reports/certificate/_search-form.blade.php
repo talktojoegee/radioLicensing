@@ -4,14 +4,15 @@
             <div class="modal-header">
                 <h6 class="text-uppercase modal-title"> Date Range</h6>
             </div>
-            <form action="{{ route('generate-remittance-report') }}" method="get">
+            <form action="{{ route('generate-system-report') }}" method="get">
                 @csrf
                 <div class="row mt-4">
+
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="form-label">From</label>
                             <input type="date" value="{{ $from }}" name="from" class="form-control" placeholder="From">
-                            <input type="hidden" name="type" value="cashbook">
+                            <input type="hidden" name="type" value="certificate">
                             @error('from') <i class="text-danger">{{$message}}</i> @enderror
                         </div>
                     </div>

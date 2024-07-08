@@ -149,4 +149,10 @@ class Organization extends Model
     public function getCompaniesByIds($ids){
         return Organization::whereIn('id',$ids)->distinct()->orderBy('id', 'DESC')->get();
     }
+
+    public function getCompanyByDateRange($from, $to){
+        return Organization::whereBetween('created_at', [$from, $to])
+            ->orderBy('id', 'ASC')
+            ->get();
+    }
 }

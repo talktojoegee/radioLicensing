@@ -24,28 +24,9 @@ class RadioLicenseReportController extends Controller
 
 
     public function showReportByType($slug){
-
-
         $from = date('Y-m-d', strtotime("-30 days"));
         $to = date('Y-m-d');
-
         switch ($slug){
-            case 'application':
-                return view('reports.cashbook.index',[
-                    'search'=>0,
-                    'from'=>$from,
-                    'to'=>$to,
-                    //'accounts'=>$accounts,
-
-                ]);
-            case 'license':
-                return view('reports.income.index',[
-                    'search'=>0,
-                    'from'=>$from,
-                    'to'=>$to,
-                    //'accounts'=>$accounts,
-
-                ]);
             case 'inflow':
 
                 return view('company.reports.inflow.index',[
@@ -54,31 +35,18 @@ class RadioLicenseReportController extends Controller
                     'to'=>$to,
 
                 ]);
-            case 'payment':
-                return view('reports.expense.index',[
-
-                    'search'=>0,
-                    'from'=>$from,
-                    'to'=>$to,
-                    //'accounts'=>$accounts,
-
-                ]);
             case 'certificate':
-                return view('reports.expense.index',[
-
+                return view('company.reports.certificate.index',[
                     'search'=>0,
                     'from'=>$from,
                     'to'=>$to,
-                    //'accounts'=>$accounts,
 
                 ]);
             case 'company':
-                return view('reports.expense.index',[
-
+                return view('company.reports.company.index',[
                     'search'=>0,
                     'from'=>$from,
                     'to'=>$to,
-                    //'accounts'=>$accounts,
 
                 ]);
             default:
@@ -110,22 +78,21 @@ class RadioLicenseReportController extends Controller
                     'to'=>$to,
 
                 ]);
-            case 'income':
-                return view('reports.income.index',[
-
+            case 'certificate':
+                return view('company.reports.certificate.index',[
                     'search'=>1,
                     'from'=>$from,
                     'to'=>$to,
+                    'certificates'=>$this->assignfrequency->getCertificatesByDateRange($from, $to),
 
 
                 ]);
-            case 'expense':
-                return view('reports.expense.index',[
+            case 'company':
+                return view('company.reports.company.index',[
                     'search'=>1,
                     'from'=>$from,
                     'to'=>$to,
-
-
+                    'records'=>$this->organization->getCompanyByDateRange($from, $to)
                 ]);
             default:
                 abort(404);

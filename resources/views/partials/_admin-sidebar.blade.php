@@ -130,10 +130,9 @@
                     <span key="t-bulksms"> Reports </span>
                 </a>
                 <ul class="sub-menu" aria-expanded="false">
-                    <li><a href="{{route('top-up')}}" key="t-bulksms">Application</a></li>
                     <li><a href="{{route('report-handler', 'inflow')}}" key="t-bulksms">Inflow</a></li>
-                    <li><a href="{{route('bulksms-messages')}}" key="t-bulksms">Certificate</a></li>
-                    <li><a href="{{route('phone-groups')}}" key="t-bulksms">Company</a></li>
+                    <li><a href="{{route('report-handler', 'certificate')}}" key="t-bulksms">Certificate</a></li>
+                    <li><a href="{{route('report-handler', 'company')}}" key="t-bulksms">Company</a></li>
                 </ul>
             </li>
         <li class="menu-title">Extras</li>

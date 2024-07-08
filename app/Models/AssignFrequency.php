@@ -109,6 +109,12 @@ class AssignFrequency extends Model
         return AssignFrequency::where('post_id',$postId)->get();
     }
 
+    public function getCertificatesByDateRange($from, $to){
+        return AssignFrequency::whereBetween('created_at', [$from, $to])
+            ->orderBy('id', 'ASC')
+            ->get();
+    }
+
 
 
 
