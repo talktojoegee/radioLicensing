@@ -139,7 +139,7 @@
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Station</th>
+                                            <th>Location</th>
                                             <th>Mode</th>
                                             <th>Category</th>
                                             <th>Frequency</th>
@@ -151,6 +151,7 @@
                                         </thead>
                                         <tbody>
                                         @foreach($workflow->getRadioLicenseDetails as $key => $detail)
+
                                             <tr>
                                                 <th>{{ $key +1  }}</th>
                                                 <td>{{$detail->getWorkstation->name ?? '' }}</td>
@@ -189,14 +190,15 @@
                                                     @endswitch
                                                 </td>
                                                 <td style="text-align: center;">
+
                                                     <input type="hidden" value="{{$detail->id}}" name="itemId[]">
                                                     {{ number_format($detail->no_of_device ?? 0)  }}
                                                 </td>
                                                 <td style="text-align: right;">
-                                                    {{ number_format($detail->getInvoiceDetail->amount ?? 0) }}
+                                                    {{ number_format($invoice->getOneInvoiceDetail($invoice->id)->amount ) }}
                                                 </td>
                                                 <td style="text-align: right;">
-                                                    {{ number_format( ($detail->getInvoiceDetail->amount * $detail->no_of_device),2 ) }}
+                                                    {{ number_format( ($invoice->getOneInvoiceDetail($invoice->id)->amount  * $detail->no_of_device),2 ) }}
                                                 </td>
                                             </tr>
                                         @endforeach

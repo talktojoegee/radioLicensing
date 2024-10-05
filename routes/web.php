@@ -62,6 +62,8 @@ Route::group(['prefix'=>'/settings', 'middleware'=>'auth'], function(){
     Route::get('/appointments', [App\Http\Controllers\Portal\SettingsController::class, 'showAppointmentSettings'])->name('appointment-settings');
     Route::get('/change-password', [App\Http\Controllers\Portal\SettingsController::class, 'showChangePasswordForm'])->name('change-password');
     Route::post('/change-password', [App\Http\Controllers\Portal\SettingsController::class, 'changePassword']);
+    Route::post('/transaction-password', [App\Http\Controllers\UserController::class, 'setTransactionPassword'])->name('transaction-password');
+    Route::post('/confirm-transaction-password', [App\Http\Controllers\UserController::class, 'confirmTransactionPassword'])->name('confirm-transaction-password');
     Route::post('/digital-signature', [App\Http\Controllers\Portal\SettingsController::class, 'storeDigitalSignature'])->name('digital-signature');
     Route::get('/appointment-types', [App\Http\Controllers\Portal\SettingsController::class, 'showAppointmentTypeSettings'])->name('appointment-types-settings');
     Route::post('/appointment-types', [App\Http\Controllers\Portal\SettingsController::class, 'storeAppointmentType']);
@@ -310,6 +312,7 @@ Route::group(['prefix'=>'/license', 'middleware'=>'auth'], function(){
     Route::get('/applications', [App\Http\Controllers\Portal\RadioController::class, 'showManageApplications'])->name('manage-applications');
     Route::get('/applications/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showManageApplicationDetails'])->name('show-application-details');
     Route::get('/generate-invoice/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showGenerateInvoice'])->name('generate-invoice');
+    Route::get('/generate-renewal-invoice/{slug}', [App\Http\Controllers\Portal\RadioController::class, 'showLicenseRenewalInvoiceForm'])->name('generate-renew-invoice');
     Route::post('/generate-invoice', [App\Http\Controllers\Portal\RadioController::class, 'generateInvoice'])->name('new-invoice');
 
     #Invoice

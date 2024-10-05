@@ -1,10 +1,10 @@
 
 @extends('layouts.master-layout')
 @section('title')
-    New Workstation
+    New Location
 @endsection
 @section('current-page')
-    New Workstation
+    New Location
 @endsection
 @section('extra-styles')
     <link href="/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
@@ -36,7 +36,7 @@
                 <div class="row mt-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="modal-header ">New Work Station</h5>
+                            <h5 class="modal-header ">New Location</h5>
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-lg-12">
                                     <form action="{{ route('show-create-workstation') }}" method="post" enctype="multipart/form-data" autocomplete="off">
@@ -95,7 +95,7 @@
                                                 <div class="row mt-3 from-message">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label class="form-label">Is this a workstation active? <sup class="text-danger">*</sup></label>
+                                                            <label class="form-label">Is this a location active? <sup class="text-danger">*</sup></label>
                                                             <select name="status"  class="form-control">
                                                                 <option value="1">Yes</option>
                                                                 <option value="0">No</option>

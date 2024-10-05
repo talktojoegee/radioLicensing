@@ -120,7 +120,7 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Station</th>
+                                        <th>Location</th>
                                         <th>Mode</th>
                                         <th>Category</th>
                                         <th>Frequency</th>

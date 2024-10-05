@@ -12,6 +12,7 @@ use App\Models\InvoiceDetail;
 use App\Models\InvoiceMaster;
 use App\Models\LicenceCategory;
 use App\Models\Notification;
+use App\Models\Organization;
 use App\Models\Post;
 use App\Models\PostAttachment;
 use App\Models\PostComment;
@@ -37,6 +38,7 @@ class RadioController extends Controller
         $this->invoicemaster = new InvoiceMaster();
         $this->assignfrequency = new AssignFrequency();
         $this->authorizingpersons = new AuthorizingPerson();
+        $this->organization = new Organization();
 
     }
 
@@ -314,6 +316,20 @@ class RadioController extends Controller
         return back();
     }
 
+
+    public function showLicenseRenewalInvoiceForm($licenseNo){
+        $license = $this->assignfrequency->getLicenseByLicenseNo($licenseNo);
+        if(empty($license)){
+            abort(404);
+        }
+        return view('company.license.generate-license-renewal-invoice',
+            [
+                'license'=>$license,
+                'company'=>$this->organization->getUserOrganization($license->org_id)
+            ]);
+    }
+
+
     public function showManageInvoices($type){
         $authUser = Auth::user();
         switch ($type){
@@ -356,6 +372,7 @@ class RadioController extends Controller
         if(empty($invoice)){
             abort(404);
         }
+        //return dd($invoice->getOneInvoiceDetail);
         return view('company.invoice.view',
             [
                 'invoice'=>$invoice,
@@ -717,15 +734,18 @@ class RadioController extends Controller
             case 'all':
                 return view('company.license.certificates',[
                     'certificates'=> $authUser->type == 1 ? $this->assignfrequency->getAllCertificatesByStatus([0,1,2]) : $this->assignfrequency->getAllOrgCertificatesByStatus($authUser->org_id,[0,1,2]),
+                    'title'=>'All '
                     //'certificateBatch'=> $authUser->type == 1 ? $this->assignfrequency->getAllCertificates() : $this->assignfrequency->getAllGroupedOrgCertificates($authUser->org_id)
                 ]);
             case 'valid':
                 return view('company.license.certificates',[
                     'certificates'=> $authUser->type == 1 ? $this->assignfrequency->getAllCertificatesByStatus([1]) : $this->assignfrequency->getAllOrgCertificatesByStatus($authUser->org_id,[1]),
+                    'title'=>'Valid '
                 ]);
             case 'expired':
                 return view('company.license.certificates',[
                     'certificates'=> $authUser->type == 1 ? $this->assignfrequency->getAllCertificatesByStatus([2]) : $this->assignfrequency->getAllOrgCertificatesByStatus($authUser->org_id,[2]),
+                    'title'=>'Expired '
                 ]);
 
             default:

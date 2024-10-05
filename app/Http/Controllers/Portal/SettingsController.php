@@ -138,7 +138,7 @@ class SettingsController extends Controller
         $authUser = Auth::user();
         $authUser->signature = $path;
         $authUser->save();
-        return response()->json(["message"=>"Action successful"], 201);
+        return response()->json(["message"=>"Action successful."], 201);
     }
 
     public function updateAppointmentSettings(Request $request){

@@ -68,15 +68,15 @@
                                                     <h5 class="modal-header ">Device Information</h5>
                                                     <div class="container" id="products">
                                                         <div class="row mb-3 item">
-                                                            <div class="col-md-12 d-flex justify-content-end">
+                                                            <!-- <div class="col-md-12 d-flex justify-content-end">
                                                                 <a href="javascript:void(0);" class="remove-line"><i class="bx bx-trash text-danger " style="cursor: pointer; color: #ff0000 !important;"></i> Remove Item</a>
-                                                            </div>
+                                                            </div> -->
                                                             <div class="col-md-8">
                                                                 <h4>Device</h4>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
-                                                                            <label for="">Radio Station</label>
+                                                                            <label for="">Location</label>
                                                                             <select name="workstation[]" class="form-control select">
                                                                                 @foreach($stations as $station)
                                                                                     <option value="{{$station->id}}">{{$station->name ?? '' }}</option>
@@ -175,11 +175,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <!--
                                                     <div class="row mt-3">
                                                         <div class="col-md-12 col-sm-12 col-lg-12">
                                                             <button class="btn btn-sm btn-warning add-line" type="button"> <i class="bx bx-plus-circle mr-2"></i> Add more</button>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
 
                                             </div>

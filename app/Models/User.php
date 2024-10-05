@@ -191,7 +191,7 @@ class User extends Authenticatable
         $user->first_name = $request->firstName;
         $user->last_name = $request->lastName;
         $user->cellphone_no = $request->mobileNo;
-        $user->type = isset($request->type) ? 2 : 3;
+        //$user->type = isset($request->type) ? 2 : 3;
         $user->gender = isset($request->gender) ? 1 : 0;
         $user->country_id = $request->nationality;
         $user->birth_date = $request->dob ?? null;
@@ -361,6 +361,14 @@ class User extends Authenticatable
     public function getToken($token){
         return User::select('api_token')->where('api_token', $token)->first();
     }*/
+
+
+    public function setTransactionPassword($userId, Request $request){
+        $user = User::find($userId);
+        $user->transaction_password = bcrypt($request->transactionPassword);
+        $user->save();
+        return true;
+    }
 
 }
 

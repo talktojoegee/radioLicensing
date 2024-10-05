@@ -32,7 +32,7 @@ class PostRadioDetail extends Model
             $details->workstation_id = $request->workstation[$i];
             $details->cat_id = $request->licence_category[$i];
             $details->type_of_device = $request->type_of_device[$i];
-            $details->no_of_device = $request->no_of_devices[$i];
+            $details->no_of_device = 1 ?? $request->no_of_devices[$i];
             $details->post_id = $appId;
             $details->operation_mode = $request->operation_mode[$i] ?? '';
             $details->frequency_band = $request->frequency_band[$i] ?? '';

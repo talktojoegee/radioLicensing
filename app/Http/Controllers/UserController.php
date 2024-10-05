@@ -15,6 +15,7 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use phpseclib3\Crypt\Hash;
 use Spatie\Permission\Models\Role as SRole;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -315,5 +316,40 @@ class UserController extends Controller
             'maritalstatus'=>$this->maritalstatus->getMaritalStatuses(),
             'roles'=>$this->role->getRoles()
         ]);
+    }
+
+
+    public function setTransactionPassword(Request $request){
+        $this->validate($request,[
+            'transactionPassword'=>"required",
+        ],[
+            "transactionPassword.required"=>"Enter set a transaction password"
+        ]);
+        $user = User::find(Auth::user()->id);
+        if(empty($user)){
+            abort(404);
+        }
+        $this->user->setTransactionPassword($user->id, $request);
+        session()->flash("success", "Action successful");
+        return back();
+    }
+
+
+
+    public function confirmTransactionPassword(Request $request){
+        $this->validate($request,[
+            'password'=>"required",
+        ],[
+            "password.required"=>"Enter your transaction password"
+        ]);
+        $user = User::find(Auth::user()->id);
+        if(empty($user)){
+            return response()->json(["message"=>"Whoops! Account does not exist"], 400);
+        }
+        if (\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            return response()->json(["message"=>"Validation successful. Click OK to continue to submit your new digital signature"], 200);
+        }else{
+            return response()->json(["message"=>"Wrong transaction password"], 400);
+        }
     }
 }

@@ -124,9 +124,15 @@
                                                         <div>
                                                             <div class="event-date">
                                                                 <div class="text-primary mb-1">{{date('d M, Y h:ia', strtotime($auth->created_at))}}</div>
+                                                                @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
                                                                 <h5 class="mb-4">
                                                                     {{$auth->getUser->title ?? ''}} {{$auth->getUser->first_name ?? ''}} {{$auth->getUser->last_name ?? ''}}
                                                                 </h5>
+                                                                @else
+                                                                    <h5 class="mb-4">
+                                                                        {{$auth->getUser->getUserChurchBranch->cb_name ?? 'Unknown Section/Unit'}}
+                                                                    </h5>
+                                                                @endif
                                                             </div>
                                                             <div class="event-down-icon">
                                                                 @if($auth->ap_status == 0)
@@ -138,11 +144,19 @@
                                                                     <i class="bx bx-x-circle h1 text-warning down-arrow-icon"></i>
                                                                 @endif
                                                             </div>
+                                                            @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
                                                             <div class="d-flex justify-content-center">
                                                                 <img src="{{url('storage/'.$auth->getUser->image)}}"
                                                                      style="height: 64px; width: 64px;" alt=""
                                                                      class="rounded-circle avatar-sm">
                                                             </div>
+                                                            @else
+                                                                <div class="d-flex justify-content-center">
+                                                                    <img src="/assets/drive/logo/arm.png"
+                                                                         style="height: 64px; width: 64px;" alt=""
+                                                                         class="rounded-circle avatar-sm">
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -152,9 +166,15 @@
                                                         <div>
                                                             <div class="event-date">
                                                                 <div class="text-primary mb-1">{{date('d M, Y h:ia', strtotime($auth->created_at))}}</div>
-                                                                <h5 class="mb-4">
-                                                                    {{$auth->getUser->title ?? ''}} {{$auth->getUser->first_name ?? ''}} {{$auth->getUser->last_name ?? ''}}
-                                                                </h5>
+                                                                @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
+                                                                    <h5 class="mb-4">
+                                                                        {{$auth->getUser->title ?? ''}} {{$auth->getUser->first_name ?? ''}} {{$auth->getUser->last_name ?? ''}}
+                                                                    </h5>
+                                                                @else
+                                                                    <h5 class="mb-4">
+                                                                        {{$auth->getUser->getUserChurchBranch->cb_name ?? 'Unknown Section/Unit'}}
+                                                                    </h5>
+                                                                @endif
                                                             </div>
                                                             <div class="event-down-icon">
                                                                 @if($auth->ap_status == 0)
@@ -166,11 +186,19 @@
                                                                     <i class="bx bx-x-circle h1 text-warning down-arrow-icon"></i>
                                                                 @endif
                                                             </div>
+                                                            @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
                                                             <div class="d-flex justify-content-center">
                                                                 <img src="{{url('storage/'.$auth->getUser->image)}}"
                                                                      style="height: 64px; width: 64px;" alt=""
                                                                      class="rounded-circle avatar-sm">
                                                             </div>
+                                                            @else
+                                                                <div class="d-flex justify-content-center">
+                                                                    <img src="/assets/drive/logo/arm.png"
+                                                                         style="height: 64px; width: 64px;" alt=""
+                                                                         class="rounded-circle avatar-sm">
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -284,7 +312,7 @@
                                                 <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Station</th>
+                                                    <th>Location</th>
                                                     <th>Mode</th>
                                                     <th>Category</th>
                                                     <th>Freq. Band</th>

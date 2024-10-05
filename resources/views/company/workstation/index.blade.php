@@ -1,9 +1,9 @@
 @extends('layouts.master-layout')
 @section('title')
-    Workstations
+    Locations
 @endsection
 @section('current-page')
-    Workstations
+    Locations
 @endsection
 @section('extra-styles')
     <link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -25,13 +25,13 @@
             <div class="col-xl-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <a href="{{ route('show-create-workstation') }}"  class="btn btn-primary  mb-3">Add Workstation <i class="bx bx bx-highlight"></i> </a>
+                        <a href="{{ route('show-create-workstation') }}"  class="btn btn-primary  mb-3">Add Location <i class="bx bx bx-highlight"></i> </a>
                     </div>
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
 
-                                <h4 class="modal-header">Workstations</h4>
+                                <h4 class="modal-header">Locations</h4>
 
                                 <!-- Tab panes -->
                                 <div class="tab-content p-3 text-muted">
@@ -42,7 +42,7 @@
                                                     <div class="card-body">
                                                         <div class="row mb-1">
                                                             <div class="col">
-                                                                <p class="mb-2">Workstations</p>
+                                                                <p class="mb-2">Location</p>
                                                                 <h5 class="mb-0 number-font">{{number_format($stations->where('status',1)->count())}}</h5>
                                                             </div>
                                                             <div class="col-auto mb-0">

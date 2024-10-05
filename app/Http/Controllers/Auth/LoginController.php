@@ -55,7 +55,6 @@ class LoginController extends Controller
         $user = $this->user->getUserByEmail($request->email);
         if(!empty($user)){
             if(Auth::attempt(['email'=>$request->email, 'password'=>$request->password], $request->remember)){
-                //return dd($user);
                 if($user->status == 2){
                     $log = $user->first_name." ".$user->last_name." tried logging in.";
                     ActivityLog::registerActivity($user->org_id, null, $user->id, null, 'Login attempt', $log);

@@ -101,6 +101,9 @@ class AssignFrequency extends Model
     public function getCertificateByLicenseBySlug($slug){
         return AssignFrequency::where('slug', $slug)->first();
     }
+ public function getLicenseByLicenseNo($licenseNo){
+        return AssignFrequency::where('license_no', $licenseNo)->first();
+    }
 
     public function getAssignedFrequencyById($id){
         return AssignFrequency::find($id);

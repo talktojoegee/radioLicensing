@@ -1,9 +1,9 @@
 @extends('layouts.master-layout')
 @section('title')
-    Certificates
+    {{ $title ?? '' }}Certificates
 @endsection
 @section('current-page')
-    Certificates
+    {{ $title ?? '' }}Certificates
 @endsection
 @section('extra-styles')
 
@@ -167,6 +167,9 @@
                                                     <i class="bx bx-dots-vertical dropdown-toggle text-warning" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;"></i>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item" href="{{ route('certificate-details', $cert->slug) }}" > <i class="bx bxs-book-open"></i> View</a>
+                                                        @if((\Illuminate\Support\Facades\Auth::user()->type == 1)  && ($cert->status == 2)  )
+                                                            <a class="dropdown-item" href="{{route('generate-renew-invoice', $cert->license_no)}}" > <i class="bx bx-purchase-tag"></i> Generate Invoice</a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>

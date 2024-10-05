@@ -28,7 +28,7 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route('company-profile')}}" key="t-bulksms">Profile</a></li>
                         <li><a href="{{route('persons')}}" key="t-bulksms">Persons</a></li>
-                        <li><a href="{{route('show-workstations')}}" key="t-bulksms">Work Stations</a></li>
+                        <li><a href="{{route('show-workstations')}}" key="t-bulksms">Locations</a></li>
                     </ul>
                 </li>
 

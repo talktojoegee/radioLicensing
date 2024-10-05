@@ -15,6 +15,7 @@ class InvoiceMaster extends Model
         return $this->hasMany(InvoiceDetail::class, 'invoice_id');
     }
 
+
     public function getAuthor(){
         return $this->belongsTo(User::class, 'generated_by');
     }
@@ -69,5 +70,10 @@ class InvoiceMaster extends Model
         return InvoiceMaster::whereBetween('created_at', [$from, $to])
             ->orderBy('id', 'ASC')
             ->get();
+    }
+
+
+    public function getOneInvoiceDetail($invoiceId){
+        return InvoiceDetail::where('invoice_id', $invoiceId)->first();
     }
 }

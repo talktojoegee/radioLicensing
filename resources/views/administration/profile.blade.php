@@ -1,6 +1,6 @@
 @extends('layouts.master-layout')
-@section('current-page')
-
+@section('title')
+    {{$user->title ?? '' }} {{ $user->first_name ?? ''  }}'s Profile
 @endsection
 @section('extra-styles')
     <link href="/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -14,6 +14,15 @@
 @section('main-content')
     <div class="row mb-10" style="margin-bottom: 70px;">
         <div class="col-12 grid-margin">
+            @if($errors->any())
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="mdi mdi-close me-2"></i>
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <div class="card">
                 <div class="position-relative">
                     <div class="d-flex justify-content-between align-items-center position-absolute top-90 w-100 px-2 px-md-4 mt-n4">
@@ -123,7 +132,7 @@
                         <p class="text-muted">{{$user->address_1 ?? '' }}</p>
                     </div>
                     <div class="mt-1">
-                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Branch</label>
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Section/Unit</label>
                         <p class="text-muted">{{$user->getUserChurchBranch->cb_name ?? '' }}</p>
                     </div>
                     <div class="mt-1">
@@ -336,7 +345,7 @@
                                                     <div class="form-check form-switch mt-3">
                                                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="pastor"
                                                             {{$user->pastor == 1 ? 'checked' : null  }}>
-                                                        <label class="form-check-label" for="flexSwitchCheckChecked">Is this person a pastor?</label>
+                                                        <label class="form-check-label" for="flexSwitchCheckChecked">Is this person a admin?</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-sm-12 col-lg-6">
@@ -359,7 +368,7 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-12 col-lg-6">
                                                     <div class="form-group mt-1">
-                                                        <label for=""> Branch <span class="text-danger">*</span></label>
+                                                        <label for=""> Section/Unit <span class="text-danger">*</span></label>
                                                         <select name="branch" id="" data-parsley-required-message="Select branch" class="form-control select2">
                                                             @foreach($branches as $branch)
                                                                 <option {{$user->branch == $branch->id ? 'selected' : null  }} value="{{$branch->cb_id}}">{{$branch->cb_name ?? '' }}</option>
@@ -416,6 +425,21 @@
                                         <button type="submit" class="btn btn-primary">Change Password <i class="bx bx-lock-alt"></i> </button>
                                     </div>
                                 </form>
+
+                                <div class="modal-header mt-3">Transaction Password</div>
+                                <p class="mt-3">Set transaction password.</p>
+
+                                <form action="{{route('transaction-password')}}" method="post" enctype="multipart/form-data" class="mt-4">
+                                    @csrf
+                                    <div class="form-group mt-3">
+                                        <label for="">Transaction Password <span class="text-danger">*</span></label>
+                                        <input type="password" name="transactionPassword" placeholder="Transaction Password" class="form-control">
+                                        @error('transactionPassword') <i class="text-danger">{{$message}}</i>@enderror
+                                    </div>
+                                    <div class="form-group mt-3 d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-primary">Submit <i class="bx bx-check-double"></i> </button>
+                                    </div>
+                                </form>
                             </div>
 
                                 <div class="multi-collapse collapse" id="signature">
@@ -454,7 +478,10 @@
 
                                                 </div>
                                                 <div class="form-group mt-3 d-flex justify-content-center">
-                                                    <button type="button" id="saveSignature" class="btn btn-primary">Submit Signature <i class="bx bx-edit-alt"></i> </button>
+                                                    <div class="btn-group">
+                                                        <button type="button" id="clearPad"  class="btn btn-danger">Clear <i class="bx bxs-eraser"></i> </button>
+                                                        <button type="button" id="saveSignature"  class="btn btn-primary">Submit Signature <i class="bx bx-edit-alt"></i> </button>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -577,6 +604,36 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="transactionPasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger" style="border-radius: 0px;">
+                    <h4 class="modal-title text-center " id="myModalLabel2">Confirm You're the one.</h4>
+                    <button type="button"  class="btn-close text-white" style="margin: 0px; padding: 0px;" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form autocomplete="off" action="#" method="post" id="addNewUser" data-parsley-validate="">
+                        @csrf
+                        <div class="form-group">
+                            <p class="text-wrap">Our system thinks someone else is trying to change your digital signature. Kindly confirm that you're the one carrying out this operation by entering your transaction password.</p>
+                        </div>
+                        <div class="form-group mt-1">
+                            <label for="">Transaction Password</label>
+                            <input type="password" id="transactionPassword" name="transactionPassword" placeholder="
+Enter Transaction Password" class="form-control">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" id="confirmTransactionPassword" class="btn btn-danger waves-effect waves-light">Submit</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('extra-scripts')
@@ -588,32 +645,49 @@
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
     <script src="/assets/js/axios.min.js"></script>
     <script>
+        let canvas = document.querySelector("canvas");
+        let signaturePad = new SignaturePad(canvas);
+        let url = "{{route('digital-signature')}}";
+        let base64String = signaturePad.toDataURL();//.split(',')[1];
+
         $(document).ready(function(){
 
-            let canvas = document.querySelector("canvas");
-            let signaturePad = new SignaturePad(canvas);
-            let url = "{{route('digital-signature')}}";
-
-            $('#saveSignature').on('click',function(e){
-                e.preventDefault();
-
-                const base64String = signaturePad.toDataURL();//.split(',')[1];
-                if (!base64String) {
-                    alert('Canvas is empty or invalid image data.');
-                    return;
+            $('#saveSignature').on('click', function(){
+                if (signaturePad.isEmpty()) {
+                    alert("You have not signed. Use your mouse to sign within the dotted box.");
+                    $('#transactionPasswordModal').modal('hide');
+                }else{
+                    $('#transactionPasswordModal').modal('show');
+                    //console.log(base64String)
                 }
+            })
+            $('#clearPad').on('click', function(){
+                signaturePad.clear();
+            })
 
-                axios.post(url, { image: base64String })
+            $('#confirmTransactionPassword').on('click',function(){
+               let password = $('#transactionPassword').val();
+               if(password === '' || password === null || password === undefined){
+                   alert('Enter your transaction password')
+               }
+               const transUrl = "{{route('confirm-transaction-password')}}";
+               $('#confirmTransactionPassword').text('Submitting...');
+               $('#confirmTransactionPassword').prop('disabled', true);
+                axios.post(transUrl, { password: password })
                     .then(response => {
-                       alert("Action successful")
-                        location.reload();
+                        alert(response.data.message);
+                        saveSignature();
                     })
                     .catch(error => {
-                        alert("Whoops! Something went wrong.");
-                        location.reload();
+                        alert(error.response.data.message)
+                        $('#transactionPassword').val('');
                     });
+                $('#confirmTransactionPassword').text('Submit');
+                $('#confirmTransactionPassword').prop('disabled', false);
 
             });
+
+
 
             let currentImagePath = "{{url('storage/'.$user->image)}}";
             $('#clientAssignmentWrapper').hide();
@@ -634,6 +708,21 @@
             });
         });
 
+
+       function saveSignature(){
+           base64String = signaturePad.toDataURL();
+            axios.post(url, { image: base64String })
+                .then(response => {
+                    alert(response.data.message)
+                    location.reload();
+                })
+                .catch(error => {
+                    alert(error.response.data.message);
+                    location.reload();
+                });
+
+        }
+
         function uploadCanvasImage() {
             const base64String = canvas.toDataURL('image/png').split(',')[1];
 
@@ -644,11 +733,13 @@
 
             axios.post(url, { image: signaturePad })
                 .then(response => {
-                    console.log(response.data);
+                    //console.log(response.data);
                 })
                 .catch(error => {
-                    console.error(error);
+                    //console.error(error);
                 });
         }
+
+
     </script>
 @endsection
